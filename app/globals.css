@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: auto;
+    overflow-x: clip;
+  }
+
+  body {
+    @apply bg-paper font-body text-body text-ink antialiased;
+  }
+
+  ::selection {
+    background: #0e6b6b;
+    color: #fafaf8;
+  }
+
+  :focus-visible {
+    outline: 2px solid #0e6b6b;
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .site-card {
+    @apply border border-line/80 bg-transparent px-6 py-6 transition-[border-color,background-color,transform] duration-200 ease-out sm:px-8 sm:py-8;
+  }
+
+  .site-card:hover {
+    @apply border-line bg-ink/[0.018];
+  }
+
+  .site-meta {
+    @apply font-mono text-data uppercase text-ink-muted/75;
+  }
+
+  .site-tag {
+    @apply font-mono text-[11px] tracking-[0.04em] text-ink-muted;
+  }
+
+  .site-media {
+    @apply pointer-events-none aspect-[16/10] w-full shrink-0 overflow-hidden border border-line/80 object-cover sm:w-[260px] md:w-[328px];
+  }
+}
