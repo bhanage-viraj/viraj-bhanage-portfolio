@@ -7,7 +7,7 @@ const THUMB =
   "pointer-events-none aspect-[16/10] w-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-[1.03] lg:w-[260px] xl:w-[328px]";
 
 const FEATURE =
-  "pointer-events-none aspect-[16/10] w-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-[1.03]";
+  "pointer-events-none aspect-[16/10] w-full object-cover object-center";
 
 function PreviewVideo({
   src,
@@ -93,7 +93,7 @@ export function MediaSlot({
     }
 
     return (
-      <figure className="overflow-hidden border border-line/80">
+      <figure className="overflow-hidden rounded-[1.15rem] border border-line/80">
         <video
           className="aspect-video w-full bg-line/30"
           src={media.src}
@@ -113,7 +113,7 @@ export function MediaSlot({
 
   if (media.type === "image") {
     return (
-      <figure className={variant === "study" ? "overflow-hidden border border-line/80" : undefined}>
+      <figure className={variant === "study" ? "overflow-hidden rounded-[1.15rem] border border-line/80" : undefined}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={media.src}

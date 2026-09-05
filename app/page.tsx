@@ -9,7 +9,7 @@ import { WorkGrid } from "@/components/work-grid";
 
 export default function HomePage() {
   return (
-    <main id="main">
+    <main id="main" className="animate-fade-in">
       <Hero />
       <About />
       <WorkGrid />

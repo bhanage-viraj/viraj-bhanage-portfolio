@@ -94,7 +94,7 @@ const achievementCount = items.length + trailingItems.length + 1;
 
 function CertificateThumb({ src }: { src: string }) {
   return (
-    <div className="w-[148px] overflow-hidden border border-line/80">
+    <div className="w-[148px] overflow-hidden rounded-[1.15rem] border border-line/70">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={src}

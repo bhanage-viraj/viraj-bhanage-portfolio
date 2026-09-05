@@ -71,10 +71,10 @@ export function AchievementCard({
   const palette = tones[tone];
 
   return (
-    <Card className="hover:border-line/80 hover:bg-transparent">
+    <Card>
       <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:gap-5">
         <span
-          className={`flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden ${palette.well} ${palette.mark} [&>svg]:mt-0 [&>svg]:text-current`}
+          className={`flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-2xl ${palette.well} ${palette.mark} [&>svg]:mt-0 [&>svg]:text-current`}
         >
           {icon}
         </span>

@@ -66,7 +66,7 @@ export function KaggleAchievementItem() {
         body={achievements.kaggle.body}
         icon={<KaggleGlyph />}
         aside={
-          <div className="border border-line px-3 py-2.5">
+          <div className="rounded-[1.15rem] border border-line/70 bg-paper px-3 py-2.5">
             <div className="flex items-center gap-2">
               {data.live ? (
                 <span

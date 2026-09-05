@@ -1,17 +1,37 @@
-import { hero } from "@/lib/content";
+import { contact, hero } from "@/lib/content";
 import { PageCol } from "@/lib/ui";
 
 export function Hero() {
   return (
-    <section className="pt-20 pb-16 sm:pt-28 sm:pb-24">
-      <PageCol>
-        {/* TODO: confirm official job title in the subhead — "Junior Developer" is still a placeholder for "IS developer." */}
-        <h1 className="max-w-[20ch] font-display text-hero font-semibold text-ink sm:max-w-[24ch]">
-          {hero.headline}
+    <section className="relative overflow-hidden pt-24 pb-20 sm:pt-32 sm:pb-28">
+      <div className="hero-ambient" aria-hidden="true" />
+      <PageCol className="relative z-[1]">
+        <p className="site-meta">{hero.eyebrow}</p>
+        <h1 className="mt-5 max-w-[18ch] font-display text-hero font-semibold text-ink">
+          {hero.headlineLead}
+          <br />
+          {hero.headlineEnd}
         </h1>
-        <p className="mt-7 max-w-prose text-body text-ink-muted sm:mt-8">
+        {/* TODO: confirm official job title in the subhead — "Junior Developer" is still a placeholder for "IS developer." */}
+        <p className="mt-7 max-w-[40ch] text-body text-ink-muted sm:mt-8">
           {hero.subhead}
         </p>
+        <div className="mt-10 flex flex-wrap items-center gap-x-7 gap-y-3">
+          <a
+            href="#work"
+            className="inline-flex min-h-11 items-center text-[15px] font-medium text-ink underline decoration-ink/25 underline-offset-[5px] transition-colors hover:decoration-ink"
+          >
+            View work
+          </a>
+          <a
+            href={contact.github}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex min-h-11 items-center text-[15px] font-medium text-signal transition-opacity hover:opacity-70"
+          >
+            GitHub ↗
+          </a>
+        </div>
       </PageCol>
     </section>
   );

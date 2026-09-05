@@ -1,6 +1,7 @@
 import { shippedProjects } from "@/lib/content";
-import { CardList, Section } from "@/lib/ui";
+import { Section } from "@/lib/ui";
 import { ProjectCard } from "./project-card";
+import { Reveal } from "./reveal";
 
 export function WorkGrid() {
   return (
@@ -9,13 +10,15 @@ export function WorkGrid() {
       title="Work"
       lede="A selection of projects I've built around AI, native development, games and creative technology."
     >
-      <CardList>
+      <ul className="space-y-6 sm:space-y-8">
         {shippedProjects.map((project, index) => (
           <li key={project.slug}>
-            <ProjectCard project={project} mediaFirst={index % 2 === 1} />
+            <Reveal delay={index * 70}>
+              <ProjectCard project={project} />
+            </Reveal>
           </li>
         ))}
-      </CardList>
+      </ul>
     </Section>
   );
 }

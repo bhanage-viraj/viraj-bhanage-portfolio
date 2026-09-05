@@ -1,29 +1,7 @@
 import type { Metadata } from "next";
-import { JetBrains_Mono, Public_Sans, Space_Grotesk } from "next/font/google";
 import { Nav } from "@/components/nav";
 import { site } from "@/lib/content";
 import "./globals.css";
-
-const spaceGrotesk = Space_Grotesk({
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
-  variable: "--font-display",
-  display: "swap",
-});
-
-const publicSans = Public_Sans({
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  variable: "--font-body",
-  display: "swap",
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  variable: "--font-mono",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: {
@@ -39,10 +17,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${spaceGrotesk.variable} ${publicSans.variable} ${jetbrainsMono.variable}`}
-    >
+    <html lang="en">
       <body>
         <a
           href="#main"

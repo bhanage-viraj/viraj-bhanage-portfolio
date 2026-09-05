@@ -93,7 +93,7 @@ export default async function CaseStudyPage({
                   href={link.href}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-body text-signal underline decoration-signal/40 underline-offset-4 hover:decoration-signal"
+                  className="text-body font-medium text-ink underline decoration-ink/25 underline-offset-[5px] hover:decoration-ink"
                 >
                   {link.label}
                 </a>

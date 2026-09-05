@@ -10,7 +10,10 @@ export const site = {
 };
 
 export const hero = {
-  headline: "I build the intelligence that runs on-device, and the iOS app around it.",
+  eyebrow: "iOS · On-device AI · Spatial computing",
+  headline: "I build intelligence that runs on-device.",
+  headlineLead: "I build intelligence",
+  headlineEnd: "that runs on-device.",
   // TODO: confirm official job title — still using "Junior Developer" as a placeholder for "IS developer."
   subhead:
     "3rd-year BS Computer Science student at BITS Pilani, currently a Junior Developer at the Apple Developer Academy — building native iOS apps powered by on-device AI/ML.",
@@ -367,14 +370,23 @@ export const press: PressItem[] = [
 export const achievements = {
   cursorBali: {
     title: "1st Place — Cursor Bali Hackathon",
+    result: "1st Place",
+    detail: "Cursor Bali Hackathon",
+    date: "2026",
     body: "Built a posture-tracking macOS app in the time box of the hackathon — tracks a person's posture in real time and flags it back to them.",
   },
   geoAi: {
     title: "Finalist — National Geo AI Hackathon, IIT Bombay Techfest",
+    result: "Finalist",
+    detail: "National Geo AI Hackathon, IIT Bombay Techfest",
+    date: "2025",
     body: "Trained a model to develop AI-based solutions using drone imagery and point-cloud data under the SVAMITVA Scheme.",
   },
   algoUtsav: {
     title: "AIR 3 — AlgoUtsav 2025, NIT Rourkela",
+    result: "AIR 3",
+    detail: "AlgoUtsav · NIT Rourkela",
+    date: "2025",
     body: "Placed 3rd (All India Rank) in NIT Rourkela's national competitive programming contest, hosted by their Algorithmic and Programming Society.",
     certificate: {
       src: "/certificates/algoutsav.jpg",
@@ -383,6 +395,9 @@ export const achievements = {
   },
   metaHackerCup: {
     title: "Meta Hacker Cup 2025 — Global Rank 1623",
+    result: "Global Rank 1623",
+    detail: "Meta Hacker Cup",
+    date: "2025",
     body: "Placed 1,623rd worldwide in Round 2 of Meta's 2025 competitive programming contest.",
     certificate: {
       src: "/certificates/meta-hacker-cup.png",
@@ -391,10 +406,15 @@ export const achievements = {
   },
   unicornBharat: {
     title: "3rd Place — Unicorn Bharat Hackathon",
+    result: "3rd Place",
+    detail: "Unicorn Bharat Hackathon",
+    date: "2024",
     body: "Built a marketplace for farmers to sell their goods.",
   },
   schoolOfSolana: {
     title: "School of Solana (Ackee Blockchain)",
+    result: "Certified",
+    detail: "School of Solana (Ackee Blockchain)",
     body: "Certified in Rust & Solana program development; built a functional on-chain Solana program with Anchor as the capstone.",
     certificate: {
       src: "/certificates/school-of-solana.jpg",
@@ -404,6 +424,9 @@ export const achievements = {
   },
   kaggle: {
     title: "Kaggle — Dataset Expert & Notebook Expert",
+    result: "Expert",
+    detail: "Kaggle — Dataset Expert & Notebook Expert",
+    date: "Present",
     body: "Expert tier on Kaggle.",
     profileUrl: "https://www.kaggle.com/bhanageviraj",
     username: "bhanageviraj",

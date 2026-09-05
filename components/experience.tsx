@@ -8,11 +8,11 @@ export function Experience() {
         <div className="flex flex-col gap-16">
           <div>
             <h2 className="font-display text-section font-semibold text-ink">Experience</h2>
-            <ul className="mt-10 space-y-5">
+            <ul className="mt-10 space-y-6 sm:space-y-8">
               {experience.map((item) => (
                 <li
                   key={item.org}
-                  className="flex flex-col border border-line p-5"
+                  className="project-card flex flex-col"
                 >
                   <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
                     <h3 className="font-display text-[18px] font-semibold text-ink">
@@ -29,7 +29,7 @@ export function Experience() {
           </div>
           <div>
             <h2 className="font-display text-section font-semibold text-ink">Education</h2>
-            <div className="mt-10 border border-line p-5">
+            <div className="project-card mt-10">
               <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
                 <h3 className="font-display text-[18px] font-semibold text-ink">
                   {education.school}
