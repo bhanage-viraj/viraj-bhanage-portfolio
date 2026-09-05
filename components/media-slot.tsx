@@ -6,6 +6,9 @@ import type { ProjectMedia } from "@/lib/types";
 const THUMB =
   "pointer-events-none aspect-[16/10] w-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-[1.03] lg:w-[260px] xl:w-[328px]";
 
+const FEATURE =
+  "pointer-events-none aspect-[16/10] w-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-[1.03]";
+
 function PreviewVideo({
   src,
   poster,
@@ -54,13 +57,14 @@ export function MediaSlot({
 }: {
   media: ProjectMedia;
   title: string;
-  variant?: "card" | "study" | "thumb";
+  variant?: "card" | "study" | "thumb" | "feature";
 }) {
-  if (variant === "thumb") {
+  if (variant === "thumb" || variant === "feature") {
+    const frame = variant === "feature" ? FEATURE : THUMB;
     if (media.type === "video") {
       return (
         <PreviewVideo
-          className={THUMB}
+          className={frame}
           src={media.previewSrc ?? media.src}
           poster={media.poster}
           title={title}
@@ -70,10 +74,10 @@ export function MediaSlot({
     if (media.type === "image") {
       return (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={media.src} alt="" className={THUMB} />
+        <img src={media.src} alt="" className={frame} />
       );
     }
-    return <div className={`${THUMB} bg-line/25`} aria-hidden="true" />;
+    return <div className={`${frame} bg-line/25`} aria-hidden="true" />;
   }
 
   if (media.type === "video") {

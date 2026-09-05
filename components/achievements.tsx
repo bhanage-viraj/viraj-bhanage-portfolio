@@ -4,6 +4,7 @@ import { useState, type ReactNode } from "react";
 import {
   AchievementCard,
   ChipGlyph,
+  MarketGlyph,
   MedalGlyph,
   TrophyGlyph,
   type AchievementTone,
@@ -15,7 +16,7 @@ import { MetaGlyph } from "@/components/meta-glyph";
 import { achievements } from "@/lib/content";
 import { CardList, Section } from "@/lib/ui";
 
-type AchievementId = "cursor" | "geoai" | "algo" | "meta" | "solana";
+type AchievementId = "cursor" | "geoai" | "algo" | "meta" | "solana" | "unicorn";
 
 type ListedAchievement = {
   id: AchievementId;
@@ -67,24 +68,35 @@ const items: ListedAchievement[] = [
   },
 ];
 
-const lastItem: ListedAchievement = {
-  id: "solana",
-  tone: "solana",
-  category: "Certification",
-  title: achievements.schoolOfSolana.title,
-  body: achievements.schoolOfSolana.body,
-  icon: (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img
-      src={achievements.schoolOfSolana.certificate.src}
-      alt=""
-      className="h-full w-full object-cover"
-    />
-  ),
-  certificate: achievements.schoolOfSolana.certificate,
-};
+const trailingItems: ListedAchievement[] = [
+  {
+    id: "solana",
+    tone: "solana",
+    category: "Certification",
+    title: achievements.schoolOfSolana.title,
+    body: achievements.schoolOfSolana.body,
+    icon: (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={achievements.schoolOfSolana.certificate.src}
+        alt=""
+        className="h-full w-full object-cover"
+      />
+    ),
+    certificate: achievements.schoolOfSolana.certificate,
+  },
+  {
+    id: "unicorn",
+    tone: "farm",
+    category: "Hackathon",
+    date: "2024",
+    title: achievements.unicornBharat.title,
+    body: achievements.unicornBharat.body,
+    icon: <MarketGlyph />,
+  },
+];
 
-const allItems = [...items, lastItem];
+const allItems = [...items, ...trailingItems];
 const achievementCount = allItems.length + 1;
 
 function CertificateThumb({ src }: { src: string }) {
@@ -140,17 +152,19 @@ export function Achievements() {
           </li>
         ))}
         <KaggleAchievementItem />
-        <li>
-          <AchievementCard
-            tone={lastItem.tone}
-            category={lastItem.category}
-            date={lastItem.date}
-            title={lastItem.title}
-            body={lastItem.body}
-            icon={lastItem.icon}
-            onClick={() => setOpen(lastItem.id)}
-          />
-        </li>
+        {trailingItems.map((item) => (
+          <li key={item.id}>
+            <AchievementCard
+              tone={item.tone}
+              category={item.category}
+              date={item.date}
+              title={item.title}
+              body={item.body}
+              icon={item.icon}
+              onClick={() => setOpen(item.id)}
+            />
+          </li>
+        ))}
       </CardList>
 
       <Lightbox

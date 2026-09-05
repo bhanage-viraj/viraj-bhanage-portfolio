@@ -7,7 +7,8 @@ export type AchievementTone =
   | "algo"
   | "meta"
   | "kaggle"
-  | "solana";
+  | "solana"
+  | "farm";
 
 const tones: Record<
   AchievementTone,
@@ -42,6 +43,11 @@ const tones: Record<
     well: "bg-[#EDE8F6]",
     mark: "text-[#7B4FC4]",
     pill: "bg-[#EDE8F6] text-[#7B4FC4]",
+  },
+  farm: {
+    well: "bg-[#EEF3E4]",
+    mark: "text-[#5B7A2F]",
+    pill: "bg-[#EEF3E4] text-[#5B7A2F]",
   },
 };
 
@@ -118,6 +124,20 @@ export function MedalGlyph() {
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <circle cx="12" cy="14" r="5.2" stroke="currentColor" strokeWidth="1.6" />
       <path stroke="currentColor" strokeWidth="1.6" d="M9 4.5 12 9l3-4.5" />
+    </svg>
+  );
+}
+
+export function MarketGlyph() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        stroke="currentColor"
+        strokeWidth="1.6"
+        d="M4 10.5 6.2 5h11.6L20 10.5"
+      />
+      <path stroke="currentColor" strokeWidth="1.6" d="M5 10.5h14V20H5z" />
+      <path stroke="currentColor" strokeWidth="1.6" d="M10 20v-5.5h4V20" />
     </svg>
   );
 }

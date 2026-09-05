@@ -43,6 +43,7 @@ export type Project = {
   slug: string;
   caseId: string;
   title: string;
+  category?: string;
   cardSubheading: string;
   cardTeaser: string;
   logo?: ProjectLogo;

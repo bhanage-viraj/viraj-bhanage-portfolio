@@ -27,6 +27,7 @@ export const projects: Project[] = [
     slug: "coralyst",
     caseId: "01 · CORALYST",
     title: "Coralyst",
+    category: "AI / Conservation",
     cardSubheading: "On-device bioacoustic monitoring for coral reef conservation",
     cardTeaser:
       "An AI/ML pipeline that listens for illegal blast fishing on a Balinese reef — and runs fully offline, on-device, with no dependency on a network connection.",
@@ -116,6 +117,7 @@ export const projects: Project[] = [
     slug: "revenants",
     caseId: "02 · REVENANTS",
     title: "Revenants",
+    category: "AR / Game",
     cardSubheading: "Asymmetrical co-op AR horror game",
     cardTeaser:
       "Two phones, one shared haunted room — LiDAR world-scanning, ARKit collaborative sessions, and a spatial audio engine I built and open-sourced along the way.",
@@ -168,6 +170,7 @@ export const projects: Project[] = [
     slug: "whos-out",
     caseId: "03 · WHO'S OUT",
     title: "Who's Out",
+    category: "iOS / AI",
     cardSubheading: "Privacy-first friend availability app, built on iOS 27",
     cardTeaser:
       "See who's nearby and actually free — on-device AI reasoning over calendar and location, end-to-end encrypted friend sync, and a new Siri integration. Built at IndeHub WWDC26.",
@@ -217,6 +220,7 @@ export const projects: Project[] = [
     slug: "rush-hour",
     caseId: "04 · RUSH HOUR",
     title: "Rush Hour",
+    category: "iOS / Productivity",
     cardSubheading: "A focus app built around timelapse accountability",
     cardTeaser:
       "Records your focus sessions on camera and blocks distracting apps while you work — already through its first public exhibition and a round of real user feedback.",
@@ -267,6 +271,7 @@ export const projects: Project[] = [
     slug: "sema",
     caseId: "05 · SEMA",
     title: "Sema",
+    category: "AI / Accessibility",
     cardSubheading: "Offline, on-device Kenyan Sign Language interpreter",
     cardTeaser:
       "A bidirectional KSL ↔ English/Swahili interpreter that runs fully offline on iPhone, built on Gemma 4 via llama.cpp for the Gemma for Good Hackathon.",
@@ -383,6 +388,10 @@ export const achievements = {
       src: "/certificates/meta-hacker-cup.png",
       alt: "2025 Meta Hacker Cup certificate recognizing Viraj Bhanage for progressing to Round 2, global rank 1,623.",
     },
+  },
+  unicornBharat: {
+    title: "3rd Place — Unicorn Bharat Hackathon",
+    body: "Built a marketplace for farmers to sell their goods.",
   },
   schoolOfSolana: {
     title: "School of Solana (Ackee Blockchain)",

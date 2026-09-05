@@ -182,6 +182,7 @@ DevBytes covered the release directly: *"Apple Developer Academy graduate Viraj 
 - **Kaggle — Dataset Expert & Notebook Expert.** Expert tier on Kaggle.
 - **Meta Hacker Cup — Global Rank 1623.** Placed 1,623rd worldwide in Meta's annual competitive programming contest.
 - **School of Solana (Ackee Blockchain).** Certified in Rust & Solana program development; built a functional on-chain Solana program with Anchor as the capstone.
+- **3rd Place — Unicorn Bharat Hackathon (2024).** Built a marketplace for farmers to sell their goods.
 
 ---
 
