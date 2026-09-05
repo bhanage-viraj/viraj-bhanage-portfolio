@@ -8,6 +8,25 @@ export type NarrativeSection = {
   body: string;
 };
 
+export type ProjectFact = {
+  label: string;
+  value: string;
+};
+
+export type ProjectExperiment = {
+  setup: string;
+  recall: string;
+  fpr: string;
+  field: string;
+};
+
+export type ProjectNumbers = {
+  heading: string;
+  facts: ProjectFact[];
+  experiments: ProjectExperiment[];
+  takeaway: string;
+};
+
 export type ProjectLink = {
   label: string;
   href: string;
@@ -31,6 +50,7 @@ export type Project = {
   media: ProjectMedia;
   images: ProjectMedia[];
   narrative: NarrativeSection[];
+  numbers?: ProjectNumbers;
   links: ProjectLink[];
   openSource?: boolean;
 };

@@ -53,14 +53,60 @@ export const projects: Project[] = [
       },
       {
         heading: "Engineering decisions",
-        body: "I built the AI/ML pipeline end-to-end: collecting and preparing hydrophone recordings, training a model to pick out blast-fishing signatures against the ambient noise floor of a healthy vs. degraded reef, and — the part that mattered most — getting that model small and efficient enough to run locally, on-device, with no dependency on a live connection. The system logs each detection with a timestamp and estimated location, and separately tracks reef health cues (a healthy reef crackles with life; a damaged one goes quiet) as a side signal.",
+        body: "I built the AI/ML pipeline end-to-end: collecting and preparing hydrophone recordings from ReefSet v1.0 (Williams et al., 2024), training a 2-layer bidirectional LSTM on 40-band log-mel spectrograms from ~1.92s clips to pick out blast-fishing signatures against the ambient noise floor of a healthy vs. degraded reef, and — the part that mattered most — getting that model small and efficient enough to run locally, on-device, with no dependency on a live connection. The system logs each detection with a timestamp and estimated location, and separately tracks reef health cues (a healthy reef crackles with life; a damaged one goes quiet) as a side signal. The held-out field set is the actual failure mode: the model almost never mistakes real reef life for a bomb, but a confidence threshold calibrated on ReefSet doesn't fully transfer to a new recorder or site. Ranking stays strong (ROC-AUC ~0.95–0.98); each training iteration has been closing that domain-shift gap.",
       },
       {
         heading: "My contribution",
         body: "The AI/ML pipeline was mine, start to finish — model training, and the on-device deployment work to make sure something meant for a remote Balinese reef didn't quietly stop working the moment it lost signal.",
       },
     ],
-    // TODO: Coralyst / Sema — no TestFlight or App Store link for either; site/Kaggle writeup stays as the sole reference unless one exists.
+    numbers: {
+      heading: "By the numbers",
+      facts: [
+        {
+          label: "Data",
+          value:
+            "ReefSet v1.0 (Williams et al., 2024) — 57,074 hand-labeled hydrophone clips across 16 sites worldwide.",
+        },
+        {
+          label: "Positive class",
+          value: "203 confirmed Indonesia blast clips (anthrop_bomb).",
+        },
+        {
+          label: "External test",
+          value:
+            "38 independent field recordings (\"Drive\"), held out — never touched during training, different recorder and gain than ReefSet.",
+        },
+        {
+          label: "Model",
+          value:
+            "2-layer bidirectional LSTM, hidden size 64, dropout 0.3, mean-pool + linear head, trained on 40-band log-mel spectrograms from ~1.92s clips.",
+        },
+      ],
+      experiments: [
+        {
+          setup: "A — Indonesia bombs vs. Indonesia ambient",
+          recall: "41/42 (98%), F1 0.94",
+          fpr: "not tested",
+          field: "not tested",
+        },
+        {
+          setup: "B — + every shrimp/reef-sound class in training",
+          recall: "42/42 (100%)",
+          fpr: "0.12% false-positive rate",
+          field: "7/38 (18%)",
+        },
+        {
+          setup: "C — balanced slice of all 37 ReefSet label types",
+          recall: "5/5 (small n)",
+          fpr: "0.57% false-positive rate",
+          field: "12/38 (32%)",
+        },
+      ],
+      takeaway:
+        "The model reliably tells a blast from reef background noise, and it almost never mistakes real reef life — snapping shrimp, fish knocks, waves — for a bomb. What it hasn't solved yet is transferring that threshold to a totally new recorder or site: ranking stays strong (ROC-AUC ~0.95–0.98), but the confidence threshold calibrated on ReefSet doesn't fully carry over to real field audio yet. Each iteration (B→C) measurably closes that gap (18%→32% field recall).",
+    },
+    // TODO: Coralyst — no TestFlight or App Store link; live prototype stays as the sole reference unless one exists.
     links: [
       { label: "GitHub", href: "https://github.com/Gleenryan/CH5_Biorocks" },
       { label: "Live prototype", href: "https://coralyst.vercel.app" },
@@ -204,16 +250,16 @@ export const projects: Project[] = [
       },
       {
         heading: "Engineering decisions",
-        body: "App blocking runs on Apple's Screen Time APIs — `FamilyControls`/`DeviceActivity` — with a dedicated Shield Action and Shield Configuration extension, plus a jailbreak-detection monitor so the block can't just be quietly bypassed. A WidgetKit extension gives at-a-glance session status from the home screen. It's the most actively iterated of the four projects — 139 commits in — which tracks with it being the one that's already been through a real public exhibition and a round of user feedback.",
+        body: "App blocking runs on Apple's Screen Time APIs — `FamilyControls`/`DeviceActivity` — with a dedicated Shield Action and Shield Configuration extension, plus a jailbreak-detection monitor so the block can't just be quietly bypassed. A WidgetKit extension gives at-a-glance session status from the home screen.",
       },
       {
         heading: "My contribution",
         body: "Rush Hour had its first public exhibition last month, at the Apple Developer Academy's own showcase — the first time real users incorporated it into actual work sessions and gave feedback on what helped and what to fix. That feedback is currently shaping the pre–App Store refinement pass.",
       },
     ],
-    // TODO: Rush Hour TestFlight (JX8RE59Q) still unconfirmed — do not invent a join URL. Paste "What to Test" text from that listing if it should be written up.
     links: [
       { label: "GitHub", href: "https://github.com/bhanage-viraj/RushHour" },
+      { label: "TestFlight", href: "https://testflight.apple.com/join/JX8RE59Q" },
       { label: "Live site", href: "https://rush-hour-rho.vercel.app" },
     ],
   },
@@ -249,8 +295,8 @@ export const projects: Project[] = [
         body: "Full build for the hackathon submission — the on-device Gemma integration and the bidirectional interpretation flow.",
       },
     ],
-    // TODO: Coralyst / Sema — no TestFlight or App Store link; Kaggle writeup stays as the sole reference unless one exists.
     links: [
+      { label: "TestFlight", href: "https://testflight.apple.com/join/h9gftDva" },
       {
         label: "Kaggle writeup",
         href: "https://www.kaggle.com/competitions/gemma-4-good-hackathon/writeups/new-writeup-1779016365972",
@@ -336,6 +382,15 @@ export const achievements = {
     certificate: {
       src: "/certificates/meta-hacker-cup.png",
       alt: "2025 Meta Hacker Cup certificate recognizing Viraj Bhanage for progressing to Round 2, global rank 1,623.",
+    },
+  },
+  schoolOfSolana: {
+    title: "School of Solana (Ackee Blockchain)",
+    body: "Certified in Rust & Solana program development; built a functional on-chain Solana program with Anchor as the capstone.",
+    certificate: {
+      src: "/certificates/school-of-solana.jpg",
+      alt: "School of Solana Season 8 graduation certificate from Ackee Blockchain Security.",
+      contain: true,
     },
   },
   kaggle: {

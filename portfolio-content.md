@@ -36,10 +36,24 @@ Biorock Indonesia is a coral preservation community in Bali. Their reefs get hit
 A reef makes a sound — fish, shrimp, ambient reef noise — and so does a bomb going off. That gave us a signal to build on: a hydrophone doesn't need to be in the right place at the right moment the way a patrol boat does, and a timestamped recording is a lot harder to dismiss than a secondhand report. The hard constraint was that this had to work at the edge, where connectivity can't be assumed. That ruled out anything that depended on streaming audio to a server for inference — the detection had to happen on the device itself.
 
 **Engineering decisions.**
-I built the AI/ML pipeline end-to-end: collecting and preparing hydrophone recordings, training a model to pick out blast-fishing signatures against the ambient noise floor of a healthy vs. degraded reef, and — the part that mattered most — getting that model small and efficient enough to run locally, on-device, with no dependency on a live connection. The system logs each detection with a timestamp and estimated location, and separately tracks reef health cues (a healthy reef crackles with life; a damaged one goes quiet) as a side signal.
+I built the AI/ML pipeline end-to-end: collecting and preparing hydrophone recordings from ReefSet v1.0 (Williams et al., 2024), training a 2-layer bidirectional LSTM on 40-band log-mel spectrograms from ~1.92s clips to pick out blast-fishing signatures against the ambient noise floor of a healthy vs. degraded reef, and — the part that mattered most — getting that model small and efficient enough to run locally, on-device, with no dependency on a live connection. The system logs each detection with a timestamp and estimated location, and separately tracks reef health cues (a healthy reef crackles with life; a damaged one goes quiet) as a side signal. The held-out field set is the actual failure mode: the model almost never mistakes real reef life for a bomb, but a confidence threshold calibrated on ReefSet doesn't fully transfer to a new recorder or site. Ranking stays strong (ROC-AUC ~0.95–0.98); each training iteration has been closing that domain-shift gap.
 
 **My contribution.**
 The AI/ML pipeline was mine, start to finish — model training, and the on-device deployment work to make sure something meant for a remote Balinese reef didn't quietly stop working the moment it lost signal.
+
+**By the numbers.**
+- **Data.** ReefSet v1.0 (Williams et al., 2024) — 57,074 hand-labeled hydrophone clips across 16 sites worldwide.
+- **Positive class.** 203 confirmed Indonesia blast clips (`anthrop_bomb`).
+- **External test.** 38 independent field recordings ("Drive"), held out — never touched during training, different recorder and gain than ReefSet.
+- **Model.** 2-layer bidirectional LSTM, hidden size 64, dropout 0.3, mean-pool + linear head, trained on 40-band log-mel spectrograms from ~1.92s clips.
+
+| Setup | ReefSet held-out recall | Confuses real reef sounds? | Unseen field recordings |
+| --- | --- | --- | --- |
+| A — Indonesia bombs vs. Indonesia ambient | 41/42 (98%), F1 0.94 | not tested | not tested |
+| B — + every shrimp/reef-sound class in training | 42/42 (100%) | 0.12% false-positive rate | 7/38 (18%) |
+| C — balanced slice of all 37 ReefSet label types | 5/5 (small n) | 0.57% false-positive rate | 12/38 (32%) |
+
+The model reliably tells a blast from reef background noise, and it almost never mistakes real reef life — snapping shrimp, fish knocks, waves — for a bomb. What it hasn't solved yet is transferring that threshold to a totally new recorder or site: ranking stays strong (ROC-AUC ~0.95–0.98), but the confidence threshold calibrated on ReefSet doesn't fully carry over to real field audio yet. Each iteration (B→C) measurably closes that gap (18%→32% field recall).
 
 **Links:** [GitHub](https://github.com/Gleenryan/CH5_Biorocks) · [Live prototype](https://coralyst.vercel.app)
 
@@ -99,12 +113,12 @@ The starting observation was simple: even small tasks get hard when you're const
 Tracking a number doesn't make someone feel like they showed up for themselves. What does is being able to look back at a session and actually see it — how many times did I get distracted, how did I spend the time, did I really show up for what I said I wanted to do. So instead of a leaderboard, Rush Hour records a timelapse of the session itself, something to reflect on afterward and something you can genuinely share, which builds in accountability without turning focus into a competition.
 
 **Engineering decisions.**
-App blocking runs on Apple's Screen Time APIs — `FamilyControls`/`DeviceActivity` — with a dedicated Shield Action and Shield Configuration extension, plus a jailbreak-detection monitor so the block can't just be quietly bypassed. A WidgetKit extension gives at-a-glance session status from the home screen. It's the most actively iterated of the four projects — 139 commits in — which tracks with it being the one that's already been through a real public exhibition and a round of user feedback.
+App blocking runs on Apple's Screen Time APIs — `FamilyControls`/`DeviceActivity` — with a dedicated Shield Action and Shield Configuration extension, plus a jailbreak-detection monitor so the block can't just be quietly bypassed. A WidgetKit extension gives at-a-glance session status from the home screen.
 
 **My contribution.**
 Rush Hour had its first public exhibition last month, at the Apple Developer Academy's own showcase — the first time real users incorporated it into actual work sessions and gave feedback on what helped and what to fix. That feedback is currently shaping the pre–App Store refinement pass.
 
-**Links:** [GitHub](https://github.com/bhanage-viraj/RushHour) · [Live site](https://rush-hour-rho.vercel.app) · [TestFlight — link to confirm, see notes]
+**Links:** [GitHub](https://github.com/bhanage-viraj/RushHour) · [TestFlight](https://testflight.apple.com/join/JX8RE59Q) · [Live site](https://rush-hour-rho.vercel.app)
 
 ---
 
@@ -125,7 +139,7 @@ Sema is a bidirectional KSL ↔ English/Swahili interpreter running fully offlin
 **My contribution.**
 Full build for the hackathon submission — the on-device Gemma integration and the bidirectional interpretation flow.
 
-**Links:** [Kaggle writeup](https://www.kaggle.com/competitions/gemma-4-good-hackathon/writeups/new-writeup-1779016365972)
+**Links:** [TestFlight](https://testflight.apple.com/join/h9gftDva) · [Kaggle writeup](https://www.kaggle.com/competitions/gemma-4-good-hackathon/writeups/new-writeup-1779016365972)
 
 ---
 
@@ -167,6 +181,7 @@ DevBytes covered the release directly: *"Apple Developer Academy graduate Viraj 
 - **AIR 3 — AlgoUtsav, NIT Rourkela.** Placed 3rd (All India Rank) in NIT Rourkela's national competitive programming contest, hosted by their Algorithmic and Programming Society. *(Confirm this is the right contest name — see notes.)*
 - **Kaggle — Dataset Expert & Notebook Expert.** Expert tier on Kaggle.
 - **Meta Hacker Cup — Global Rank 1623.** Placed 1,623rd worldwide in Meta's annual competitive programming contest.
+- **School of Solana (Ackee Blockchain).** Certified in Rust & Solana program development; built a functional on-chain Solana program with Anchor as the capstone.
 
 ---
 
@@ -189,9 +204,9 @@ Challenge-based learning program, building shipped iOS products end-to-end. Proj
 ## Notes — still need from you
 
 1. **Job title** — still using "Junior Developer" as a placeholder for "IS developer." Confirm the exact official title.
-2. **Rush Hour TestFlight** (`JX8RE59Q`) still won't load for me — paste the "What to Test" text from that listing if you want it written up with the same real-language detail as Revenants and Who's Out.
+2. ~~Rush Hour TestFlight — [join link](https://testflight.apple.com/join/JX8RE59Q) added.~~
 3. **Jagran Josh article** — still blocked from fetching, so the Featured card above is running on your framing (Apple Developer Academy, Bali, Nov 2025) rather than the actual article text. Paste the paragraph that mentions you and I'll turn it into a real teaser line instead of a placeholder.
-4. **Coralyst / Sema** — no TestFlight or App Store link for either; send one if it exists, otherwise the site/Kaggle writeup stays as the sole reference.
+4. **Coralyst** — no TestFlight or App Store link; send one if it exists, otherwise the live prototype stays as the sole reference. Sema TestFlight: [h9gftDva](https://testflight.apple.com/join/h9gftDva).
 5. **AlgoUtsav name check** — I couldn't find a contest called "Algoth" at NIT Rourkela, but they run an annual national competitive-programming contest called **AlgoUtsav** through their Algorithmic and Programming Society, which matches an "AIR 3" framing. I've written it up as AlgoUtsav — correct me if it was a different contest (or a different name entirely) and I'll fix it.
 6. ~~Cursor Bali Hackathon — name confirmed.~~
 7. **Kaggle profile link** — send your Kaggle username/profile URL so I can link "Dataset Expert & Notebook Expert" directly to your profile instead of leaving it as text-only.

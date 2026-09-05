@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { CaseNumbers } from "@/components/case-numbers";
 import { Footer } from "@/components/footer";
 import { MediaSlot } from "@/components/media-slot";
 import { ProjectLogo } from "@/components/project-logo";
@@ -82,6 +83,8 @@ export default async function CaseStudyPage({
               </section>
             ))}
           </div>
+
+          {project.numbers ? <CaseNumbers numbers={project.numbers} /> : null}
 
           <ul className="mt-14 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-x-8">
             {project.links.map((link) => (
