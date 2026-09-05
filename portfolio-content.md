@@ -145,8 +145,8 @@ Full build for the hackathon submission — the on-device Gemma integration and 
 
 ## Open Source — RealityAudio
 
-**Card subheading:** Open-source spatial audio package for RealityKit
-**Card teaser:** One line of code for LiDAR-aware spatial audio in AR — built out of a real need while making Revenants, published free on GitHub, and featured by DevBytes.
+**Card subheading:** I built this and open-sourced it
+**Card teaser:** RealityAudio is a RealityKit spatial audio package I wrote for Revenants and released on GitHub — one line of code for LiDAR-aware 3D sound in AR. Later featured by DevBytes.
 
 **The situation.**
 Born directly out of Revenants: I needed spatial audio in RealityKit that could realistically muffle or block when a real wall or piece of furniture was between the listener and the sound source. RealityKit didn't have a simple way to do that — it meant hand-rolling matrix math and manual `AnchorEntity` setup every time.

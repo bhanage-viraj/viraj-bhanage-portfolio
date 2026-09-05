@@ -1,111 +1,102 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
+import {
+  AchievementCard,
+  ChipGlyph,
+  MedalGlyph,
+  TrophyGlyph,
+  type AchievementTone,
+} from "@/components/achievement-card";
+import { CursorGlyph } from "@/components/cursor-glyph";
+import { KaggleAchievementItem } from "@/components/kaggle-achievements";
+import { Lightbox } from "@/components/lightbox";
+import { MetaGlyph } from "@/components/meta-glyph";
 import { achievements } from "@/lib/content";
-import { Card, CardList, Section } from "@/lib/ui";
-import { CursorGlyph } from "./cursor-glyph";
-import { KaggleAchievementItem } from "./kaggle-achievements";
-import { Lightbox } from "./lightbox";
-import { MetaGlyph } from "./meta-glyph";
+import { CardList, Section } from "@/lib/ui";
 
 type AchievementId = "cursor" | "geoai" | "algo" | "meta" | "solana";
 
-type AchievementItem = {
+type ListedAchievement = {
   id: AchievementId;
+  tone: AchievementTone;
+  category: string;
+  date?: string;
   title: string;
   body: string;
-  glyph?: "cursor" | "meta";
+  icon: ReactNode;
   certificate?: { src: string; alt: string; contain?: boolean };
 };
 
-const items: AchievementItem[] = [
+const items: ListedAchievement[] = [
   {
     id: "cursor",
+    tone: "cursor",
+    category: "Hackathon",
     title: achievements.cursorBali.title,
     body: achievements.cursorBali.body,
-    glyph: "cursor",
+    icon: <CursorGlyph />,
   },
   {
     id: "geoai",
+    tone: "geo",
+    category: "Hackathon",
     title: achievements.geoAi.title,
     body: achievements.geoAi.body,
+    icon: <ChipGlyph />,
   },
   {
     id: "algo",
+    tone: "algo",
+    category: "Competition",
+    date: "2025",
     title: achievements.algoUtsav.title,
     body: achievements.algoUtsav.body,
+    icon: <MedalGlyph />,
     certificate: achievements.algoUtsav.certificate,
   },
   {
     id: "meta",
+    tone: "meta",
+    category: "Competition",
+    date: "2025",
     title: achievements.metaHackerCup.title,
     body: achievements.metaHackerCup.body,
-    glyph: "meta",
+    icon: <MetaGlyph />,
     certificate: achievements.metaHackerCup.certificate,
   },
 ];
 
-const lastItem: AchievementItem = {
+const lastItem: ListedAchievement = {
   id: "solana",
+  tone: "solana",
+  category: "Certification",
   title: achievements.schoolOfSolana.title,
   body: achievements.schoolOfSolana.body,
+  icon: (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={achievements.schoolOfSolana.certificate.src}
+      alt=""
+      className="h-full w-full object-cover"
+    />
+  ),
   certificate: achievements.schoolOfSolana.certificate,
 };
 
 const allItems = [...items, lastItem];
+const achievementCount = allItems.length + 1;
 
-function AchievementCard({
-  item,
-  onOpen,
-}: {
-  item: AchievementItem;
-  onOpen: (id: AchievementId) => void;
-}) {
-  const contain = item.certificate?.contain;
-
+function CertificateThumb({ src }: { src: string }) {
   return (
-    <Card as="button" type="button" onClick={() => onOpen(item.id)}>
-      <div
-        className={`flex flex-col gap-6 ${
-          item.certificate ? "lg:flex-row lg:items-start lg:gap-12" : ""
-        }`}
-      >
-        <div className="min-w-0 flex-1">
-          <div className="flex items-start gap-2.5">
-            {item.glyph === "cursor" ? (
-              <span className="mt-1 shrink-0">
-                <CursorGlyph />
-              </span>
-            ) : null}
-            {item.glyph === "meta" ? (
-              <span className="mt-1 shrink-0">
-                <MetaGlyph />
-              </span>
-            ) : null}
-            <h3 className="font-display text-card font-medium text-ink">
-              {item.title}
-            </h3>
-          </div>
-          <p className="mt-3 max-w-[42ch] text-[15px] leading-[1.65] text-ink-muted sm:text-body">
-            {item.body}
-          </p>
-        </div>
-        {item.certificate ? (
-          <div className="w-full overflow-hidden border border-line/80 lg:w-auto">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={item.certificate.src}
-              alt=""
-              className={
-                contain
-                  ? "aspect-[16/10] w-full bg-paper object-contain transition-transform duration-500 ease-out group-hover:scale-[1.03] lg:w-[260px] xl:w-[328px]"
-                  : "aspect-[16/10] w-full object-cover object-top transition-transform duration-500 ease-out group-hover:scale-[1.03] lg:w-[260px] xl:w-[328px]"
-              }
-            />
-          </div>
-        ) : null}
-      </div>
-    </Card>
+    <div className="w-[148px] overflow-hidden border border-line/80">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={src}
+        alt=""
+        className="aspect-[16/10] w-full object-cover object-top transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+      />
+    </div>
   );
 }
 
@@ -114,16 +105,51 @@ export function Achievements() {
   const active = allItems.find((item) => item.id === open) ?? null;
 
   return (
-    <Section id="achievements" title="Achievements">
+    <Section
+      id="achievements"
+      title="Achievements"
+      lede="Competitions, certifications and milestones along the way."
+      icon={
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center bg-ink text-paper">
+          <TrophyGlyph />
+        </span>
+      }
+      aside={
+        <p className="shrink-0 font-mono text-data uppercase text-ink-muted">
+          {achievementCount} achievements
+        </p>
+      }
+    >
       <CardList>
         {items.map((item) => (
           <li key={item.id}>
-            <AchievementCard item={item} onOpen={setOpen} />
+            <AchievementCard
+              tone={item.tone}
+              category={item.category}
+              date={item.date}
+              title={item.title}
+              body={item.body}
+              icon={item.icon}
+              aside={
+                item.certificate ? (
+                  <CertificateThumb src={item.certificate.src} />
+                ) : undefined
+              }
+              onClick={() => setOpen(item.id)}
+            />
           </li>
         ))}
         <KaggleAchievementItem />
         <li>
-          <AchievementCard item={lastItem} onOpen={setOpen} />
+          <AchievementCard
+            tone={lastItem.tone}
+            category={lastItem.category}
+            date={lastItem.date}
+            title={lastItem.title}
+            body={lastItem.body}
+            icon={lastItem.icon}
+            onClick={() => setOpen(lastItem.id)}
+          />
         </li>
       </CardList>
 
@@ -142,7 +168,11 @@ export function Achievements() {
             }
           />
         ) : null}
-        <p className={`max-w-prose font-display text-card font-medium text-ink ${active?.certificate ? "mt-5" : ""}`}>
+        <p
+          className={`max-w-prose font-display text-card font-medium text-ink ${
+            active?.certificate ? "mt-5" : ""
+          }`}
+        >
           {active?.title}
         </p>
         <p className="mt-3 max-w-prose text-ink-muted">{active?.body}</p>

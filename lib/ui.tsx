@@ -18,21 +18,48 @@ export function PageCol({
 export function Section({
   id,
   title,
+  lede,
+  aside,
+  icon,
   children,
   className = "",
 }: {
   id?: string;
   title: string;
+  lede?: string;
+  aside?: ReactNode;
+  icon?: ReactNode;
   children: ReactNode;
   className?: string;
 }) {
+  const heading = (
+    <h2 className="font-display text-section font-semibold text-ink">{title}</h2>
+  );
+
   return (
     <section
       id={id}
       className={`scroll-mt-24 border-t border-line py-section-sm sm:py-section ${className}`}
     >
       <PageCol>
-        <h2 className="font-display text-section font-semibold text-ink">{title}</h2>
+        {lede || aside || icon ? (
+          <div className="flex items-start justify-between gap-6">
+            <div className="flex items-start gap-3.5">
+              {icon}
+              <div>
+                {heading}
+                {lede ? (
+                  <p className="mt-2 max-w-[46ch] text-[15px] leading-snug text-ink-muted">
+                    {lede}
+                  </p>
+                ) : null}
+              </div>
+            </div>
+            {aside}
+          </div>
+        ) : (
+          heading
+        )}
         <div className="mt-10 sm:mt-12">{children}</div>
       </PageCol>
     </section>

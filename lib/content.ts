@@ -307,9 +307,9 @@ export const projects: Project[] = [
     slug: "realityaudio",
     caseId: "OS · REALITYAUDIO",
     title: "RealityAudio",
-    cardSubheading: "Open-source spatial audio package for RealityKit",
+    cardSubheading: "I built this and open-sourced it",
     cardTeaser:
-      "One line of code for LiDAR-aware spatial audio in AR — built out of a real need while making Revenants, published free on GitHub, and featured by DevBytes.",
+      "RealityAudio is a RealityKit spatial audio package I wrote for Revenants and released on GitHub — one line of code for LiDAR-aware 3D sound in AR. Later featured by DevBytes.",
     tech: ["Swift", "RealityKit", "ARKit", "Swift Package Manager"],
     media: { type: "placeholder", intended: "image" },
     images: [],

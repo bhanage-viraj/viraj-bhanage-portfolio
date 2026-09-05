@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { AchievementCard } from "@/components/achievement-card";
 import { achievements } from "@/lib/content";
 import type { KaggleCategory, KaggleStats } from "@/lib/types";
-import { Card } from "@/lib/ui";
 import { KaggleGlyph } from "./kaggle-glyph";
 import { Lightbox } from "./lightbox";
 
@@ -22,26 +22,18 @@ function formatCount(value: number): string {
   return value.toLocaleString("en-US");
 }
 
-function ExpertBadge({ large = false }: { large?: boolean }) {
+function ExpertBadge() {
   return (
-    <span className={`inline-flex items-center ${large ? "gap-2.5" : "gap-1.5"}`}>
+    <span className="inline-flex items-center gap-1.5">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src="/logos/kaggle-expert.png"
         alt=""
-        width={large ? 56 : 28}
-        height={large ? 56 : 28}
-        className={large ? "h-12 w-12 shrink-0 sm:h-14 sm:w-14" : "h-7 w-7 shrink-0"}
+        width={28}
+        height={28}
+        className="h-7 w-7 shrink-0"
       />
-      <span
-        className={
-          large
-            ? "font-mono text-[17px] tracking-[0.04em] text-signal sm:text-[19px]"
-            : "font-mono text-data text-signal"
-        }
-      >
-        Expert
-      </span>
+      <span className="font-mono text-data text-signal">Expert</span>
     </span>
   );
 }
@@ -105,34 +97,42 @@ export function KaggleAchievementItem() {
 
   return (
     <li>
-      <Card as="button" type="button" onClick={() => setOpen(true)}>
-        <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:gap-12">
-          <div className="min-w-0 flex-1">
-            <div className="flex items-start gap-2.5">
-              <span className="mt-1 shrink-0">
-                <KaggleGlyph />
-              </span>
-              <h3 className="font-display text-card font-medium text-ink">
-                {achievements.kaggle.title}
-              </h3>
-            </div>
-            <p className="mt-3 max-w-[42ch] text-[15px] leading-[1.65] text-ink-muted sm:text-body">
-              {achievements.kaggle.body}
-            </p>
-          </div>
-          <div className="flex shrink-0 flex-col items-start gap-3 sm:items-end">
+      <AchievementCard
+        tone="kaggle"
+        category="Platform"
+        title={achievements.kaggle.title}
+        body={achievements.kaggle.body}
+        icon={<KaggleGlyph />}
+        aside={
+          <div className="border border-line px-3 py-2.5">
             <div className="flex items-center gap-2">
               {data.live ? (
-                <span className="inline-block h-2.5 w-2.5 rounded-full bg-coral" aria-hidden="true" />
+                <span
+                  className="inline-block h-2 w-2 rounded-full bg-coral"
+                  aria-hidden="true"
+                />
               ) : null}
-              <ExpertBadge large />
+              <ExpertBadge />
             </div>
-            <p className="font-mono text-[18px] tracking-tight text-ink-muted sm:text-[20px]">
-              {formatCount(data.datasets.rank)} · {formatCount(data.notebooks.rank)}
-            </p>
+            <div className="mt-2 flex gap-3 border-t border-line pt-2">
+              <p className="font-mono text-[13px] leading-tight tracking-normal text-ink">
+                {formatCount(data.datasets.rank)}
+                <span className="mt-0.5 block text-[10px] uppercase tracking-[0.1em] text-ink-muted">
+                  Datasets
+                </span>
+              </p>
+              <span className="self-stretch border-l border-line" aria-hidden="true" />
+              <p className="font-mono text-[13px] leading-tight tracking-normal text-ink">
+                {formatCount(data.notebooks.rank)}
+                <span className="mt-0.5 block text-[10px] uppercase tracking-[0.1em] text-ink-muted">
+                  Notebooks
+                </span>
+              </p>
+            </div>
           </div>
-        </div>
-      </Card>
+        }
+        onClick={() => setOpen(true)}
+      />
 
       <Lightbox open={open} title={achievements.kaggle.title} onClose={() => setOpen(false)}>
         <p className="max-w-prose text-body text-ink">{achievements.kaggle.title}</p>
