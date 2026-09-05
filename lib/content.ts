@@ -270,7 +270,7 @@ export const projects: Project[] = [
     cardSubheading: "Offline, on-device Kenyan Sign Language interpreter",
     cardTeaser:
       "A bidirectional KSL ↔ English/Swahili interpreter that runs fully offline on iPhone, built on Gemma 4 via llama.cpp for the Gemma for Good Hackathon.",
-    tech: ["Gemma 4", "llama.cpp", "Swift/SwiftUI"],
+    tech: ["Gemma 4", "llama.cpp", "MediaPipe", "Swift/SwiftUI"],
     media: {
       type: "image",
       src: "/work/sema-poster.jpg",

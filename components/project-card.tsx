@@ -49,7 +49,7 @@ export function ProjectCard({
           </div>
         ) : null}
       </div>
-      <ul className="mt-6 flex flex-wrap gap-x-3 gap-y-1.5">
+      <ul className="mt-6 flex flex-wrap gap-2">
         {project.tech.map((item) => (
           <li key={item} className="site-tag">
             {item}

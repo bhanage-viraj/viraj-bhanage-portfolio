@@ -47,7 +47,7 @@
   }
 
   .site-tag {
-    @apply font-mono text-[11px] tracking-[0.04em] text-ink-muted;
+    @apply border border-line px-2 py-1 font-mono text-[11px] tracking-[0.04em] text-ink;
   }
 
   .site-media {
