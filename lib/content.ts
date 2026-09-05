@@ -10,15 +10,16 @@ export const site = {
 };
 
 export const hero = {
-  headline: "I build the thing that thinks, and the thing people actually touch.",
+  headline: "I build the intelligence that runs on-device, and the iOS app around it.",
   // TODO: confirm official job title — still using "Junior Developer" as a placeholder for "IS developer."
   subhead:
-    "3rd-year BS Computer Science student at BITS Pilani, currently a Junior Developer at the Apple Developer Academy.",
+    "3rd-year BS Computer Science student at BITS Pilani, currently a Junior Developer at the Apple Developer Academy — building native iOS apps powered by on-device AI/ML.",
 };
 
 export const about = [
-  "I'm Viraj — a computer science student who keeps ending up at the same intersection: on-device AI/ML and the native Apple stack. At the Apple Developer Academy I've built a bioacoustics pipeline that runs offline on a phone for a coral conservation community in Bali, a two-player AR horror game with its own custom spatial audio engine, a friend-availability app built on brand-new iOS 27 platform features, and a focus app that ships with its first real user feedback already shaping the roadmap. I also maintain RealityAudio, an open-source spatial audio package for RealityKit.",
-  "I like projects with a hard constraint baked in — no internet at the reef, two phones that have to agree on one haunted room in real time, an interpreter that has to work fully offline for the community it's built for. That's usually where the actual engineering is.",
+  "I'm Viraj — an iOS developer who builds on-device AI/ML, which is a specific, stubborn kind of engineering: no cloud to lean on, no server to quietly offload the hard part to, just Swift, Core ML, and whatever the phone in someone's hand can actually do in real time.",
+  "That constraint is the thing I keep choosing to work inside. Whether it's a model, a spatial-computing session, or a signal being interpreted live, I care about the moment it actually has to run on hardware someone's holding — where latency, battery, and privacy aren't abstractions, they're the whole design problem.",
+  "I'm drawn to native Apple engineering with real intelligence built in, not bolted on from a server somewhere else.",
 ];
 
 export const projects: Project[] = [
@@ -339,7 +340,7 @@ export const achievements = {
   },
   kaggle: {
     title: "Kaggle — Dataset Expert & Notebook Expert",
-    body: "Recognized at Expert tier on Kaggle in both the Datasets and Notebooks categories.",
+    body: "Expert tier on Kaggle.",
     profileUrl: "https://www.kaggle.com/bhanageviraj",
     username: "bhanageviraj",
     staticAsOf: "4 September 2026",
