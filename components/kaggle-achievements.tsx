@@ -3,9 +3,8 @@
 import { useEffect, useState } from "react";
 import { AchievementCard } from "@/components/achievement-card";
 import { achievements } from "@/lib/content";
-import type { KaggleCategory, KaggleStats } from "@/lib/types";
+import type { KaggleStats } from "@/lib/types";
 import { KaggleGlyph } from "./kaggle-glyph";
-import { Lightbox } from "./lightbox";
 
 function snapshotStats(): KaggleStats {
   return {
@@ -38,45 +37,8 @@ function ExpertBadge() {
   );
 }
 
-function MedalLine({ category }: { category: KaggleCategory }) {
-  const parts: string[] = [];
-  if (category.gold) parts.push(`${category.gold} gold`);
-  if (category.silver) parts.push(`${category.silver} silver`);
-  if (category.bronze) parts.push(`${category.bronze} bronze`);
-  if (parts.length === 0) parts.push("no medals");
-  return <span>{parts.join(" · ")}</span>;
-}
-
-function CategoryCard({ category }: { category: KaggleCategory }) {
-  return (
-    <article className="flex flex-col border border-line p-5">
-      <div className="flex items-center justify-between gap-3">
-        <h3 className="font-display text-[18px] font-semibold text-ink">{category.name}</h3>
-        {category.tier === "Expert" ? (
-          <ExpertBadge />
-        ) : (
-          <span className="font-mono text-data text-signal">{category.tier}</span>
-        )}
-      </div>
-      <p className="mt-4 font-mono text-data text-ink-muted">Medals</p>
-      <p className="mt-1 text-[16px] text-ink">
-        <MedalLine category={category} />
-      </p>
-      <p className="mt-4 font-mono text-data text-ink-muted">Rank</p>
-      <p className="mt-1 font-mono text-[22px] leading-none text-ink">
-        {formatCount(category.rank)}
-        <span className="ml-1 text-data text-ink-muted">of {formatCount(category.of)}</span>
-      </p>
-      <p className="mt-2 font-mono text-data text-ink-muted">
-        {formatCount(category.highest)} highest ever
-      </p>
-    </article>
-  );
-}
-
 export function KaggleAchievementItem() {
   const [stats, setStats] = useState<KaggleStats | null>(null);
-  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -131,25 +93,7 @@ export function KaggleAchievementItem() {
             </div>
           </div>
         }
-        onClick={() => setOpen(true)}
       />
-
-      <Lightbox open={open} title={achievements.kaggle.title} onClose={() => setOpen(false)}>
-        <p className="max-w-prose text-body text-ink">{achievements.kaggle.title}</p>
-        <p className="mt-2 max-w-prose text-ink-muted">{achievements.kaggle.body}</p>
-        <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <CategoryCard category={data.datasets} />
-          <CategoryCard category={data.notebooks} />
-        </div>
-        <a
-          href={data.profileUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="mt-5 inline-block text-[15px] text-signal underline decoration-signal/40 underline-offset-4 hover:decoration-signal"
-        >
-          kaggle.com/{achievements.kaggle.username}
-        </a>
-      </Lightbox>
     </li>
   );
 }

@@ -1,6 +1,4 @@
-"use client";
-
-import { useState, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import {
   AchievementCard,
   ChipGlyph,
@@ -11,22 +9,19 @@ import {
 } from "@/components/achievement-card";
 import { CursorGlyph } from "@/components/cursor-glyph";
 import { KaggleAchievementItem } from "@/components/kaggle-achievements";
-import { Lightbox } from "@/components/lightbox";
 import { MetaGlyph } from "@/components/meta-glyph";
 import { achievements } from "@/lib/content";
 import { CardList, Section } from "@/lib/ui";
 
-type AchievementId = "cursor" | "geoai" | "algo" | "meta" | "solana" | "unicorn";
-
 type ListedAchievement = {
-  id: AchievementId;
+  id: string;
   tone: AchievementTone;
   category: string;
   date?: string;
   title: string;
   body: string;
   icon: ReactNode;
-  certificate?: { src: string; alt: string; contain?: boolean };
+  certificate?: { src: string; alt: string };
 };
 
 const items: ListedAchievement[] = [
@@ -83,7 +78,6 @@ const trailingItems: ListedAchievement[] = [
         className="h-full w-full object-cover"
       />
     ),
-    certificate: achievements.schoolOfSolana.certificate,
   },
   {
     id: "unicorn",
@@ -96,8 +90,7 @@ const trailingItems: ListedAchievement[] = [
   },
 ];
 
-const allItems = [...items, ...trailingItems];
-const achievementCount = allItems.length + 1;
+const achievementCount = items.length + trailingItems.length + 1;
 
 function CertificateThumb({ src }: { src: string }) {
   return (
@@ -106,16 +99,13 @@ function CertificateThumb({ src }: { src: string }) {
       <img
         src={src}
         alt=""
-        className="aspect-[16/10] w-full object-cover object-top transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+        className="aspect-[16/10] w-full object-cover object-top"
       />
     </div>
   );
 }
 
 export function Achievements() {
-  const [open, setOpen] = useState<AchievementId | null>(null);
-  const active = allItems.find((item) => item.id === open) ?? null;
-
   return (
     <Section
       id="achievements"
@@ -147,7 +137,6 @@ export function Achievements() {
                   <CertificateThumb src={item.certificate.src} />
                 ) : undefined
               }
-              onClick={() => setOpen(item.id)}
             />
           </li>
         ))}
@@ -161,36 +150,10 @@ export function Achievements() {
               title={item.title}
               body={item.body}
               icon={item.icon}
-              onClick={() => setOpen(item.id)}
             />
           </li>
         ))}
       </CardList>
-
-      <Lightbox
-        open={active !== null}
-        title={active?.title ?? "Achievement"}
-        onClose={() => setOpen(null)}
-      >
-        {active?.certificate ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={active.certificate.src}
-            alt={active.certificate.alt}
-            className={
-              active.certificate.contain ? "mx-auto w-full max-w-md" : "w-full"
-            }
-          />
-        ) : null}
-        <p
-          className={`max-w-prose font-display text-card font-medium text-ink ${
-            active?.certificate ? "mt-5" : ""
-          }`}
-        >
-          {active?.title}
-        </p>
-        <p className="mt-3 max-w-prose text-ink-muted">{active?.body}</p>
-      </Lightbox>
     </Section>
   );
 }

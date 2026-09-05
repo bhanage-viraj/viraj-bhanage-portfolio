@@ -59,7 +59,6 @@ export function AchievementCard({
   body,
   icon,
   aside,
-  onClick,
 }: {
   tone: AchievementTone;
   category: string;
@@ -68,12 +67,11 @@ export function AchievementCard({
   body: string;
   icon: ReactNode;
   aside?: ReactNode;
-  onClick: () => void;
 }) {
   const palette = tones[tone];
 
   return (
-    <Card as="button" type="button" onClick={onClick}>
+    <Card className="hover:border-line/80 hover:bg-transparent">
       <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:gap-5">
         <span
           className={`flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden ${palette.well} ${palette.mark} [&>svg]:mt-0 [&>svg]:text-current`}
