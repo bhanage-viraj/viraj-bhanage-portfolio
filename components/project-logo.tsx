@@ -18,12 +18,12 @@ export function ProjectLogo({
       className={
         logo.icon
           ? study
-            ? "mt-5 h-14 w-auto rounded-[22%] object-contain sm:h-[4.5rem]"
+            ? "h-12 w-12 shrink-0 rounded-[22%] object-contain sm:h-14 sm:w-14"
             : card
               ? "h-12 w-12 rounded-[22%] object-contain"
               : "mt-5 h-9 w-auto rounded-[22%] object-contain sm:h-11"
           : study
-            ? "mt-5 h-10 w-auto max-w-[min(100%,360px)] object-contain sm:h-12"
+            ? "h-9 w-auto max-w-[min(100%,220px)] shrink-0 object-contain sm:h-11"
             : card
               ? "h-8 w-auto max-w-[min(100%,200px)] object-contain"
               : "mt-5 h-7 w-auto max-w-[min(100%,240px)] object-contain sm:h-8"

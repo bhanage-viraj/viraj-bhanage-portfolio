@@ -95,7 +95,7 @@ export function MediaSlot({
     return (
       <figure className="overflow-hidden rounded-[1.15rem] border border-line/80">
         <video
-          className="aspect-video w-full bg-line/30"
+          className="h-auto w-full bg-line/30"
           src={media.src}
           poster={media.poster}
           controls
