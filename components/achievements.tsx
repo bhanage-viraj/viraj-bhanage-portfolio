@@ -12,6 +12,7 @@ import { KaggleAchievementItem } from "@/components/kaggle-achievements";
 import { MetaGlyph } from "@/components/meta-glyph";
 import { achievements } from "@/lib/content";
 import { CardList, Section } from "@/lib/ui";
+import { Reveal } from "./reveal";
 
 type ListedAchievement = {
   id: string;
@@ -123,34 +124,42 @@ export function Achievements() {
       }
     >
       <CardList>
-        {items.map((item) => (
+        {items.map((item, index) => (
           <li key={item.id}>
-            <AchievementCard
-              tone={item.tone}
-              category={item.category}
-              date={item.date}
-              title={item.title}
-              body={item.body}
-              icon={item.icon}
-              aside={
-                item.certificate ? (
-                  <CertificateThumb src={item.certificate.src} />
-                ) : undefined
-              }
-            />
+            <Reveal delay={index * 70}>
+              <AchievementCard
+                tone={item.tone}
+                category={item.category}
+                date={item.date}
+                title={item.title}
+                body={item.body}
+                icon={item.icon}
+                aside={
+                  item.certificate ? (
+                    <CertificateThumb src={item.certificate.src} />
+                  ) : undefined
+                }
+              />
+            </Reveal>
           </li>
         ))}
-        <KaggleAchievementItem />
-        {trailingItems.map((item) => (
+        <li>
+          <Reveal delay={items.length * 70}>
+            <KaggleAchievementItem />
+          </Reveal>
+        </li>
+        {trailingItems.map((item, index) => (
           <li key={item.id}>
-            <AchievementCard
-              tone={item.tone}
-              category={item.category}
-              date={item.date}
-              title={item.title}
-              body={item.body}
-              icon={item.icon}
-            />
+            <Reveal delay={(items.length + 1 + index) * 70}>
+              <AchievementCard
+                tone={item.tone}
+                category={item.category}
+                date={item.date}
+                title={item.title}
+                body={item.body}
+                icon={item.icon}
+              />
+            </Reveal>
           </li>
         ))}
       </CardList>

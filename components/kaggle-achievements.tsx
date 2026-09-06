@@ -58,8 +58,7 @@ export function KaggleAchievementItem() {
   const data = stats ?? snapshotStats();
 
   return (
-    <li>
-      <AchievementCard
+    <AchievementCard
         tone="kaggle"
         category="Platform"
         title={achievements.kaggle.title}
@@ -94,6 +93,5 @@ export function KaggleAchievementItem() {
           </div>
         }
       />
-    </li>
   );
 }

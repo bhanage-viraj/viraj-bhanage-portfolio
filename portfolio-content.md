@@ -6,11 +6,13 @@ Rewritten as case-study narratives — each project follows the same arc: the si
 
 ## Hero
 
+**Eyebrow:** iOS · On-device AI · Swift packages · Spatial
+
 **Headline:**
-> I build the intelligence that runs on-device, and the iOS app around it.
+> I build intelligence that runs on-device.
 
 **Subhead:**
-> 3rd-year BS Computer Science student at BITS Pilani, currently a Junior Developer at the Apple Developer Academy — building native iOS apps powered by on-device AI/ML.
+> 3rd-year BS Computer Science student at BITS Pilani, currently a Junior Developer at the Apple Developer Academy — shipping native iOS, a public Swift package, and on-device inference. No cloud for the hard part.
 
 ---
 
@@ -18,16 +20,17 @@ Rewritten as case-study narratives — each project follows the same arc: the si
 
 I'm Viraj — an iOS developer who builds on-device AI/ML, which is a specific, stubborn kind of engineering: no cloud to lean on, no server to quietly offload the hard part to, just Swift, Core ML, and whatever the phone in someone's hand can actually do in real time.
 
-That constraint is the thing I keep choosing to work inside. Whether it's a model, a spatial-computing session, or a signal being interpreted live, I care about the moment it actually has to run on hardware someone's holding — where latency, battery, and privacy aren't abstractions, they're the whole design problem.
+That constraint is the thing I keep choosing to work inside. Whether it's a Core ML classifier, a Foundation Models suggestion, a llama.cpp session, or two phones agreeing on one AR room over Network.framework, I care about the moment it has to run on hardware someone's holding — where latency, battery, isolation, and privacy aren't abstractions, they're the design problem.
 
-I'm drawn to native Apple engineering with real intelligence built in, not bolted on from a server somewhere else.
+I've published that work as a Swift package with a public API and tests, written Swift 6 concurrency so network and AR callbacks stay on the right actor, and kept UI in SwiftUI — VIPER where the session is long-lived (Revenants), MVVM where the screens are discrete (Rush Hour).
 
 ---
 
 ## Project 1 — Coralyst
 
 **Card subheading:** On-device bioacoustic monitoring for coral reef conservation
-**Card teaser:** An AI/ML pipeline that listens for illegal blast fishing on a Balinese reef — and runs fully offline, on-device, with no dependency on a network connection.
+**Card teaser:** On-device inference: a bundled Core ML classifier listens for blast fishing on a Balinese reef — AVFoundation audio in, local prediction out, no network.
+**Stack:** Python, Core ML, Swift/SwiftUI, AVFoundation
 
 **The situation.**
 Biorock Indonesia is a coral preservation community in Bali. Their reefs get hit by blast fishing — homemade explosives thrown into the water that kill everything in a 10–30 meter radius and can leave a reef as rubble for decades. It's illegal almost everywhere it happens, but oceans are vast, patrols are thin, and most blasts go unwitnessed. The community didn't need another dashboard — they needed a way to actually catch this happening, at sites with no reliable connectivity.
@@ -36,10 +39,10 @@ Biorock Indonesia is a coral preservation community in Bali. Their reefs get hit
 A reef makes a sound — fish, shrimp, ambient reef noise — and so does a bomb going off. That gave us a signal to build on: a hydrophone doesn't need to be in the right place at the right moment the way a patrol boat does, and a timestamped recording is a lot harder to dismiss than a secondhand report. The hard constraint was that this had to work at the edge, where connectivity can't be assumed. That ruled out anything that depended on streaming audio to a server for inference — the detection had to happen on the device itself.
 
 **Engineering decisions.**
-I built the AI/ML pipeline end-to-end: collecting and preparing hydrophone recordings from ReefSet v1.0 (Williams et al., 2024), training a 2-layer bidirectional LSTM on 40-band log-mel spectrograms from ~1.92s clips to pick out blast-fishing signatures against the ambient noise floor of a healthy vs. degraded reef, and — the part that mattered most — getting that model small and efficient enough to run locally, on-device, with no dependency on a live connection. The system logs each detection with a timestamp and estimated location, and separately tracks reef health cues (a healthy reef crackles with life; a damaged one goes quiet) as a side signal. The held-out field set is the actual failure mode: the model almost never mistakes real reef life for a bomb, but a confidence threshold calibrated on ReefSet doesn't fully transfer to a new recorder or site. Ranking stays strong (ROC-AUC ~0.95–0.98); each training iteration has been closing that domain-shift gap.
+I built the AI/ML pipeline end-to-end: collecting and preparing hydrophone recordings from ReefSet v1.0 (Williams et al., 2024), training a 2-layer bidirectional LSTM on 40-band log-mel spectrograms from ~1.92s clips to pick out blast-fishing signatures against the ambient noise floor of a healthy vs. degraded reef, and — the part that mattered most — getting that model small and efficient enough to run locally. On-device inference is a bundled Core ML `BlastEventClassifier.mlpackage` loaded with `MLModel`; `BlastClassifier` is `Sendable` and runs prediction on extracted audio features with no live connection. Hydrophone playback and capture sit on `AVFoundation` (`AVAudioEngine` / player nodes). The system logs each detection with a timestamp and estimated location, and separately tracks reef health cues. The held-out field set is the actual failure mode: the model almost never mistakes real reef life for a bomb, but a confidence threshold calibrated on ReefSet doesn't fully transfer to a new recorder or site. Ranking stays strong (ROC-AUC ~0.95–0.98); each training iteration has been closing that domain-shift gap.
 
 **My contribution.**
-The AI/ML pipeline was mine, start to finish — model training, and the on-device deployment work to make sure something meant for a remote Balinese reef didn't quietly stop working the moment it lost signal.
+The AI/ML pipeline was mine, start to finish — model training, and getting a bundled Core ML `BlastEventClassifier` running on-device so a remote Balinese reef doesn't quietly stop working the moment it loses signal.
 
 **By the numbers.**
 - **Data.** ReefSet v1.0 (Williams et al., 2024) — 57,074 hand-labeled hydrophone clips across 16 sites worldwide.
@@ -62,7 +65,8 @@ The model reliably tells a blast from reef background noise, and it almost never
 ## Project 2 — Revenants
 
 **Card subheading:** Asymmetrical co-op AR horror game
-**Card teaser:** Two phones, one shared haunted room — LiDAR world-scanning, ARKit collaborative sessions, and a spatial audio engine I built and open-sourced along the way.
+**Card teaser:** Swift 6 concurrency + a custom Network.framework / Bonjour protocol: two phones, one LiDAR-scanned room, ARKit collaboration, Core Haptics, and a Swift package spun out for spatial audio.
+**Stack:** Swift 6 concurrency, SwiftUI, VIPER, ARKit, RealityKit, RoomPlan, Core Haptics, Network.framework, Combine
 
 **The situation.**
 This was a co-op AR game project: two players in the same physical room, one experience, built to be genuinely playable together rather than side-by-side. The concept was an asymmetrical horror escape room — a curse splits the two players' senses, and neither can get through it alone.
@@ -71,10 +75,10 @@ This was a co-op AR game project: two players in the same physical room, one exp
 The interesting problem wasn't the horror theming, it was the coordination problem underneath it: two phones that have never met need to agree, to the centimeter, on where a doll is sitting on a real rug. One phone has LiDAR and can build an accurate model of the room; the other doesn't. Rather than treat that as a limitation, we turned it into the plot — the LiDAR phone becomes the Host and builds the map, the other becomes the Guest and joins that shared coordinate space through ARKit's collaborative session. Once the curse hits, one player goes deaf and gains sight (hidden clues, glowing locks); the other goes blind and gains spatial hearing and haptic guidance. Neither piece of information is useful alone, so the only way through a puzzle is two people standing in the same room, talking out loud.
 
 **Engineering decisions.**
-Under the horror skin it's a disciplined **VIPER + SwiftUI** app on Swift 6 / iOS 18+: Views never talk to ARKit or the network directly, an Interactor owns proximity checks and role logic, and two long-lived services (`ARService`, `NetworkService`) sit beneath every screen. Every random decision — frequencies, spawn points, puzzle answers — is computed once on the Host and replicated to the Guest, so two players can never end up seeing two different curses. Transport is a custom wire protocol over `Network.framework` and Bonjour (deliberately not MultipeerConnectivity): every message carries a 1-byte header saying whether it's a JSON gameplay event or a chunk of binary ARKit collaboration data, with non-critical AR frames dropped once the send queue backs up — a call made specifically so a network hiccup doesn't turn into a broken jump-scare.
+Under the horror skin it's a disciplined **VIPER + SwiftUI** app on Swift 6 / iOS 18+ — not MVVM; Views never talk to ARKit or the network directly, an Interactor owns proximity checks and role logic, and two long-lived `@MainActor` services (`ARService`, `NetworkService`) sit beneath every screen. `NetworkService` is an `ObservableObject` (Combine) isolated to the main actor: `Network.framework` callbacks hop back with `Task { @MainActor in … }` so UI state and the send queue stay thread-safe. Every random decision — frequencies, spawn points, puzzle answers — is computed once on the Host and replicated to the Guest. Transport is a custom wire protocol over `Network.framework` and Bonjour `_arcurse._tcp` (deliberately not MultipeerConnectivity): frame layout `[kind: 1 byte][length: 4 bytes][payload]`, JSON gameplay events vs binary ARKit collaboration data. Non-critical AR frames are dropped once `pendingSends.count > 6` so a backed-up queue can't stall world-merge. Host room capture is **RoomPlan**; gameplay uses ARKit collaborative sessions, RealityKit, LiDAR, and Core Haptics on a 60 fps proximity loop. Peer names on the wire come from UIKit's `UIDevice`; the UI itself is SwiftUI.
 
 **My contribution.**
-While building the letter/clue system — a hidden object that the Listener finds by ear before the Seer finds it by sight — I needed spatial audio in RealityKit that respected the actual walls of the room, so a whisper wouldn't just leak cleanly through drywall. There wasn't a simple way to do that. So I built it myself, and open-sourced it as **RealityAudio** (see below) — that's the piece of this project that exists independently of the game.
+While building the letter/clue system — a hidden object that the Listener finds by ear before the Seer finds it by sight — I needed spatial audio in RealityKit that respected the actual walls of the room, so a whisper wouldn't just leak cleanly through drywall. There wasn't a simple way to do that. So I built it myself, packaged it as a Swift package, and open-sourced it as **RealityAudio**.
 
 **Links:** [GitHub — Revenants](https://github.com/bhanage-viraj/Split-Mechanics) · [TestFlight](https://testflight.apple.com/join/bxqH2nP9)
 
@@ -82,20 +86,21 @@ While building the letter/clue system — a hidden object that the Listener find
 
 ## Project 3 — Who's Out
 
-**Card subheading:** Privacy-first friend availability app, built on iOS 27
-**Card teaser:** See who's nearby and actually free — on-device AI reasoning over calendar and location, end-to-end encrypted friend sync, and a new Siri integration. Built at HUB WDC 2026.
+**Card subheading:** Privacy-first friend availability — coordination, not a feed
+**Card teaser:** Friend graph, E2E location sync, REST + CryptoKit, on-device Foundation Models, Siri / App Intents. Built at IndeHub WWDC26; the product is coordination, not a social feed.
+**Stack:** Swift/SwiftUI, Foundation Models, App Intents, URLSession, CryptoKit, Keychain, Spring Boot, EventKit, Core Location
 
 **The situation.**
-Built at the HUB WDC 2026 hackathon, where the challenge was to build something around brand-new iOS 27 platform features. The idea: friends lose track of each other's actual availability — everyone's on their phone, nobody knows who's actually free right now.
+Friends lose track of each other's actual availability — everyone's on their phone, nobody knows who's actually free right now. Built at IndeHub WWDC26 around new iOS 27 platform features, but the product problem is older than the hackathon: coordination, not content.
 
 **How I thought about it.**
-Most "social" apps solve this by adding a feed, which is exactly the wrong instinct — more content isn't the fix for "I don't know who's around." I scoped it down hard: no posting, no feed, no content, just coordination. The app learns a friend's real availability by reasoning over their calendar, location, and Focus sessions, and nudges you when someone nearby is actually free. It also had to justify constant location/calendar access, which meant privacy couldn't be an afterthought bolted on later — it had to be the architecture.
+Most "social" apps solve this by adding a feed, which is exactly the wrong instinct — more content isn't the fix for "I don't know who's around." I scoped it down hard: no posting, no feed, no content, just a friend graph and availability. The app reasons over calendar (EventKit), location (Core Location), and Focus sessions, then nudges you when someone nearby is actually free. Constant location/calendar access meant privacy had to be the architecture, not a settings toggle.
 
 **Engineering decisions.**
-The AI reasoning over calendar, location, and Focus data runs on-device — that data never needs to leave the phone to produce a suggestion. Friend-to-friend location updates are end-to-end encrypted, so the server only ever relays ciphertext, never plaintext location. Sign-in is Apple-only, friend pairing is opt-in via invite codes rather than a public graph, and the whole thing ships with a Siri integration built on the new iOS 27 App Intents / Foundation Models stack — you can ask Siri "who's free nearby?" and get a real, on-device-reasoned answer. It's an iOS app + Spring Boot backend monorepo under the hood.
+On-device inference first: Foundation Models run on the phone over calendar / location / Focus — that data never needs to leave the device to produce a suggestion. Friend-to-friend location is end-to-end encrypted with **CryptoKit** (`CryptoBox`: X25519, ChaCha20-Poly1305); the Spring Boot API only stores and relays ciphertext. Networking is a Swift `actor` `APIClient` over `URLSession` — JSON REST, Bearer auth, token refresh. Tokens and identity keys live in the **Keychain**. Pairing is opt-in (invite codes / QR), Apple-only sign-in. Siri is App Intents plus WidgetKit / Live Activity. `KismetTests` unit-test target. Architecture is SwiftUI + feature stores — not MVVM, not VIPER.
 
 **My contribution.**
-Built as part of the hackathon team under real time pressure — the call to scope this down to pure coordination (no feed) rather than a broader social app, and the privacy-first architecture (on-device reasoning, encrypted friend sync) were the product and engineering decisions I'd point to first.
+Built as part of the hackathon team under time pressure — the call to ship pure coordination (friend graph, encrypted sync, Siri) rather than a broader social app, and the privacy-first split (on-device reasoning, ciphertext-only backend) are the decisions I'd point to first.
 
 **Links:** [GitHub](https://github.com/bhanage-viraj/Whos-Out) · [TestFlight](https://testflight.apple.com/join/avevSG7f)
 
@@ -104,7 +109,8 @@ Built as part of the hackathon team under real time pressure — the call to sco
 ## Project 4 — Rush Hour
 
 **Card subheading:** A focus app built around timelapse accountability
-**Card teaser:** Records your focus sessions on camera and blocks distracting apps while you work — already through its first public exhibition and a round of real user feedback.
+**Card teaser:** MVVM + SwiftUI: AVFoundation timelapse capture (`AVCaptureSession`), Screen Time blocking, WidgetKit — exhibited, then iterated from real users.
+**Stack:** Swift/SwiftUI, MVVM, AVFoundation, UIKit, FamilyControls, DeviceActivity, WidgetKit, Combine
 
 **The situation.**
 The starting observation was simple: even small tasks get hard when you're constantly pulled away, and ambition without focus doesn't actually get you anywhere. Most focus apps respond to that by just tracking numbers — minutes focused, streaks kept.
@@ -113,10 +119,10 @@ The starting observation was simple: even small tasks get hard when you're const
 Tracking a number doesn't make someone feel like they showed up for themselves. What does is being able to look back at a session and actually see it — how many times did I get distracted, how did I spend the time, did I really show up for what I said I wanted to do. So instead of a leaderboard, Rush Hour records a timelapse of the session itself, something to reflect on afterward and something you can genuinely share, which builds in accountability without turning focus into a competition.
 
 **Engineering decisions.**
-App blocking runs on Apple's Screen Time APIs — `FamilyControls`/`DeviceActivity` — with a dedicated Shield Action and Shield Configuration extension, plus a jailbreak-detection monitor so the block can't just be quietly bypassed. A WidgetKit extension gives at-a-glance session status from the home screen.
+This one **is MVVM + SwiftUI**: discrete screens own a `*ViewModel` as `@MainActor` `ObservableObject`s (Combine). Session video is **AVFoundation** — `AVCaptureSession` for camera capture, export, and a timelapse you can replay or share — with UIKit `UIImage` frames for the in-session preview. App blocking runs on Screen Time (`FamilyControls` / `DeviceActivity`) plus Shield extensions, and a jailbreak-detection monitor. WidgetKit shows whether a session is actually running from the home screen.
 
 **My contribution.**
-Rush Hour had its first public exhibition last month, at the Apple Developer Academy's own showcase — the first time real users incorporated it into actual work sessions and gave feedback on what helped and what to fix. That feedback is currently shaping the pre–App Store refinement pass.
+The Screen Time stack was mine, and so was the camera path: `FamilyControls` / `DeviceActivity`, the Shield extensions, the jailbreak monitor, the `AVFoundation` timelapse, and the WidgetKit surface. After the Academy showcase, real users put it in actual work sessions; that feedback is the pre–App Store pass.
 
 **Links:** [GitHub](https://github.com/bhanage-viraj/RushHour) · [TestFlight](https://testflight.apple.com/join/JX8RE59Q) · [Live site](https://rush-hour-rho.vercel.app)
 
@@ -125,7 +131,8 @@ Rush Hour had its first public exhibition last month, at the Apple Developer Aca
 ## Project 5 — Sema
 
 **Card subheading:** Offline, on-device Kenyan Sign Language interpreter
-**Card teaser:** A bidirectional KSL ↔ English/Swahili interpreter that runs fully offline on iPhone, built on Gemma 4 via llama.cpp for the Gemma for Good Hackathon.
+**Card teaser:** On-device inference: bidirectional KSL ↔ English/Swahili on iPhone — Gemma 4 via llama.cpp, camera in through MediaPipe, no cloud.
+**Stack:** Gemma 4, llama.cpp, MediaPipe, Swift/SwiftUI
 
 **The situation.**
 Built for the Gemma for Good Hackathon. The challenge: Kenyan Sign Language (KSL) interpretation is a real, unmet need, but most translation tooling assumes reliable connectivity and cloud inference — both of which are real barriers for a lot of the communities that would actually use this.
@@ -134,10 +141,10 @@ Built for the Gemma for Good Hackathon. The challenge: Kenyan Sign Language (KSL
 "Fully offline, runs on a phone people already own" wasn't a technical flex here — it was the actual product requirement. If it needs the cloud, it doesn't work for the people it's meant for. And it had to be two-way: sign to the app and have it interpreted for a hearing person, or have a hearing person's speech signed back — a real conversation, not a one-directional lookup tool.
 
 **Engineering decisions.**
-Sema is a bidirectional KSL ↔ English/Swahili interpreter running fully offline, on-device, on iPhone, built on Gemma 4 (E2B) via llama.cpp — small enough to run on-device, capable enough to hold up both directions of a real conversation.
+Sema is a bidirectional KSL ↔ English/Swahili interpreter running fully offline, on-device, on iPhone. Sign language hits the camera through MediaPipe; speech/text is handled by Gemma 4 (E2B) via llama.cpp — small enough for on-device inference, capable enough for both directions of a real conversation. If it needs the cloud, it doesn't work for the people it's meant for, so there is no server-side model.
 
 **My contribution.**
-Full build for the hackathon submission — the on-device Gemma integration and the bidirectional interpretation flow.
+Full build for the hackathon submission — the on-device Gemma / llama.cpp integration and the bidirectional interpretation flow.
 
 **Links:** [TestFlight](https://testflight.apple.com/join/h9gftDva) · [Kaggle writeup](https://www.kaggle.com/competitions/gemma-4-good-hackathon/writeups/new-writeup-1779016365972)
 
@@ -145,17 +152,18 @@ Full build for the hackathon submission — the on-device Gemma integration and 
 
 ## Open Source — RealityAudio
 
-**Card subheading:** I built this and open-sourced it
-**Card teaser:** RealityAudio is a RealityKit spatial audio package I wrote for Revenants and released on GitHub — one line of code for LiDAR-aware 3D sound in AR. Later featured by DevBytes.
+**Card subheading:** Published Swift package — spatial audio SDK for RealityKit
+**Card teaser:** SPM library with a public API (`RealityAudio.play`), Swift 6, AVFoundation + RealityKit, unit tests — extracted from Revenants so any AR app can import it. Featured by DevBytes.
+**Stack:** Swift Package Manager, Swift 6, RealityKit, ARKit, AVFoundation, Swift Testing
 
 **The situation.**
-Born directly out of Revenants: I needed spatial audio in RealityKit that could realistically muffle or block when a real wall or piece of furniture was between the listener and the sound source. RealityKit didn't have a simple way to do that — it meant hand-rolling matrix math and manual `AnchorEntity` setup every time.
+Born directly out of Revenants: I needed spatial audio in RealityKit that could realistically muffle or block when a real wall or piece of furniture was between the listener and the sound source. RealityKit didn't have a simple way to do that — it meant hand-rolling matrix math and manual `AnchorEntity` setup every time. That's an SDK problem, not a game-only hack.
 
 **How I thought about it.**
-This felt like a gap worth fixing properly rather than a one-off hack buried in the game's codebase, so I pulled it out into its own package.
+If I was going to fix it, it had to be importable: a Swift package with a public API, explicit framework links, and tests — extracted from the game so another AR app can add it the same way.
 
 **Engineering decisions.**
-RealityAudio wraps spatial audio setup into a single function call — drop a 3D sound into a scene with one line — with native LiDAR-based occlusion built in, so sound realistically attenuates or blocks based on real-world geometry when the host app enables ARKit scene understanding. It ships with its own test suite and supports iOS 17+ and visionOS 1+.
+RealityAudio is a **Swift Package** (`Package.swift`, Swift tools 6.3, Swift 6 language mode). The product is a library target that links **RealityKit** and **AVFoundation**. The public API is one `@MainActor` entry point: `RealityAudio.play(_:in:at:occluded:)` — load an audio file, attach a `SpatialAudioComponent` at a world position, return the emitter `Entity`. LiDAR occlusion is opt-in and pairs with the host `ARView`'s scene-understanding `.occlusion` flag. Platforms: iOS 17+ and visionOS 1+. Tests live in `RealityAudioTests` (Swift Testing). Written so Revenants could drop a letter/clue whisper that respects real walls, then published as its own package.
 
 **Recognition.**
 DevBytes covered the release directly: *"Apple Developer Academy graduate Viraj Bhanage has open-sourced RealityAudio, a Swift package that simplifies the implementation of spatial audio in AR apps."* Their piece specifically calls out that it eliminates the need for complex matrix math and manual `AnchorEntity` setup, letting developers create immersive 3D sound with one line of code — and that it comes with native occlusion and a testing suite, free on GitHub. (Published July 15, 2026.)
@@ -190,7 +198,7 @@ DevBytes covered the release directly: *"Apple Developer Academy graduate Viraj 
 
 **Apple Developer Academy — Junior Developer**
 *March 2026 – Present*
-Challenge-based learning program, building shipped iOS products end-to-end. Projects: Coralyst, Revenants, Who's Out, Rush Hour.
+Challenge-based program shipping native iOS end-to-end: on-device Core ML and Foundation Models, Swift 6 concurrency around Network.framework / ARKit, a published Swift package, and TestFlight apps (Coralyst, Revenants, Who's Out, Rush Hour).
 
 ## Education
 

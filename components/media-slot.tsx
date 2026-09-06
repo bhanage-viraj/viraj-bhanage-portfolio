@@ -7,7 +7,7 @@ const THUMB =
   "pointer-events-none aspect-[16/10] w-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-[1.03] lg:w-[260px] xl:w-[328px]";
 
 const FEATURE =
-  "pointer-events-none aspect-[16/10] w-full object-cover object-center";
+  "pointer-events-none block h-auto w-full";
 
 function PreviewVideo({
   src,

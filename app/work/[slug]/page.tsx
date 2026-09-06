@@ -58,6 +58,16 @@ export default async function CaseStudyPage({
           <p className="mt-4 max-w-study font-display text-card font-medium text-ink">
             {project.cardSubheading}
           </p>
+          <p className="mt-3 max-w-study text-[15px] leading-[1.6] text-ink-muted">
+            {project.cardTeaser}
+          </p>
+          <ul className="mt-6 flex flex-wrap gap-1.5">
+            {project.tech.map((item) => (
+              <li key={item} className="site-tag">
+                {item}
+              </li>
+            ))}
+          </ul>
 
           {project.media.type !== "placeholder" ? (
             <div className="mt-10">

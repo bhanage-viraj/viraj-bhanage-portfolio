@@ -8,13 +8,13 @@ export function WorkGrid() {
     <Section
       id="work"
       title="Work"
-      lede="A selection of projects I've built around AI, native development, games and creative technology."
+      lede="On-device inference, a published Swift package, Swift 6 concurrency, AR/networking, and TestFlight apps."
     >
-      <ul className="space-y-6 sm:space-y-8">
+      <ul className="space-y-5 sm:space-y-6">
         {shippedProjects.map((project, index) => (
           <li key={project.slug}>
             <Reveal delay={index * 70}>
-              <ProjectCard project={project} />
+              <ProjectCard project={project} mediaFirst={index % 2 === 1} />
             </Reveal>
           </li>
         ))}

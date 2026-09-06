@@ -6,23 +6,23 @@ export const site = {
   title: "Viraj Bhanage — iOS & on-device AI",
   // Meta description is the one place a short summary is allowed.
   description:
-    "CS student at BITS Pilani and Junior Developer at the Apple Developer Academy. On-device AI/ML and native Apple projects: Coralyst, Revenants, Who's Out, Rush Hour, Sema, and RealityAudio.",
+    "CS student at BITS Pilani and Junior Developer at the Apple Developer Academy. Native iOS: on-device Core ML / Foundation Models, Swift 6 concurrency, a published Swift package, ARKit/RealityKit, and TestFlight apps.",
 };
 
 export const hero = {
-  eyebrow: "iOS · On-device AI · Spatial computing",
+  eyebrow: "iOS · On-device AI · Swift packages · Spatial",
   headline: "I build intelligence that runs on-device.",
   headlineLead: "I build intelligence",
   headlineEnd: "that runs on-device.",
   // TODO: confirm official job title — still using "Junior Developer" as a placeholder for "IS developer."
   subhead:
-    "3rd-year BS Computer Science student at BITS Pilani, currently a Junior Developer at the Apple Developer Academy — building native iOS apps powered by on-device AI/ML.",
+    "3rd-year BS Computer Science student at BITS Pilani, currently a Junior Developer at the Apple Developer Academy — shipping native iOS, a public Swift package, and on-device inference. No cloud for the hard part.",
 };
 
 export const about = [
   "I'm Viraj — an iOS developer who builds on-device AI/ML, which is a specific, stubborn kind of engineering: no cloud to lean on, no server to quietly offload the hard part to, just Swift, Core ML, and whatever the phone in someone's hand can actually do in real time.",
-  "That constraint is the thing I keep choosing to work inside. Whether it's a model, a spatial-computing session, or a signal being interpreted live, I care about the moment it actually has to run on hardware someone's holding — where latency, battery, and privacy aren't abstractions, they're the whole design problem.",
-  "I'm drawn to native Apple engineering with real intelligence built in, not bolted on from a server somewhere else.",
+  "That constraint is the thing I keep choosing to work inside. Whether it's a Core ML classifier, a Foundation Models suggestion, a llama.cpp session, or two phones agreeing on one AR room over Network.framework, I care about the moment it has to run on hardware someone's holding — where latency, battery, isolation, and privacy aren't abstractions, they're the design problem.",
+  "I've published that work as a Swift package with a public API and tests, written Swift 6 concurrency so network and AR callbacks stay on the right actor, and kept UI in SwiftUI — VIPER where the session is long-lived (Revenants), MVVM where the screens are discrete (Rush Hour).",
 ];
 
 export const projects: Project[] = [
@@ -33,13 +33,13 @@ export const projects: Project[] = [
     category: "AI / Conservation",
     cardSubheading: "On-device bioacoustic monitoring for coral reef conservation",
     cardTeaser:
-      "An AI/ML pipeline that listens for illegal blast fishing on a Balinese reef — and runs fully offline, on-device, with no dependency on a network connection.",
+      "On-device inference: a bundled Core ML classifier listens for blast fishing on a Balinese reef — AVFoundation audio in, local prediction out, no network.",
     logo: {
       src: "/logos/coralyst.png",
       alt: "Coralyst",
       icon: true,
     },
-    tech: ["Python", "Core ML", "Swift/SwiftUI"],
+    tech: ["Python", "Core ML", "Swift/SwiftUI", "AVFoundation"],
     media: {
       type: "image",
       src: "/work/coralyst-poster.jpg",
@@ -57,11 +57,11 @@ export const projects: Project[] = [
       },
       {
         heading: "Engineering decisions",
-        body: "I built the AI/ML pipeline end-to-end: collecting and preparing hydrophone recordings from ReefSet v1.0 (Williams et al., 2024), training a 2-layer bidirectional LSTM on 40-band log-mel spectrograms from ~1.92s clips to pick out blast-fishing signatures against the ambient noise floor of a healthy vs. degraded reef, and — the part that mattered most — getting that model small and efficient enough to run locally, on-device, with no dependency on a live connection. The system logs each detection with a timestamp and estimated location, and separately tracks reef health cues (a healthy reef crackles with life; a damaged one goes quiet) as a side signal. The held-out field set is the actual failure mode: the model almost never mistakes real reef life for a bomb, but a confidence threshold calibrated on ReefSet doesn't fully transfer to a new recorder or site. Ranking stays strong (ROC-AUC ~0.95–0.98); each training iteration has been closing that domain-shift gap.",
+        body: "I built the AI/ML pipeline end-to-end: collecting and preparing hydrophone recordings from ReefSet v1.0 (Williams et al., 2024), training a 2-layer bidirectional LSTM on 40-band log-mel spectrograms from ~1.92s clips to pick out blast-fishing signatures against the ambient noise floor of a healthy vs. degraded reef, and — the part that mattered most — getting that model small and efficient enough to run locally. On-device inference is a bundled Core ML `BlastEventClassifier.mlpackage` loaded with `MLModel`; `BlastClassifier` is `Sendable` and runs prediction on extracted audio features with no live connection. Hydrophone playback and capture sit on `AVFoundation` (`AVAudioEngine` / player nodes). The system logs each detection with a timestamp and estimated location, and separately tracks reef health cues. The held-out field set is the actual failure mode: the model almost never mistakes real reef life for a bomb, but a confidence threshold calibrated on ReefSet doesn't fully transfer to a new recorder or site. Ranking stays strong (ROC-AUC ~0.95–0.98); each training iteration has been closing that domain-shift gap.",
       },
       {
         heading: "My contribution",
-        body: "The AI/ML pipeline was mine, start to finish — model training, and the on-device deployment work to make sure something meant for a remote Balinese reef didn't quietly stop working the moment it lost signal.",
+        body: "The AI/ML pipeline was mine, start to finish — model training, and getting a bundled Core ML `BlastEventClassifier` running on-device so a remote Balinese reef doesn't quietly stop working the moment it loses signal.",
       },
     ],
     numbers: {
@@ -123,21 +123,22 @@ export const projects: Project[] = [
     category: "AR / Game",
     cardSubheading: "Asymmetrical co-op AR horror game",
     cardTeaser:
-      "Two phones, one shared haunted room — LiDAR world-scanning, ARKit collaborative sessions, and a spatial audio engine I built and open-sourced along the way.",
+      "Swift 6 concurrency + a custom Network.framework / Bonjour protocol: two phones, one LiDAR-scanned room, ARKit collaboration, Core Haptics, and a Swift package spun out for spatial audio.",
     logo: {
       src: "/logos/revenants.png",
       alt: "Revenants",
       icon: true,
     },
     tech: [
-      "Swift 6",
+      "Swift 6 concurrency",
       "SwiftUI",
+      "VIPER",
       "ARKit",
       "RealityKit",
       "RoomPlan",
       "Core Haptics",
       "Network.framework",
-      "VIPER",
+      "Combine",
     ],
     media: {
       type: "video",
@@ -157,11 +158,11 @@ export const projects: Project[] = [
       },
       {
         heading: "Engineering decisions",
-        body: "Under the horror skin it's a disciplined **VIPER + SwiftUI** app on Swift 6 / iOS 18+: Views never talk to ARKit or the network directly, an Interactor owns proximity checks and role logic, and two long-lived services (`ARService`, `NetworkService`) sit beneath every screen. Every random decision — frequencies, spawn points, puzzle answers — is computed once on the Host and replicated to the Guest, so two players can never end up seeing two different curses. Transport is a custom wire protocol over `Network.framework` and Bonjour (deliberately not MultipeerConnectivity): every message carries a 1-byte header saying whether it's a JSON gameplay event or a chunk of binary ARKit collaboration data, with non-critical AR frames dropped once the send queue backs up — a call made specifically so a network hiccup doesn't turn into a broken jump-scare.",
+        body: "Under the horror skin it's a disciplined **VIPER + SwiftUI** app on Swift 6 / iOS 18+ — not MVVM; Views never talk to ARKit or the network directly, an Interactor owns proximity checks and role logic, and two long-lived `@MainActor` services (`ARService`, `NetworkService`) sit beneath every screen. `NetworkService` is an `ObservableObject` (Combine) isolated to the main actor: `Network.framework` callbacks hop back with `Task { @MainActor in … }` so UI state and the send queue stay thread-safe. Every random decision — frequencies, spawn points, puzzle answers — is computed once on the Host and replicated to the Guest. Transport is a custom wire protocol over `Network.framework` and Bonjour `_arcurse._tcp` (deliberately not MultipeerConnectivity): frame layout `[kind: 1 byte][length: 4 bytes][payload]`, JSON gameplay events vs binary ARKit collaboration data. Non-critical AR frames are dropped once `pendingSends.count > 6` so a backed-up queue can't stall world-merge. Host room capture is **RoomPlan** (`ScanningInteractor` / `RoomScanService`); gameplay uses ARKit collaborative sessions, RealityKit, LiDAR, and Core Haptics on a 60 fps proximity loop (`CADisplayLink`). Peer names on the wire come from UIKit's `UIDevice`; the UI itself is SwiftUI.",
       },
       {
         heading: "My contribution",
-        body: "While building the letter/clue system — a hidden object that the Listener finds by ear before the Seer finds it by sight — I needed spatial audio in RealityKit that respected the actual walls of the room, so a whisper wouldn't just leak cleanly through drywall. There wasn't a simple way to do that. So I built it myself, and open-sourced it as **RealityAudio** (see below) — that's the piece of this project that exists independently of the game.",
+        body: "While building the letter/clue system — a hidden object that the Listener finds by ear before the Seer finds it by sight — I needed spatial audio in RealityKit that respected the actual walls of the room, so a whisper wouldn't just leak cleanly through drywall. There wasn't a simple way to do that. So I built it myself, packaged it as a Swift package, and open-sourced it as **RealityAudio** — the SDK-shaped piece of this project that exists independently of the game.",
       },
     ],
     links: [
@@ -174,9 +175,9 @@ export const projects: Project[] = [
     caseId: "03 · WHO'S OUT",
     title: "Who's Out",
     category: "iOS / AI",
-    cardSubheading: "Privacy-first friend availability app, built on iOS 27",
+    cardSubheading: "Privacy-first friend availability — coordination, not a feed",
     cardTeaser:
-      "See who's nearby and actually free — on-device AI reasoning over calendar and location, end-to-end encrypted friend sync, and a new Siri integration. Built at IndeHub WWDC26.",
+      "Friend graph, E2E location sync, REST + CryptoKit, on-device Foundation Models, Siri / App Intents. Built at IndeHub WWDC26; the product is coordination, not a social feed.",
     logo: {
       src: "/logos/whos-out.png",
       alt: "Who's Out",
@@ -184,9 +185,12 @@ export const projects: Project[] = [
     },
     tech: [
       "Swift/SwiftUI",
-      "Spring Boot",
-      "App Intents",
       "Foundation Models",
+      "App Intents",
+      "URLSession",
+      "CryptoKit",
+      "Keychain",
+      "Spring Boot",
       "EventKit",
       "Core Location",
     ],
@@ -199,19 +203,19 @@ export const projects: Project[] = [
     narrative: [
       {
         heading: "The situation",
-        body: "Built at the IndeHub WWDC26 hackathon, where the challenge was to build something around brand-new iOS 27 platform features. The idea: friends lose track of each other's actual availability — everyone's on their phone, nobody knows who's actually free right now.",
+        body: "Friends lose track of each other's actual availability — everyone's on their phone, nobody knows who's actually free right now. Built at IndeHub WWDC26 around new iOS 27 platform features, but the product problem is older than the hackathon: coordination, not content.",
       },
       {
         heading: "Thought process",
-        body: "Most \"social\" apps solve this by adding a feed, which is exactly the wrong instinct — more content isn't the fix for \"I don't know who's around.\" I scoped it down hard: no posting, no feed, no content, just coordination. The app learns a friend's real availability by reasoning over their calendar, location, and Focus sessions, and nudges you when someone nearby is actually free. It also had to justify constant location/calendar access, which meant privacy couldn't be an afterthought bolted on later — it had to be the architecture.",
+        body: "Most \"social\" apps solve this by adding a feed, which is exactly the wrong instinct — more content isn't the fix for \"I don't know who's around.\" I scoped it down hard: no posting, no feed, no content, just a friend graph and availability. The app reasons over calendar (EventKit), location (Core Location), and Focus sessions, then nudges you when someone nearby is actually free. Constant location/calendar access meant privacy had to be the architecture, not a settings toggle.",
       },
       {
         heading: "Engineering decisions",
-        body: "The AI reasoning over calendar, location, and Focus data runs on-device — that data never needs to leave the phone to produce a suggestion. Friend-to-friend location updates are end-to-end encrypted, so the server only ever relays ciphertext, never plaintext location. Sign-in is Apple-only, friend pairing is opt-in via invite codes rather than a public graph, and the whole thing ships with a Siri integration built on the new iOS 27 App Intents / Foundation Models stack — you can ask Siri \"who's free nearby?\" and get a real, on-device-reasoned answer. It's an iOS app + Spring Boot backend monorepo under the hood.",
+        body: "On-device inference first: Foundation Models run on the phone over calendar / location / Focus — that data never needs to leave the device to produce a suggestion. Friend-to-friend location is end-to-end encrypted with **CryptoKit** (`CryptoBox`: X25519 key agreement, ChaCha20-Poly1305 sealed blobs); the Spring Boot API only stores and relays ciphertext (`EncryptedBlob`). Networking is a Swift `actor` `APIClient` over `URLSession` — JSON REST, Bearer auth, token refresh, retries on cold-start — not a custom socket. Tokens and identity keys live in the **Keychain**. Pairing is opt-in (invite codes / QR), Apple-only sign-in, no public graph. Siri is App Intents (`HowAreMyFriendsDoingIntent`, pulse actions) plus a WidgetKit / Live Activity surface. The app has a `KismetTests` unit-test target. Architecture is SwiftUI + feature stores — not MVVM, not VIPER.",
       },
       {
         heading: "My contribution",
-        body: "Built as part of the hackathon team under real time pressure — the call to scope this down to pure coordination (no feed) rather than a broader social app, and the privacy-first architecture (on-device reasoning, encrypted friend sync) were the product and engineering decisions I'd point to first.",
+        body: "Built as part of the hackathon team under time pressure — the call to ship pure coordination (friend graph, encrypted sync, Siri) rather than a broader social app, and the privacy-first split (on-device reasoning, ciphertext-only backend) are the decisions I'd point to first.",
       },
     ],
     links: [
@@ -226,18 +230,20 @@ export const projects: Project[] = [
     category: "iOS / Productivity",
     cardSubheading: "A focus app built around timelapse accountability",
     cardTeaser:
-      "Records your focus sessions on camera and blocks distracting apps while you work — already through its first public exhibition and a round of real user feedback.",
+      "MVVM + SwiftUI: AVFoundation timelapse capture (`AVCaptureSession`), Screen Time blocking, WidgetKit — exhibited, then iterated from real users.",
     logo: {
       src: "/logos/rush-hour.png",
       alt: "Rush Hour",
     },
     tech: [
       "Swift/SwiftUI",
+      "MVVM",
+      "AVFoundation",
+      "UIKit",
       "FamilyControls",
       "DeviceActivity",
-      "Shield",
       "WidgetKit",
-      "AVFoundation",
+      "Combine",
     ],
     media: {
       type: "video",
@@ -257,11 +263,11 @@ export const projects: Project[] = [
       },
       {
         heading: "Engineering decisions",
-        body: "App blocking runs on Apple's Screen Time APIs — `FamilyControls`/`DeviceActivity` — with a dedicated Shield Action and Shield Configuration extension, plus a jailbreak-detection monitor so the block can't just be quietly bypassed. A WidgetKit extension gives at-a-glance session status from the home screen.",
+        body: "This one **is MVVM + SwiftUI**: discrete screens own a `*ViewModel` (`SessionRecordingViewModel`, `FocusViewModel`, …) as `@MainActor` `ObservableObject`s (Combine). Session video is **AVFoundation** — `AVCaptureSession` for camera capture, export, and a timelapse you can replay or share — with UIKit `UIImage` frames for the in-session preview. App blocking runs on Screen Time (`FamilyControls` / `DeviceActivity`) plus Shield Action and Shield Configuration extensions, and a jailbreak-detection monitor so the block can't be quietly walked around. WidgetKit (and an App Intent on the widget) shows whether a session is actually running from the home screen.",
       },
       {
         heading: "My contribution",
-        body: "Rush Hour had its first public exhibition last month, at the Apple Developer Academy's own showcase — the first time real users incorporated it into actual work sessions and gave feedback on what helped and what to fix. That feedback is currently shaping the pre–App Store refinement pass.",
+        body: "The Screen Time stack was mine, and so was the camera path: `FamilyControls` / `DeviceActivity`, the Shield extensions, the jailbreak monitor, the `AVFoundation` timelapse, and the WidgetKit surface. After the Academy showcase, real users put it in actual work sessions; that feedback is the pre–App Store pass.",
       },
     ],
     links: [
@@ -277,7 +283,7 @@ export const projects: Project[] = [
     category: "AI / Accessibility",
     cardSubheading: "Offline, on-device Kenyan Sign Language interpreter",
     cardTeaser:
-      "A bidirectional KSL ↔ English/Swahili interpreter that runs fully offline on iPhone, built on Gemma 4 via llama.cpp for the Gemma for Good Hackathon.",
+      "On-device inference: bidirectional KSL ↔ English/Swahili on iPhone — Gemma 4 via llama.cpp, camera in through MediaPipe, no cloud.",
     tech: ["Gemma 4", "llama.cpp", "MediaPipe", "Swift/SwiftUI"],
     media: {
       type: "image",
@@ -296,11 +302,11 @@ export const projects: Project[] = [
       },
       {
         heading: "Engineering decisions",
-        body: "Sema is a bidirectional KSL ↔ English/Swahili interpreter running fully offline, on-device, on iPhone, built on Gemma 4 (E2B) via llama.cpp — small enough to run on-device, capable enough to hold up both directions of a real conversation.",
+        body: "Sema is a bidirectional KSL ↔ English/Swahili interpreter running fully offline, on-device, on iPhone. Sign language hits the camera through MediaPipe; speech/text is handled by Gemma 4 (E2B) via llama.cpp — small enough for on-device inference, capable enough for both directions of a real conversation. If it needs the cloud, it doesn't work for the people it's meant for, so there is no server-side model.",
       },
       {
         heading: "My contribution",
-        body: "Full build for the hackathon submission — the on-device Gemma integration and the bidirectional interpretation flow.",
+        body: "Full build for the hackathon submission — the on-device Gemma / llama.cpp integration and the bidirectional interpretation flow.",
       },
     ],
     links: [
@@ -315,25 +321,32 @@ export const projects: Project[] = [
     slug: "realityaudio",
     caseId: "OS · REALITYAUDIO",
     title: "RealityAudio",
-    cardSubheading: "I built this and open-sourced it",
+    cardSubheading: "Published Swift package — spatial audio SDK for RealityKit",
     cardTeaser:
-      "RealityAudio is a RealityKit spatial audio package I wrote for Revenants and released on GitHub — one line of code for LiDAR-aware 3D sound in AR. Later featured by DevBytes.",
-    tech: ["Swift", "RealityKit", "ARKit", "Swift Package Manager"],
+      "SPM library with a public API (`RealityAudio.play`), Swift 6, AVFoundation + RealityKit, unit tests — extracted from Revenants so any AR app can import it. Featured by DevBytes.",
+    tech: [
+      "Swift Package Manager",
+      "Swift 6",
+      "RealityKit",
+      "ARKit",
+      "AVFoundation",
+      "Swift Testing",
+    ],
     media: { type: "placeholder", intended: "image" },
     images: [],
     openSource: true,
     narrative: [
       {
         heading: "The situation",
-        body: "Born directly out of Revenants: I needed spatial audio in RealityKit that could realistically muffle or block when a real wall or piece of furniture was between the listener and the sound source. RealityKit didn't have a simple way to do that — it meant hand-rolling matrix math and manual `AnchorEntity` setup every time.",
+        body: "Born directly out of Revenants: I needed spatial audio in RealityKit that could realistically muffle or block when a real wall or piece of furniture was between the listener and the sound source. RealityKit didn't have a simple way to do that — it meant hand-rolling matrix math and manual `AnchorEntity` setup every time. That's an SDK problem, not a game-only hack.",
       },
       {
         heading: "Thought process",
-        body: "This felt like a gap worth fixing properly rather than a one-off hack buried in the game's codebase, so I pulled it out into its own package.",
+        body: "If I was going to fix it, it had to be importable: a Swift package with a public API, explicit framework links, and tests — extracted from the game so another AR app can add it the same way.",
       },
       {
         heading: "Engineering decisions",
-        body: "RealityAudio wraps spatial audio setup into a single function call — drop a 3D sound into a scene with one line — with native LiDAR-based occlusion built in, so sound realistically attenuates or blocks based on real-world geometry when the host app enables ARKit scene understanding. It ships with its own test suite and supports iOS 17+ and visionOS 1+.",
+        body: "RealityAudio is a **Swift Package** (`Package.swift`, Swift tools 6.3, `swiftLanguageModes: [.v6]`). The product is a library target that links **RealityKit** and **AVFoundation**. The public API is one `@MainActor` entry point: `RealityAudio.play(_:in:at:occluded:)` — load an audio file, attach a `SpatialAudioComponent` at a world position, return the emitter `Entity` so the host can stop playback. LiDAR occlusion is opt-in (`occluded: true`) and pairs with the host `ARView`'s scene-understanding `.occlusion` flag. Platforms: iOS 17+ and visionOS 1+ (README / `@available`). Tests live in `RealityAudioTests` (Swift Testing) for the spatial math; `play()` is documented as device-only. Extracted from Revenants' letter/clue whisper so the occlusion math wouldn't stay buried in the game.",
       },
       {
         heading: "Recognition",
@@ -462,7 +475,7 @@ export const experience: ExperienceItem[] = [
     // TODO: confirm exact official title — still using "Junior Developer" as a placeholder for "IS developer."
     title: "Junior Developer",
     dates: "March 2026 – Present",
-    body: "Challenge-based learning program, building shipped iOS products end-to-end. Projects: Coralyst, Revenants, Who's Out, Rush Hour.",
+    body: "Challenge-based program shipping native iOS end-to-end: on-device Core ML and Foundation Models, Swift 6 concurrency around Network.framework / ARKit, a published Swift package, and TestFlight apps (Coralyst, Revenants, Who's Out, Rush Hour).",
     titleTodo: true,
   },
 ];
@@ -475,13 +488,11 @@ export const education = {
 };
 
 export const contact = {
-  // TODO: add email address
-  email: null as string | null,
-  // TODO: add LinkedIn URL
-  linkedin: null as string | null,
+  email: "virajbhanage00@gmail.com",
+  linkedin: "https://www.linkedin.com/in/bhanageviraj/",
+  x: "https://x.com/viraj_Bhanage_",
   github: "https://github.com/bhanage-viraj",
-  // TODO: add resume PDF (e.g. public/viraj-bhanage-resume.pdf)
-  resume: null as string | null,
+  resume: "/viraj-bhanage-resume.pdf",
 };
 
 export function getProject(slug: string): Project | undefined {

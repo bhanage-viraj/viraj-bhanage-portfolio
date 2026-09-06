@@ -69,7 +69,7 @@ export function Nav() {
 
   return (
     <header
-      className={`sticky top-0 z-50 bg-paper/95 ${
+      className={`sticky top-0 z-50 bg-paper/95 transition-[border-color] duration-300 ${
         scrolled ? "border-b border-line" : "border-b border-transparent"
       }`}
     >
