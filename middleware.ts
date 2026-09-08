@@ -41,14 +41,13 @@ export function middleware(request: NextRequest) {
   const token = request.cookies.get(INTERN_DESK_COOKIE)?.value;
   const allowed = Boolean(slug) && token === slug;
   const localOpen =
-    process.env.NODE_ENV !== "production" && isInternDeskPath(pathname);
+    process.env.NODE_ENV !== "production" &&
+    (isInternDeskPath(pathname) || isInternDeskApi(pathname));
 
   if (slug && (pathname === `/${slug}` || pathname.startsWith(`/${slug}/`))) {
     const rest = pathname.slice(slug.length + 1);
     const url = request.nextUrl.clone();
-    url.pathname = rest.startsWith("/resume/")
-      ? `/api/intern${rest}`
-      : `/intern${rest === "/" ? "" : rest}`;
+    url.pathname = `/intern${rest === "/" ? "" : rest}`;
     return attachDeskCookies(NextResponse.rewrite(url), slug);
   }
 

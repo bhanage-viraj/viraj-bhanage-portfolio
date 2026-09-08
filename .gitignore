@@ -40,3 +40,7 @@ next-env.d.ts
 # Overleaf MCP credentials (never commit)
 projects.json
 .overleaf-mcp/
+
+# Tailored resumes stay on this Mac — never deploy or serve them
+resumes/pdf/
+resumes/*.pdf

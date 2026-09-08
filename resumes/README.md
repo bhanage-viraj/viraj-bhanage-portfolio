@@ -2,7 +2,7 @@
 
 Harshibar / jake-yang template. One page each. Same facts, different order and keywords.
 
-**PDFs (ready to upload):** `resumes/pdf/`
+**PDFs stay on this Mac** as `resumes/pdf/<Company>/Viraj-Bhanage.pdf`. Same filename in every company folder. They are gitignored and not served on the website.
 
 ## Overleaf MCP (Cursor)
 

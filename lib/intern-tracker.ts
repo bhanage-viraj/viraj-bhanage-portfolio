@@ -6,6 +6,13 @@ export type JobStatus =
   | "rejected"
   | "hold";
 
+/**
+ * When Viraj prompts “add this internship”, fill a complete Job:
+ * apply URL or mailTo, resume folder under resumes/pdf/<Company>/Viraj-Bhanage.pdf,
+ * coverNote or mailBody, lead (true stack only), status.
+ * Never invent RxSwift / Core Data / Realm / Firebase / work auth.
+ * Identity is always Bali, +91 8855867440, need sponsorship, Expected 2028.
+ */
 export type Job = {
   id: string;
   order: number;
@@ -20,12 +27,19 @@ export type Job = {
   extraHref?: string;
   extraLabel?: string;
   applyLabel: string;
+  /** Company folder under resumes/pdf/. File is always Viraj-Bhanage.pdf */
   resume: string;
   lead: string;
   /** Official status from this Cursor chat. Overlay with local marks on the page. */
   status: JobStatus;
   appliedOn?: string;
   note?: string;
+  /** apply = posting exists. email = no live listing / lost posting. */
+  channel?: "apply" | "email";
+  mailTo?: string;
+  mailSubject?: string;
+  mailBody?: string;
+  coverNote?: string;
 };
 
 export type ChatEntry = {
@@ -52,6 +66,16 @@ export const internDesk = {
   },
 };
 
+export const RESUME_FILE = "Viraj-Bhanage.pdf";
+
+export function resumeRelPath(job: Job) {
+  return `resumes/pdf/${job.resume}/${RESUME_FILE}`;
+}
+
+export function resumeAbsPath(job: Job) {
+  return `/Users/bhanageviraj/Desktop/Portfollio/${resumeRelPath(job)}`;
+}
+
 export const jobs: Job[] = [
   {
     id: "capital-one",
@@ -65,7 +89,7 @@ export const jobs: Job[] = [
     risk: "Canadian work permit not promised. Full-stack, not iOS-only.",
     href: "https://capitalone.wd12.myworkdayjobs.com/en-US/Capital_One/job/Intern--Mobile-Software-Engineer---Team-Gringotts-North---Winter-2027_R249015",
     applyLabel: "Workday",
-    resume: "Viraj-Bhanage-Capital-One.pdf",
+    resume: "Capital-One",
     lead: "Who's Out REST + Spring Boot",
     status: "hold",
   },
@@ -81,7 +105,7 @@ export const jobs: Job[] = [
     risk: "JD lists RxSwift / Core Data / Realm — do not claim them. Lead Rush Hour MVVM.",
     href: "https://www.revolut.com/careers/apply/bc2ddc16-c0ca-4c39-9db7-390db7f6cb3c/",
     applyLabel: "Revolut apply",
-    resume: "Viraj-Bhanage-Revolut.pdf",
+    resume: "Revolut",
     lead: "Rush Hour MVVM + SwiftUI",
     status: "to_apply",
   },
@@ -97,7 +121,7 @@ export const jobs: Job[] = [
     risk: "Start month unpublished. Visa not stated.",
     href: "https://job-boards.greenhouse.io/argmax/jobs/4067268009",
     applyLabel: "Greenhouse",
-    resume: "Viraj-Bhanage-Argmax-RunAnywhere.pdf",
+    resume: "Argmax",
     lead: "RealityAudio + Coralyst + Sema",
     status: "to_apply",
   },
@@ -113,7 +137,7 @@ export const jobs: Job[] = [
     risk: "Android equally valid. Sponsorship asked, not promised.",
     href: "https://job-boards.greenhouse.io/applovin/jobs/4708448006",
     applyLabel: "Greenhouse",
-    resume: "Viraj-Bhanage-AppLovin.pdf",
+    resume: "AppLovin",
     lead: "Who's Out social + Rush Hour camera",
     status: "to_apply",
   },
@@ -129,7 +153,7 @@ export const jobs: Job[] = [
     risk: "iOS not guaranteed. Two-application global cap.",
     href: "https://careers.tiktok.com/resume/7663326108122515717/apply",
     applyLabel: "TikTok apply",
-    resume: "Viraj-Bhanage-TikTok-Creation.pdf",
+    resume: "TikTok",
     lead: "Revenants AR + Coralyst + Rush Hour",
     status: "to_apply",
   },
@@ -145,7 +169,7 @@ export const jobs: Job[] = [
     risk: "Some mirrors say grad 2026. Put Expected 2028 on the form.",
     href: "https://job-boards.greenhouse.io/verkada/jobs/5219131007",
     applyLabel: "Greenhouse",
-    resume: "Viraj-Bhanage-Verkada.pdf",
+    resume: "Verkada",
     lead: "Swift 6 + REST + tests",
     status: "to_apply",
   },
@@ -164,7 +188,7 @@ export const jobs: Job[] = [
       "https://jobs.apple.com/en-in/details/200676288-3957/2027-apple-internship-information-systems-and-technology-aus",
     extraLabel: "Sydney backup",
     applyLabel: "Apple Singapore",
-    resume: "Viraj-Bhanage-Apple-IST.pdf",
+    resume: "Apple-IST",
     lead: "Dashboard / APIs / App Intents",
     status: "to_apply",
   },
@@ -180,7 +204,7 @@ export const jobs: Job[] = [
     risk: "US intern visa from an Indian university is the hard part.",
     href: "https://jobs.apple.com/en-us/details/200664785-3810/software-undergrad-engineering-internships",
     applyLabel: "Apple US",
-    resume: "Viraj-Bhanage-Apple-US.pdf",
+    resume: "Apple-US",
     lead: "Package + AR + Core ML + Foundation Models",
     status: "to_apply",
   },
@@ -196,7 +220,7 @@ export const jobs: Job[] = [
     risk: "2027 dates and visa unstated.",
     href: "https://careers.linecorp.com/jobs/2934",
     applyLabel: "LINE careers",
-    resume: "Viraj-Bhanage-LINE.pdf",
+    resume: "LINE",
     lead: "SwiftUI + URLSession + Keychain",
     status: "to_apply",
   },
@@ -212,7 +236,7 @@ export const jobs: Job[] = [
     risk: "Prefers final-year. Offer 4–6 months and convert.",
     href: "https://www.workatastartup.com/jobs/103634",
     applyLabel: "WAAS",
-    resume: "Viraj-Bhanage-FrontPage.pdf",
+    resume: "FrontPage",
     lead: "AI client + Spring Boot",
     status: "to_apply",
   },
@@ -228,7 +252,7 @@ export const jobs: Job[] = [
     risk: "Global two-application cap. AU visa NOT VERIFIED. Aggregator claimed Dec 2026 start / 19 Oct deadline — official page does not say that.",
     href: "https://careers.tiktok.com/resume/7661940129289947397/apply",
     applyLabel: "TikTok Live apply",
-    resume: "Viraj-Bhanage-TikTok-Creation.pdf",
+    resume: "TikTok-Live",
     lead: "Rush Hour + Revenants",
     status: "hold",
   },
@@ -244,7 +268,7 @@ export const jobs: Job[] = [
     risk: "Not an intern. Expected 2028. Hybrid EU, not remote from Bali.",
     href: "https://n26.com/en-eu/careers/positions/8163939",
     applyLabel: "N26 apply",
-    resume: "Viraj-Bhanage-Revolut.pdf",
+    resume: "N26",
     lead: "Revenants VIPER + Who's Out REST",
     status: "hold",
   },
@@ -260,15 +284,152 @@ export const jobs: Job[] = [
     risk: "Visa field says US citizen/visa only while location lists SG/Tokyo. Resolve in the first sentence.",
     href: "https://www.ycombinator.com/companies/ego/jobs/0Gwm3fO-member-of-technical-staff-ios-engineer",
     applyLabel: "YC / WAAS",
-    resume: "Viraj-Bhanage-Argmax-RunAnywhere.pdf",
+    resume: "ego",
     lead: "Who's Out + RealityAudio",
     status: "to_apply",
   },
   {
-    id: "c5",
-    at: "8 Sep 2026",
-    from: "cursor",
-    text: "New verified openings: N26 junior iOS (Berlin/Barcelona, visa support — only if you can take leave), ego iOS MTS (SG/Tokyo remote listed vs US-visa-only field), TikTok Live Foundation iOS intern Sydney (hold for slot 2). Capital One OA deadline was 7 Sep 23:59. RunAnywhere still has no iOS intern JD — email san@runanywhere.ai. No verified paid remote-worldwide iOS intern exists.",
+    id: "runanywhere",
+    order: 14,
+    company: "RunAnywhere",
+    role: "iOS SDK intern — not posted",
+    term: "Winter or Summer 2027",
+    when: "Send this week. No public iOS intern JD.",
+    where: "Ask — do not assume remote",
+    why: "Highest-fit cold email. You already ship on-device Swift inference.",
+    risk: "No listing. Ask for iOS SDK intern, not DevRel.",
+    href: "mailto:san@runanywhere.ai",
+    applyLabel: "Open Mail",
+    resume: "RunAnywhere",
+    lead: "Sema + RealityAudio + Coralyst Core ML",
+    status: "to_apply",
+    channel: "email",
+    mailTo: "san@runanywhere.ai",
+    mailSubject: "iOS SDK intern — on-device Swift (Viraj Bhanage)",
+    mailBody: `Hi Sanchit,
+
+I'm Viraj Bhanage, 3rd-year CS at BITS Pilani, currently at the Apple Developer Academy in Bali. RunAnywhere does not have a public iOS intern posting. I am asking for an iOS SDK intern seat (not DevRel) for Winter or Summer 2027.
+
+I ship on-device, not wrappers:
+• RealityAudio — published Swift package (audio + spatial)
+• Coralyst — Core ML LSTM blast-fishing classifier, bundled on-device
+• Sema — on-device KSL ↔ English/Swahili via llama.cpp / Gemma
+
+Need sponsorship. Expected 2028. Portfolio: https://www.bhanageviraj.tech
+Happy to send the tailored PDF and jump on a short call.
+
+Viraj Bhanage
+virajbhanage00@gmail.com
++91 8855867440
+https://github.com/bhanage-viraj`,
+  },
+  {
+    id: "speak",
+    order: 15,
+    company: "Speak",
+    role: "iOS intern — listing still titled Summer 2026",
+    term: "Ask Winter / Summer 2027",
+    when: "Email first. Do not submit a 2026 form as if it were 2027.",
+    where: "Unconfirmed",
+    why: "iOS product exists. Cycle name is stale.",
+    risk: "If they only have 2026 leftover, skip.",
+    href: "https://www.workatastartup.com/jobs/88690",
+    applyLabel: "WAAS (stale)",
+    resume: "Speak",
+    lead: "Sema on-device language + Rush Hour",
+    status: "hold",
+    channel: "email",
+    mailSubject: "Winter/Summer 2027 iOS intern — Viraj Bhanage",
+    mailBody: `Hi Speak team — please forward to Andrew Hsu if useful.
+
+Your WAAS iOS intern row still reads Summer 2026. Is there a Winter or Summer 2027 native-iOS intern seat?
+
+I'm Viraj Bhanage, 3rd-year CS at BITS, Apple Developer Academy (Bali). On-device language + camera: Sema (KSL ↔ English/Swahili on-device) and Rush Hour (AVCaptureSession + Screen Time). Need sponsorship. Expected 2028.
+
+https://www.bhanageviraj.tech
+virajbhanage00@gmail.com
++91 8855867440`,
+  },
+  {
+    id: "jar",
+    order: 16,
+    company: "Jar",
+    role: "iOS intern — listing may have vanished",
+    term: "2027 if they reopen",
+    when: "Recheck careers, then send this mail if the iOS intern row is gone.",
+    where: "India",
+    why: "Fintech iOS. Only email if the intern row disappeared.",
+    risk: "Do not invent a posting. This is a lost-listing mail.",
+    href: "https://changejar.applytojob.com/apply",
+    applyLabel: "Jar careers",
+    resume: "Jar",
+    lead: "Who's Out REST + Spring Boot",
+    status: "hold",
+    channel: "email",
+    mailSubject: "iOS intern 2027 — Viraj Bhanage (BITS, Apple Developer Academy)",
+    mailBody: `Hi Jar iOS / recruiting,
+
+I am writing because the iOS intern row on your careers board has been flaky. If a Winter or Summer 2027 native-iOS intern seat is open, I would like to apply.
+
+Viraj Bhanage — 3rd-year CS, BITS Pilani, Apple Developer Academy (Bali). Who's Out (Swift 6 URLSession actor + Spring Boot) and Rush Hour (SwiftUI + AVCaptureSession). Need sponsorship only if the seat is not India. Expected 2028.
+
+https://www.bhanageviraj.tech
+virajbhanage00@gmail.com
++91 8855867440`,
+  },
+  {
+    id: "infilect",
+    order: 17,
+    company: "Infilect",
+    role: "Mobile intern — no native-iOS intern JD",
+    term: "Ask 2027",
+    when: "Cold email. Career page is generic.",
+    where: "India",
+    why: "On-device models + shipped iOS, not Flutter.",
+    risk: "They may only want full-time / Android.",
+    href: "https://www.infilect.com/career",
+    applyLabel: "Career page",
+    resume: "Infilect",
+    lead: "Coralyst Core ML + RealityAudio",
+    status: "hold",
+    channel: "email",
+    mailSubject: "On-device iOS intern 2027 — Viraj Bhanage",
+    mailBody: `Hi Infilect,
+
+Is there a 2027 intern seat for native iOS + on-device models (not Flutter)?
+
+I am Viraj Bhanage, 3rd-year CS at BITS, Apple Developer Academy (Bali). Coralyst runs a bundled Core ML classifier on-device. RealityAudio is a published Swift package. Expected 2028. Based in Bali; India on-site is realistic.
+
+https://www.bhanageviraj.tech
+virajbhanage00@gmail.com
++91 8855867440`,
+  },
+  {
+    id: "suno",
+    order: 18,
+    company: "Suno",
+    role: "SwiftUI intern — no intern row, only FT board",
+    term: "Ask 2027 intern on the SwiftUI seat",
+    when: "Ashby is FT-shaped. Send the mail, do not fake an intern apply.",
+    where: "Unconfirmed",
+    why: "Audio + SwiftUI is a real fit if they take an intern.",
+    risk: "May be FT-only. Do not apply to a senior req as intern.",
+    href: "https://jobs.ashbyhq.com/suno",
+    applyLabel: "Suno Ashby",
+    resume: "Suno",
+    lead: "RealityAudio + Rush Hour",
+    status: "hold",
+    channel: "email",
+    mailSubject: "SwiftUI intern 2027 — RealityAudio / Rush Hour — Viraj Bhanage",
+    mailBody: `Hi Suno iOS hiring,
+
+Your Ashby board does not show a 2027 intern. If you will take a native-iOS intern on the SwiftUI seat, I would like to be considered.
+
+Viraj Bhanage — 3rd-year CS, BITS Pilani, Apple Developer Academy (Bali). RealityAudio (published Swift package) and Rush Hour (SwiftUI + camera). Need sponsorship. Expected 2028.
+
+https://www.bhanageviraj.tech
+virajbhanage00@gmail.com
++91 8855867440`,
   },
 ];
 
@@ -330,89 +491,6 @@ export const hold = [
   },
 ];
 
-export const coldMail = [
-  {
-    company: "RunAnywhere (YC W26)",
-    chance: "High",
-    who: "Sanchit Monga — san@runanywhere.ai",
-    hook: "Ask for iOS SDK intern, not DevRel. Sema + RealityAudio.",
-    href: "mailto:san@runanywhere.ai",
-    label: "san@runanywhere.ai",
-  },
-  {
-    company: "Argmax (note after apply)",
-    chance: "High",
-    who: "Founders / hiring via Greenhouse + LinkedIn",
-    hook: "I already publish a Swift package and run Core ML on-device.",
-    href: "https://www.argmaxinc.com/",
-    label: "argmaxinc.com",
-  },
-  {
-    company: "Speak (YC W17)",
-    chance: "Medium",
-    who: "Andrew Hsu (CTO)",
-    hook: "Is there a Winter/Summer 2027 iOS intern?",
-    href: "https://www.workatastartup.com/jobs/88690",
-    label: "WAAS 88690",
-  },
-  {
-    company: "FrontPage founders",
-    chance: "High",
-    who: "WAAS apply + LinkedIn",
-    hook: "3rd year BITS, 4–6 months on-site, iOS-first.",
-    href: "https://www.workatastartup.com/jobs/103634",
-    label: "WAAS",
-  },
-  {
-    company: "Jar",
-    chance: "Medium",
-    who: "Jar careers / iOS lead",
-    hook: "Recheck the iOS intern row, then email if it vanished.",
-    href: "https://changejar.applytojob.com/apply",
-    label: "Jar careers",
-  },
-  {
-    company: "Infilect",
-    chance: "Medium",
-    who: "infilect.com/career",
-    hook: "On-device models + shipped iOS, not Flutter.",
-    href: "https://www.infilect.com/career",
-    label: "Infilect",
-  },
-  {
-    company: "ego / 222 / Reframe (YC)",
-    chance: "Medium",
-    who: "Founders on the live FT iOS posts",
-    hook: "Intern now, convert later.",
-    href: "https://www.ycombinator.com/companies/ego/jobs/0Gwm3fO-member-of-technical-staff-ios-engineer",
-    label: "ego iOS",
-  },
-  {
-    company: "Suno",
-    chance: "Medium",
-    who: "iOS hiring on Ashby",
-    hook: "Intern on the SwiftUI seat. RealityAudio + Rush Hour.",
-    href: "https://jobs.ashbyhq.com/suno",
-    label: "Suno Ashby",
-  },
-  {
-    company: "ElevenLabs",
-    chance: "Long shot",
-    who: "Mobile/iOS on LinkedIn",
-    hook: "Sema / Coralyst audio. Ask for a mobile intern.",
-    href: "https://jobs.ashbyhq.com/elevenlabs",
-    label: "ElevenLabs",
-  },
-  {
-    company: "Bloom (YC P25)",
-    chance: "Medium",
-    who: "WAAS 82957",
-    hook: "AI + mobile creation intern already exists.",
-    href: "https://www.workatastartup.com/jobs/82957",
-    label: "Bloom WAAS",
-  },
-];
-
 export const formRules = [
   ["Name", internDesk.identity.name],
   ["Email", internDesk.identity.email],
@@ -470,4 +548,47 @@ export const statusLabel: Record<JobStatus, string> = {
 
 export function getJob(id: string) {
   return jobs.find((job) => job.id === id);
+}
+
+export function jobChannel(job: Job): "apply" | "email" {
+  return job.channel ?? "apply";
+}
+
+export function identityPack(): string {
+  return formRules.map(([label, value]) => `${label}: ${value}`).join("\n");
+}
+
+export function coverNoteFor(job: Job): string {
+  if (job.coverNote) return job.coverNote;
+  const i = internDesk.identity;
+  return [
+    `I am applying for ${job.role} (${job.term}) at ${job.company}.`,
+    "",
+    `${job.lead}.`,
+    `Portfolio: ${i.portfolio}`,
+    `GitHub: ${i.github}`,
+    "",
+    `${i.school}. ${i.year}. Based in ${i.location}.`,
+    `${i.sponsorship}.`,
+    "",
+    i.name,
+    i.email,
+    i.phone,
+  ].join("\n");
+}
+
+export function mailtoFor(job: Job): string | null {
+  if (!job.mailTo || !job.mailSubject || !job.mailBody) return null;
+  return `mailto:${job.mailTo}?subject=${encodeURIComponent(job.mailSubject)}&body=${encodeURIComponent(job.mailBody)}`;
+}
+
+export function emailDraft(job: Job): string | null {
+  if (!job.mailBody) return null;
+  const lines = [
+    job.mailTo ? `To: ${job.mailTo}` : "To: (no verified inbox — paste on LinkedIn / careers)",
+    job.mailSubject ? `Subject: ${job.mailSubject}` : null,
+    "",
+    job.mailBody,
+  ].filter((line) => line !== null);
+  return lines.join("\n");
 }
