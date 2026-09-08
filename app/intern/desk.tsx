@@ -145,14 +145,20 @@ export function InternDesk() {
   }
 
   function setNote(id: string, note: string) {
-    setMarks((current) => ({
-      ...current,
-      [id]: {
-        status: current[id]?.status ?? jobs.find((job) => job.id === id)?.status ?? "to_apply",
-        ...current[id],
-        note,
-      },
-    }));
+    setMarks((current) => {
+      const existing = current[id];
+      return {
+        ...current,
+        [id]: {
+          ...existing,
+          status:
+            existing?.status ??
+            jobs.find((job) => job.id === id)?.status ??
+            "to_apply",
+          note,
+        },
+      };
+    });
   }
 
   function markApplied(job: Job) {
