@@ -296,9 +296,11 @@ export const jobs: Job[] = [
     term: "Winter or Summer 2027",
     when: "Send this week. No public iOS intern JD.",
     where: "Ask — do not assume remote",
-    why: "Highest-fit cold email. You already ship on-device Swift inference.",
+    why: "No public iOS intern JD. They do have a remote DevRel intern (visa not required). Still ask Sanchit for iOS SDK intern, not DevRel, unless you want the writing seat.",
     risk: "No listing. Ask for iOS SDK intern, not DevRel.",
     href: "mailto:san@runanywhere.ai",
+    extraHref: "https://www.workatastartup.com/jobs/98717",
+    extraLabel: "DevRel intern (not iOS)",
     applyLabel: "Open Mail",
     resume: "RunAnywhere",
     lead: "Sema + RealityAudio + Coralyst Core ML",
@@ -431,6 +433,90 @@ https://www.bhanageviraj.tech
 virajbhanage00@gmail.com
 +91 8855867440`,
   },
+  {
+    id: "twinmind",
+    order: 19,
+    company: "TwinMind",
+    role: "iOS Engineer — full-time or internship",
+    term: "Immediate / intern (dates unpublished)",
+    when: "Apply this week. Official page still lists Fulltime / Internship.",
+    where: "Menlo Park, CA — in office",
+    why: "Tiny AI-native iOS product. JD asks SwiftUI + on-device models (Core ML / MLX bonus). Intern track is written on the page.",
+    risk: "On-site California. International hiring UNKNOWN. US intern visa from BITS is the hard part. Wellfound copy also mentions 3 years exp in some index snippets — ignore aggregator text; the company page says internship is allowed.",
+    href: "https://tally.so/r/mBMzg4",
+    extraHref: "https://twinmind.com/about/ios-engineer",
+    extraLabel: "JD",
+    applyLabel: "Tally apply",
+    resume: "TwinMind",
+    lead: "Sema llama.cpp + Coralyst Core ML + Rush Hour SwiftUI",
+    status: "to_apply",
+  },
+  {
+    id: "bloom",
+    order: 20,
+    company: "Bloom (YC)",
+    role: "AI Engineering Student Internship",
+    term: "Listing still says Winter or Summer 2026",
+    when: "Form is live 8 Sep 2026. Ask if a Winter 2027 seat exists. Title is stale.",
+    where: "Zurich — US citizenship/visa not required",
+    why: "Small YC team. Student intern. Portfolio apply. Swift is a bonus, TypeScript is the core. Mobile-app creator product.",
+    risk: "Not a native-iOS intern. Cycle name is 2026. Zurich on-site implied. Expected 2028 vs convert-after-grad language.",
+    href: "https://www.workatastartup.com/jobs/82957",
+    applyLabel: "WAAS Bloom",
+    resume: "Bloom",
+    lead: "Who's Out + Sema — you ship apps, they generate apps",
+    status: "to_apply",
+  },
+  {
+    id: "flavorscale",
+    order: 21,
+    company: "FlavorScale",
+    role: "iOS intern — native rebuild (listing marked inactive)",
+    term: "Work-student / intern. 2026/2027 funding cycle mentioned.",
+    when: "Hub page says no longer active. Email Penelope. Do not apply to a dead form.",
+    where: "Remote-first, must be located within the EU",
+    why: "Exact 3rd-year bet: Flutter MVP → native Swift/SwiftUI, portfolio mandatory, work with CTO/CEO, student explicitly invited.",
+    risk: "Bali is not EU. They wrote Located within EU. No paid-role promise. Listing inactive.",
+    href: "mailto:Peneloppe@flavorscale.app",
+    extraHref: "https://thehub.io/jobs/69f33cc638b05d4153e381ef",
+    extraLabel: "Hub JD (inactive)",
+    applyLabel: "Open Mail",
+    resume: "FlavorScale",
+    lead: "Rush Hour SwiftUI + Revenants",
+    status: "to_apply",
+    channel: "email",
+    mailTo: "Peneloppe@flavorscale.app",
+    mailSubject: "Native iOS intern — SwiftUI rebuild — Viraj Bhanage",
+    mailBody: `Hi Penelope,
+
+The Hub listing for FlavorScale's native iOS intern is marked inactive. If you still need someone to rebuild the Flutter MVP in Swift/SwiftUI, I want that seat.
+
+I am Viraj Bhanage, 3rd-year CS at BITS, currently at the Apple Developer Academy in Bali. I ship native iOS, not wrappers: Rush Hour (SwiftUI + AVCaptureSession) and Revenants (Swift 6 / RealityKit). Portfolio-first is how I apply.
+
+I am not in the EU. If remote-from-Bali is a no, say so. If a 2027 intern or contractor seat exists, I can send the tailored PDF today.
+
+https://www.bhanageviraj.tech
+virajbhanage00@gmail.com
++91 8855867440`,
+  },
+  {
+    id: "metry-ai",
+    order: 22,
+    company: "Metry AI",
+    role: "App Development Intern (iOS / Android)",
+    term: "3–6 months, rolling",
+    when: "Apply this week. Wellfound says intern, student/recent grad, no experience required, remote everywhere.",
+    where: "Remote everywhere (company listed Alberta / Tokyo / Taipei)",
+    why: "Highest remote YES-chance in this pass. Student intern. Swift is on the skill list. Founder-accessible on Wellfound.",
+    risk: "Stack is Swift OR Kotlin OR Flutter OR React Native — native iOS is not guaranteed. Visa sponsorship not available. Quality of the intern program is UNKNOWN. Do not treat this as an on-device AI seat.",
+    href: "https://wellfound.com/jobs/3470786-app-development-intern-ios-android",
+    extraHref: "https://wellfound.com/company/metry-ai",
+    extraLabel: "Company",
+    applyLabel: "Wellfound",
+    resume: "Metry-AI",
+    lead: "Rush Hour SwiftUI + Who's Out",
+    status: "to_apply",
+  },
 ];
 
 export const timeline = [
@@ -440,7 +526,7 @@ export const timeline = [
   },
   {
     when: "This week (8–14 Sep 2026)",
-    jobs: "Revolut, Argmax, ego + RunAnywhere email, FrontPage, AppLovin, TikTok slot 1, Verkada, Apple IS&T SG, LINE. Hold TikTok Live Sydney and N26 until you decide.",
+    jobs: "Startup-first: FrontPage, Metry AI, Bloom (ask 2027), TwinMind, FlavorScale email, RunAnywhere iOS email, ego, Argmax. Parallel prestige apps stay on the desk but are not the bet list.",
   },
   {
     when: "Rolling through Dec 2026",
@@ -534,6 +620,12 @@ export const chatLog: ChatEntry[] = [
     at: "8 Sep 2026",
     from: "cursor",
     text: "New verified openings: N26 junior iOS (Berlin/Barcelona, visa support — only if you can take leave), ego iOS MTS (SG/Tokyo remote listed vs US-visa-only field), TikTok Live Foundation iOS intern Sydney (hold for slot 2). Capital One OA deadline was 7 Sep 23:59. RunAnywhere still has no iOS intern JD — email san@runanywhere.ai. No verified paid remote-worldwide iOS intern exists.",
+  },
+  {
+    id: "c6",
+    at: "8 Sep 2026",
+    from: "cursor",
+    text: "Startup-first pass: TwinMind (iOS intern allowed, Menlo Park), Bloom student intern (Zurich, TS core, Swift bonus, 2026 title), FlavorScale native-iOS intern email (EU-only, Hub listing inactive), Metry AI remote-everywhere student intern (Swift listed among RN/Flutter). Did not invent a 100-company native-iOS intern database — public listings ran out. RxSwift is still not on your stack.",
   },
 ];
 
