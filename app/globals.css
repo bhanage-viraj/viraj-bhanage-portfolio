@@ -12,6 +12,11 @@
     @apply bg-paper font-body text-body text-ink antialiased;
   }
 
+  html[data-vd] #public-nav,
+  html[data-vd] #skip-to-content {
+    display: none !important;
+  }
+
   ::selection {
     background: #5e6ad2;
     color: #f7f7f5;

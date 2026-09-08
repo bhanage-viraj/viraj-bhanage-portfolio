@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Nav } from "@/components/nav";
+import Script from "next/script";
+import { SiteChrome } from "@/components/site-chrome";
 import { site } from "@/lib/content";
 import "./globals.css";
 
@@ -19,14 +20,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <a
-          href="#main"
-          className="sr-only focus:not-sr-only focus:absolute focus:left-5 focus:top-3 focus:z-[60] focus:bg-paper focus:px-3 focus:py-2 focus:text-signal"
-        >
-          Skip to content
-        </a>
-        <Nav />
-        {children}
+        <Script id="vd" strategy="beforeInteractive">
+          {`try{if(document.cookie.indexOf("vd_ui=")!==-1)document.documentElement.dataset.vd="1"}catch(e){}`}
+        </Script>
+        <SiteChrome>{children}</SiteChrome>
       </body>
     </html>
   );
