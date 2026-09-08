@@ -50,7 +50,7 @@ export type ChatEntry = {
 };
 
 export const internDesk = {
-  asOf: "8 September 2026",
+  asOf: "9 September 2026",
   chatId: "5f5bd748-3f89-4678-88a8-ccc623429751",
   identity: {
     name: "Viraj Bhanage",
@@ -711,6 +711,41 @@ virajbhanage00@gmail.com
     lead: "Who's Out social + Rush Hour",
     status: "hold",
   },
+  {
+    id: "notewise",
+    order: 34,
+    company: "Notewise",
+    role: "iOS intern — not posted (native iOS + Android product)",
+    term: "Ask Winter or Summer 2027",
+    when: "Send this week. Only verified small SG iOS product with a public jobs inbox.",
+    where: "One-North, Singapore on-site (they wrote in-person)",
+    why: "~9 people. Native iOS (Swift / UIKit / SwiftUI / Metal listed on the senior JD). Apple Design Award nominee 2025–2026. They hire interns (LinkedIn shows Intern on the team). New-grad posting is 2025/2026 grads only — do not apply as new grad.",
+    risk: "No intern JD. careers page 404 on 9 Sep; indexed instruction is still email jobs@notewise.dev. Work pass UNKNOWN. Expected 2028 vs new-grad 2026.",
+    href: "mailto:jobs@notewise.dev",
+    extraHref: "https://notewise.dev/",
+    extraLabel: "Product",
+    applyLabel: "Open Mail",
+    resume: "Notewise",
+    lead: "Rush Hour SwiftUI + RealityAudio",
+    status: "to_apply",
+    channel: "email",
+    mailTo: "jobs@notewise.dev",
+    mailSubject: "Native iOS intern 2027 — Viraj Bhanage",
+    mailBody: `Hi Notewise team,
+
+Your jobs page asks for resumes at this inbox. The Software Engineer, New Grad row is for 2025/2026 graduates. I graduate in 2028, so I am asking for a native iOS intern seat for Winter or Summer 2027, not the new-grad role.
+
+I am Viraj Bhanage, 3rd-year CS at BITS Pilani, currently at the Apple Developer Academy in Bali. I ship native iOS, not wrappers:
+• Rush Hour — SwiftUI + AVCaptureSession
+• RealityAudio — published Swift package
+• Revenants — Swift 6 / RealityKit
+
+One-North on-site is fine if you can sponsor a Training Employment Pass. If you do not take overseas-university interns, say so.
+
+https://www.bhanageviraj.tech
+virajbhanage00@gmail.com
++91 8855867440`,
+  },
 ];
 
 export const timeline = [
@@ -720,7 +755,7 @@ export const timeline = [
   },
   {
     when: "This week (8–14 Sep 2026)",
-    jobs: "SG: Airwallex before 18 Sep 23:59 SGT. ByteDance iOS (counts as TikTok slot 2). ShopBack Jan–Jul. StraitsX. Jump C++. Already on desk: AppLovin, TikTok Creation, Apple IS&T.",
+    jobs: "SG iOS startups: email Notewise (jobs@notewise.dev). ego WAAS (SG listed vs US-visa-only). AppLovin Gist intern. Airwallex still closes 18 Sep 23:59 SGT — not iOS. ByteDance iOS is Big Tech, not a startup, and is TikTok slot 2.",
   },
   {
     when: "Rolling through Dec 2026",
@@ -826,6 +861,12 @@ export const chatLog: ChatEntry[] = [
     at: "8 Sep 2026",
     from: "cursor",
     text: "Singapore pass: ByteDance iOS Global Payment 2027 (counts toward TikTok/ByteDance 2-app cap). Airwallex SWE intern closes 18 Sep 2026 23:59 SGT. ShopBack backend Jan–Jul 2027 and Product Builder intern. StraitsX fullstack intern. Mastercard Summer 2027 (closes 11 Oct). Jane Street SG May–Aug (OCaml). Jump C++/Python campus intern SG. JPMC Summer Analyst deadline 29 Oct. GovTech until 30 Sep — likely local students. TikTok Social 2027 held for the cap.",
+  },
+  {
+    id: "c8",
+    at: "9 Sep 2026",
+    from: "cursor",
+    text: "SG iOS-startup pass: no public native-iOS intern at a 2–50 person SG company. Only cold-email: Notewise (jobs@notewise.dev). Already on desk: ego (FT, SG/Tokyo listed) and AppLovin Gist intern. Skipped as not intern / not native / expired / PR-only: Bjak (must already live in SG, 3+ years), Plaud Mobile SG URL dead, foodpanda PowerUp (Citizen/PR), Shopee iOS intern Jan 2026 expired, GXS May–Aug 2026 closed, Take App / HitPay no iOS intern, Gotrade Flutter, MindFi no intern JD, Milky Way AI inactive.",
   },
 ];
 
