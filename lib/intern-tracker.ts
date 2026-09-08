@@ -30,7 +30,7 @@ export type Job = {
   /** Company folder under resumes/pdf/. File is always Viraj-Bhanage.pdf */
   resume: string;
   lead: string;
-  /** Official status from this Cursor chat. Overlay with local marks on the page. */
+  /** Official status from this Cursor chat. The desk overlays shared marks from Blob. */
   status: JobStatus;
   appliedOn?: string;
   note?: string;
@@ -746,6 +746,59 @@ https://www.bhanageviraj.tech
 virajbhanage00@gmail.com
 +91 8855867440`,
   },
+  {
+    id: "pandai",
+    order: 35,
+    company: "Pandai (YC S21)",
+    role: "iOS intern — not posted (they invite internship emails)",
+    term: "Ask Winter or Summer 2027",
+    when: "Send this week. Only verified KL consumer-app startup with a public intern inbox.",
+    where: "Kuala Lumpur founders; page says the team works remotely across SEA",
+    why: "YC S21, ~32 people, learning app on the App Store. Careers page explicitly says internships: email career@pandai.org. Remote-across-SEA is written, which is closer to Bali than a SG TEP.",
+    risk: "No native-iOS intern JD. Stack unpublished on the careers page. Internship Pass UNKNOWN. Do not assume they ship Swift rather than Flutter/RN.",
+    href: "mailto:career@pandai.org",
+    extraHref: "https://pandai.org/en/career",
+    extraLabel: "Careers",
+    applyLabel: "Open Mail",
+    resume: "Pandai",
+    lead: "Rush Hour SwiftUI + Who's Out",
+    status: "to_apply",
+    channel: "email",
+    mailTo: "career@pandai.org",
+    mailSubject: "Native iOS intern 2027 — Viraj Bhanage",
+    mailBody: `Hi Pandai team,
+
+Your careers page says internships can be proposed at this inbox even when a role is not listed. I am asking for a native iOS intern seat for Winter or Summer 2027.
+
+I am Viraj Bhanage, 3rd-year CS at BITS Pilani, currently at the Apple Developer Academy in Bali. I ship native iOS, not wrappers:
+• Rush Hour — SwiftUI + AVCaptureSession
+• Who's Out — SwiftUI + Foundation Models
+• RealityAudio — published Swift package
+
+You wrote that the team works remotely across Southeast Asia. Bali is fine if that is real. If you only take Malaysian-university students, say so.
+
+https://www.bhanageviraj.tech
+virajbhanage00@gmail.com
++91 8855867440`,
+  },
+  {
+    id: "ant-kl",
+    order: 36,
+    company: "Ant International",
+    role: "Mobile Engineer Intern (iOS/Android) — Kuala Lumpur",
+    term: "Intern — dates unpublished on LinkedIn",
+    when: "Apply this week if the LinkedIn row is still live. Not a startup.",
+    where: "Kuala Lumpur (TRX R&D hub)",
+    why: "Only live KL mobile intern found this pass. JD lists iOS/Android SDKs + Core ML / TFLite as preferred. Graduation window on other Ant KL campus intern rows includes 2028.",
+    risk: "Ant Group, not a startup. iOS not guaranteed. Official job-search intern keyword returned empty on 9 Sep; LinkedIn still showed the intern row. Internship Pass UNKNOWN.",
+    href: "https://www.linkedin.com/jobs/view/4454250246/",
+    extraHref: "https://www.ant-intl.com/en/job-search-campus/",
+    extraLabel: "Campus search",
+    applyLabel: "LinkedIn apply",
+    resume: "Ant-International",
+    lead: "Coralyst Core ML + Rush Hour",
+    status: "to_apply",
+  },
 ];
 
 export const timeline = [
@@ -755,7 +808,7 @@ export const timeline = [
   },
   {
     when: "This week (8–14 Sep 2026)",
-    jobs: "SG iOS startups: email Notewise (jobs@notewise.dev). ego WAAS (SG listed vs US-visa-only). AppLovin Gist intern. Airwallex still closes 18 Sep 23:59 SGT — not iOS. ByteDance iOS is Big Tech, not a startup, and is TikTok slot 2.",
+    jobs: "SG: email Notewise. KL: email Pandai (career@pandai.org). Ant International KL mobile intern on LinkedIn if still live. Airwallex still closes 18 Sep 23:59 SGT — not iOS.",
   },
   {
     when: "Rolling through Dec 2026",
@@ -867,6 +920,12 @@ export const chatLog: ChatEntry[] = [
     at: "9 Sep 2026",
     from: "cursor",
     text: "SG iOS-startup pass: no public native-iOS intern at a 2–50 person SG company. Only cold-email: Notewise (jobs@notewise.dev). Already on desk: ego (FT, SG/Tokyo listed) and AppLovin Gist intern. Skipped as not intern / not native / expired / PR-only: Bjak (must already live in SG, 3+ years), Plaud Mobile SG URL dead, foodpanda PowerUp (Citizen/PR), Shopee iOS intern Jan 2026 expired, GXS May–Aug 2026 closed, Take App / HitPay no iOS intern, Gotrade Flutter, MindFi no intern JD, Milky Way AI inactive.",
+  },
+  {
+    id: "c9",
+    at: "9 Sep 2026",
+    from: "cursor",
+    text: "KL iOS-startup pass: no public native-iOS intern at a 2–50 person KL company. Email Pandai (YC S21) at career@pandai.org — careers page invites internship emails and says the team is remote across SEA. Ant International KL Mobile Engineer Intern (iOS/Android) still on LinkedIn; official intern keyword search was empty. Grab iOS/Android intern URLs 404. Bjak MY iOS is FT and must already live in Malaysia. Gen/MoneyLion intern is Malaysians only. Pop Meals mobile is 4+ years FT.",
   },
 ];
 

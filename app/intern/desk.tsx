@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   coverNoteFor,
   emailDraft,
@@ -25,6 +25,13 @@ type Marks = Record<
   { status: JobStatus; appliedOn?: string; note?: string }
 >;
 
+function todayLabel() {
+  return new Date().toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+  });
+}
+
 const FILTERS: { id: Filter; label: string }[] = [
   { id: "to_apply", label: "To apply" },
   { id: "email", label: "Cold email" },
@@ -42,25 +49,6 @@ const STATUS_OPTIONS: JobStatus[] = [
   "hold",
 ];
 
-const STORAGE_MARKS = "intern-desk-marks";
-const STORAGE_STATUS = "intern-desk-status";
-
-function loadMarks(): Marks {
-  if (typeof window === "undefined") return {};
-  try {
-    const next = window.localStorage.getItem(STORAGE_MARKS);
-    if (next) return JSON.parse(next) as Marks;
-    const legacy = window.localStorage.getItem(STORAGE_STATUS);
-    if (!legacy) return {};
-    const parsed = JSON.parse(legacy) as Record<string, JobStatus>;
-    return Object.fromEntries(
-      Object.entries(parsed).map(([id, status]) => [id, { status }]),
-    );
-  } catch {
-    return {};
-  }
-}
-
 function statusTone(status: JobStatus) {
   if (status === "to_apply") return "border-coral/40 bg-coral/10 text-ink";
   if (status === "applied" || status === "interview")
@@ -73,20 +61,69 @@ function statusTone(status: JobStatus) {
 export function InternDesk() {
   const [filter, setFilter] = useState<Filter>("to_apply");
   const [marks, setMarks] = useState<Marks>({});
-  const [ready, setReady] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const [opening, setOpening] = useState<string | null>(null);
   const [openId, setOpenId] = useState<string | null>(null);
+  const marksRef = useRef(marks);
+  const noteTimers = useRef<Record<string, number>>({});
+  const inflight = useRef(0);
+  marksRef.current = marks;
+
+  async function refreshMarks() {
+    if (inflight.current > 0) return;
+    if (Object.values(noteTimers.current).some(Boolean)) return;
+    try {
+      const response = await fetch("/api/intern/marks", { cache: "no-store" });
+      if (!response.ok) return;
+      const data = (await response.json()) as { marks?: Marks };
+      setMarks(data.marks ?? {});
+    } catch {
+      /* keep the last known shared marks */
+    }
+  }
+
+  async function persist(
+    body: { id: string; clear?: boolean } & Partial<Marks[string]>,
+  ) {
+    inflight.current += 1;
+    let failed = false;
+    try {
+      const response = await fetch("/api/intern/marks", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      if (!response.ok) {
+        failed = true;
+        setToast("Could not save — check the other browser in a few seconds");
+      } else {
+        const data = (await response.json()) as { marks?: Marks };
+        setMarks(data.marks ?? {});
+      }
+    } catch {
+      failed = true;
+      setToast("Could not reach the shared desk");
+    } finally {
+      inflight.current = Math.max(0, inflight.current - 1);
+    }
+    if (failed) await refreshMarks();
+  }
 
   useEffect(() => {
-    setMarks(loadMarks());
-    setReady(true);
+    void refreshMarks();
   }, []);
 
   useEffect(() => {
-    if (!ready) return;
-    window.localStorage.setItem(STORAGE_MARKS, JSON.stringify(marks));
-  }, [marks, ready]);
+    const onFocus = () => void refreshMarks();
+    window.addEventListener("focus", onFocus);
+    const timer = window.setInterval(() => {
+      if (document.visibilityState === "visible") void refreshMarks();
+    }, 8000);
+    return () => {
+      window.removeEventListener("focus", onFocus);
+      window.clearInterval(timer);
+    };
+  }, []);
 
   useEffect(() => {
     if (!toast) return;
@@ -99,7 +136,7 @@ export function InternDesk() {
       jobs.map((job) => ({
         ...job,
         status: marks[job.id]?.status ?? job.status,
-        appliedOn: marks[job.id]?.appliedOn,
+        appliedOn: marks[job.id]?.appliedOn ?? job.appliedOn,
         note: marks[job.id]?.note ?? "",
       })),
     [marks],
@@ -127,21 +164,25 @@ export function InternDesk() {
   }
 
   function setStatus(id: string, status: JobStatus) {
-    setMarks((current) => ({
-      ...current,
-      [id]: {
-        ...current[id],
-        status,
-        appliedOn:
-          status === "applied"
-            ? (current[id]?.appliedOn ??
-              new Date().toLocaleDateString("en-GB", {
-                day: "numeric",
-                month: "short",
-              }))
-            : current[id]?.appliedOn,
-      },
+    const current = marksRef.current[id];
+    const appliedOn =
+      status === "applied"
+        ? (current?.appliedOn ?? todayLabel())
+        : current?.appliedOn;
+    setMarks((existing) => ({
+      ...existing,
+      [id]: { ...existing[id], status, appliedOn },
     }));
+    const official = jobs.find((job) => job.id === id);
+    if (
+      official &&
+      status === official.status &&
+      !(current?.note ?? "").trim()
+    ) {
+      void persist({ id, clear: true });
+      return;
+    }
+    void persist({ id, status, appliedOn, note: current?.note });
   }
 
   function setNote(id: string, note: string) {
@@ -159,11 +200,23 @@ export function InternDesk() {
         },
       };
     });
+    window.clearTimeout(noteTimers.current[id]);
+    noteTimers.current[id] = window.setTimeout(() => {
+      delete noteTimers.current[id];
+      const latest = marksRef.current[id];
+      void persist({
+        id,
+        status: latest?.status,
+        appliedOn: latest?.appliedOn,
+        note,
+      });
+    }, 450);
   }
 
   function markApplied(job: Job) {
     if (job.status === "applied") {
-      setStatus(job.id, jobChannel(job) === "email" ? "to_apply" : "to_apply");
+      const official = jobs.find((row) => row.id === job.id);
+      setStatus(job.id, official?.status ?? "to_apply");
       setToast(`Moved ${job.company} back to the queue`);
       return;
     }
@@ -242,6 +295,10 @@ export function InternDesk() {
           Job sites will not let this page type into their forms. Apply copies
           your details and cover, then opens the listing. Lost listings get a
           finished email. Resumes stay on this Mac.
+        </p>
+        <p className="mt-3 max-w-[54ch] text-[14px] leading-[1.55] text-ink-muted">
+          Mark applied and notes save to the shared desk. Chrome, Safari, and
+          your phone pick them up on refresh or within a few seconds.
         </p>
 
         <div className="mt-10 grid gap-3 sm:grid-cols-3">
