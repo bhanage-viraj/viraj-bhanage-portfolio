@@ -8,6 +8,26 @@
     overflow-x: clip;
   }
 
+  html.home-smooth-scroll {
+    scroll-behavior: smooth;
+  }
+
+  @media (min-width: 768px) {
+    html.home-smooth-scroll {
+      scroll-snap-type: y proximity;
+    }
+
+    .page-chapter {
+      scroll-snap-align: start;
+    }
+
+    .pin-snap {
+      scroll-snap-align: center;
+      scroll-snap-stop: normal;
+      pointer-events: none;
+    }
+  }
+
   body {
     @apply bg-paper font-body text-body text-ink antialiased;
   }

@@ -23,7 +23,7 @@ import type { KaggleStats } from "@/lib/types";
 import { PageCol } from "@/lib/ui";
 
 const SCRAMBLE_CHARS = "0123456789!<>-_\\/[]{}—=+*^?#$%&";
-const SLIDE_VH = 1.25;
+const SLIDE_VH = 1.3;
 
 const tones: Record<
   AchievementTone,
@@ -355,7 +355,7 @@ export function Achievements() {
   const trackY = useRef(0);
   const trackTargetY = useRef(0);
   const trackInit = useRef(false);
-  const lerpRef = useRef(0.1);
+  const lerpRef = useRef(0.065);
   const snapping = useRef(false);
   const snapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const scrambleRaf = useRef<number | null>(null);
@@ -460,10 +460,10 @@ export function Achievements() {
         trackRef.current.style.transform = `translate3d(0, ${trackY.current}px, 0)`;
       }
     } else {
-      lerpRef.current = 0.18;
+      lerpRef.current = 0.11;
       window.setTimeout(() => {
-        lerpRef.current = 0.1;
-      }, 480);
+        lerpRef.current = 0.065;
+      }, 640);
     }
   }, []);
 
@@ -507,23 +507,26 @@ export function Achievements() {
     };
     raf = requestAnimationFrame(animate);
 
-    const scheduleSnap = () => {
+    const settleSnap = () => {
       if (snapping.current) return;
       if (snapTimer.current) clearTimeout(snapTimer.current);
       snapTimer.current = setTimeout(() => {
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          return;
+        }
         const rect = wrap.getBoundingClientRect();
-        const isPinned =
-          rect.top <= 1 && rect.bottom >= window.innerHeight - 1;
-        if (!isPinned) return;
+        const pinned =
+          rect.top <= 2 && rect.bottom >= window.innerHeight - 2;
+        if (!pinned) return;
         const idx = currentRef.current < 0 ? 0 : currentRef.current;
         const targetY = snapTarget(idx);
-        if (Math.abs(window.scrollY - targetY) < 4) return;
+        if (Math.abs(window.scrollY - targetY) < 12) return;
         snapping.current = true;
         window.scrollTo({ top: targetY, behavior: "smooth" });
-        setTimeout(() => {
+        window.setTimeout(() => {
           snapping.current = false;
-        }, 720);
-      }, 100);
+        }, 700);
+      }, 140);
     };
 
     const onScroll = () => {
@@ -536,7 +539,7 @@ export function Achievements() {
       }
       const progress = Math.min(1, Math.max(0, -rect.top / total));
       setActiveIndex(Math.min(N - 1, Math.floor(progress * N)));
-      scheduleSnap();
+      settleSnap();
     };
 
     requestAnimationFrame(() => {
@@ -564,7 +567,7 @@ export function Achievements() {
     window.scrollTo({ top: snapTarget(idx), behavior: "smooth" });
     setTimeout(() => {
       snapping.current = false;
-    }, 720);
+    }, 1100);
   };
 
   const activeGroup = groups[active];
@@ -573,7 +576,7 @@ export function Achievements() {
 
   return (
     <section id="achievements" className="scroll-mt-24 border-t border-line">
-      <PageCol className="pt-section-sm sm:pt-section">
+      <PageCol className="pt-section-sm sm:pt-section md:hidden">
         <Reveal>
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div className="flex items-start gap-3">
@@ -598,10 +601,31 @@ export function Achievements() {
 
       <div
         ref={setWrap}
-        className="relative mt-8 hidden md:block"
+        className="relative mt-0 hidden md:block"
         style={{ height: `${N * SLIDE_VH * 100}vh` }}
       >
-        <div className="sticky top-16 z-10 grid h-[calc(100dvh-4rem)] w-full grid-cols-[220px_minmax(0,1fr)_280px] items-center gap-8 bg-paper px-8 sm:top-[4.5rem] sm:h-[calc(100dvh-4.5rem)] lg:grid-cols-[240px_minmax(0,1fr)_300px] lg:gap-10 lg:px-12 xl:px-16">
+        {groups.map((group, idx) => (
+          <div
+            key={`snap-${group.id}`}
+            data-scroll-stop
+            className="pin-snap absolute left-0 w-full"
+            style={{
+              top: `${(idx / N) * 100}%`,
+              height: `${(1 / N) * 100}%`,
+            }}
+            aria-hidden="true"
+          />
+        ))}
+        <div className="sticky top-16 z-10 flex h-[calc(100dvh-4rem)] w-full flex-col bg-paper sm:top-[4.5rem] sm:h-[calc(100dvh-4.5rem)]">
+          <div className="mx-auto flex w-full max-w-[1760px] shrink-0 items-end justify-between gap-4 px-8 pt-5 lg:px-12 xl:px-16">
+            <h2 className="font-display text-[1.65rem] font-semibold tracking-[-0.038em] text-ink sm:text-[1.85rem]">
+              Achievements
+            </h2>
+            <p className="hidden max-w-[36ch] text-right text-[13px] leading-snug text-ink-muted sm:block">
+              Competitions, certifications and milestones along the way.
+            </p>
+          </div>
+          <div className="mx-auto grid min-h-0 w-full max-w-[1760px] flex-1 grid-cols-[220px_minmax(0,1fr)_280px] items-center gap-8 px-8 lg:grid-cols-[240px_minmax(0,1fr)_300px] lg:gap-10 lg:px-12 xl:px-16">
           <div
             className="flex flex-col justify-center"
             role="listbox"
@@ -641,7 +665,7 @@ export function Achievements() {
               ref={setTrack}
               className="absolute left-0 top-1/2 w-full will-change-transform"
             >
-              <div className="pointer-events-none relative mb-14 px-2 opacity-20">
+              <div className="pointer-events-none relative mb-14 px-2 opacity-20" aria-hidden="true">
                 <GroupStage group={lastClone} kaggle={kaggle} />
               </div>
               {groups.map((group, idx) => {
@@ -652,15 +676,16 @@ export function Achievements() {
                     ref={(node) => {
                       mediaItemRefs.current[idx] = node;
                     }}
-                    className="relative mb-14 px-2 transition-[opacity,transform,filter] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
+                    aria-hidden={dist !== 0}
+                    className="relative mb-14 px-2 transition-[opacity,transform,filter] duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
                     style={{
-                      opacity: dist === 0 ? 1 : dist === 1 ? 0.2 : 0.06,
+                      opacity: dist === 0 ? 1 : dist === 1 ? 0.18 : 0.05,
                       transform:
                         dist === 0
-                          ? "scale(1)"
+                          ? "scale(1) translateY(0)"
                           : dist === 1
-                            ? "scale(0.96)"
-                            : "scale(0.92)",
+                            ? "scale(0.96) translateY(8px)"
+                            : "scale(0.92) translateY(16px)",
                       filter: dist === 0 ? "none" : "saturate(0.75)",
                     }}
                   >
@@ -672,10 +697,10 @@ export function Achievements() {
           </div>
 
           <div
-            className={`transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+            className={`transition-all duration-[850ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
               copyVisible
                 ? "translate-y-0 opacity-100"
-                : "translate-y-3 opacity-0"
+                : "translate-y-4 opacity-0"
             }`}
           >
             <p className="site-meta">
@@ -703,6 +728,7 @@ export function Achievements() {
                 </li>
               ))}
             </ul>
+          </div>
           </div>
         </div>
       </div>

@@ -60,9 +60,9 @@ export function MediaSlot({
   variant?: "card" | "study" | "thumb" | "feature" | "pin";
 }) {
   if (variant === "pin") {
-    // Fit inside the full-screen work window; keep native aspect ratio
+    // Fit inside project cards; keep native aspect ratio
     const fill =
-      "pointer-events-none mx-auto block h-auto max-h-[min(82dvh,900px)] w-auto max-w-full";
+      "pointer-events-none mx-auto block h-auto max-h-[min(54dvh,560px)] w-auto max-w-full";
     if (media.type === "video") {
       return (
         <PreviewVideo
@@ -80,7 +80,10 @@ export function MediaSlot({
       );
     }
     return (
-      <div className="flex aspect-[16/10] w-full items-end bg-line/25 p-3" aria-hidden="true" />
+      <div
+        className="flex aspect-[16/10] w-full items-end bg-line/25 p-3"
+        aria-hidden="true"
+      />
     );
   }
 

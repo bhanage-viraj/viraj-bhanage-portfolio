@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <body suppressHydrationWarning>
         <Script id="vd" strategy="beforeInteractive">
           {`try{if(document.cookie.indexOf("vd_ui=")!==-1)document.documentElement.dataset.vd="1"}catch(e){}`}
         </Script>
