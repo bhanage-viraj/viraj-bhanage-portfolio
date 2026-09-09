@@ -57,8 +57,33 @@ export function MediaSlot({
 }: {
   media: ProjectMedia;
   title: string;
-  variant?: "card" | "study" | "thumb" | "feature";
+  variant?: "card" | "study" | "thumb" | "feature" | "pin";
 }) {
+  if (variant === "pin") {
+    // Fit inside the full-screen work window; keep native aspect ratio
+    const fill =
+      "pointer-events-none mx-auto block h-auto max-h-[min(82dvh,900px)] w-auto max-w-full";
+    if (media.type === "video") {
+      return (
+        <PreviewVideo
+          className={fill}
+          src={media.previewSrc ?? media.src}
+          poster={media.poster}
+          title={title}
+        />
+      );
+    }
+    if (media.type === "image") {
+      return (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={media.src} alt={media.alt} className={fill} />
+      );
+    }
+    return (
+      <div className="flex aspect-[16/10] w-full items-end bg-line/25 p-3" aria-hidden="true" />
+    );
+  }
+
   if (variant === "thumb" || variant === "feature") {
     const frame = variant === "feature" ? FEATURE : THUMB;
     if (media.type === "video") {

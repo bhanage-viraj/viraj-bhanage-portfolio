@@ -114,6 +114,22 @@
     filter: blur(8px);
     animation: drift 22s ease-in-out infinite;
   }
+
+  .work-pin-media::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    background: linear-gradient(
+      #f7f7f5,
+      rgb(247 247 245 / 0.82) 8%,
+      transparent 22%,
+      transparent 78%,
+      rgb(247 247 245 / 0.82) 92%,
+      #f7f7f5
+    );
+  }
 }
 
 @keyframes fade-in {
