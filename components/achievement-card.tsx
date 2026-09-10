@@ -1,3 +1,109 @@
+import type { ReactNode } from "react";
+import { Card } from "@/lib/ui";
+
+export type AchievementTone =
+  | "cursor"
+  | "geo"
+  | "algo"
+  | "meta"
+  | "kaggle"
+  | "solana"
+  | "farm";
+
+const tones: Record<
+  AchievementTone,
+  { well: string; mark: string; pill: string }
+> = {
+  cursor: {
+    well: "bg-[#E4EEF8]",
+    mark: "text-[#2B6CB0]",
+    pill: "bg-[#E4EEF8] text-[#2B6CB0]",
+  },
+  geo: {
+    well: "bg-[#E6F3EA]",
+    mark: "text-[#2F7D4A]",
+    pill: "bg-[#E6F3EA] text-[#2F7D4A]",
+  },
+  algo: {
+    well: "bg-[#F6EBE3]",
+    mark: "text-[#C45C2A]",
+    pill: "bg-[#F6EBE3] text-[#C45C2A]",
+  },
+  meta: {
+    well: "bg-[#EEE8F6]",
+    mark: "text-[#6B4EA0]",
+    pill: "bg-[#EEE8F6] text-[#6B4EA0]",
+  },
+  kaggle: {
+    well: "bg-[#ECEBE8]",
+    mark: "text-ink",
+    pill: "bg-[#ECEBE8] text-ink-muted",
+  },
+  solana: {
+    well: "bg-[#EDE8F6]",
+    mark: "text-[#7B4FC4]",
+    pill: "bg-[#EDE8F6] text-[#7B4FC4]",
+  },
+  farm: {
+    well: "bg-[#EEF3E4]",
+    mark: "text-[#5B7A2F]",
+    pill: "bg-[#EEF3E4] text-[#5B7A2F]",
+  },
+};
+
+export function AchievementCard({
+  tone,
+  category,
+  date,
+  title,
+  body,
+  icon,
+  aside,
+}: {
+  tone: AchievementTone;
+  category: string;
+  date?: string;
+  title: string;
+  body: string;
+  icon: ReactNode;
+  aside?: ReactNode;
+}) {
+  const palette = tones[tone];
+
+  return (
+    <Card>
+      <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:gap-5">
+        <span
+          className={`flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-2xl ${palette.well} ${palette.mark} [&>svg]:mt-0 [&>svg]:text-current`}
+        >
+          {icon}
+        </span>
+
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+            <span
+              className={`inline-block px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.12em] ${palette.pill}`}
+            >
+              {category}
+            </span>
+            {date ? (
+              <span className="font-mono text-data text-ink-muted">{date}</span>
+            ) : null}
+          </div>
+          <h3 className="mt-2.5 font-display text-card font-medium text-ink">
+            {title}
+          </h3>
+          <p className="mt-2 max-w-[46ch] text-[15px] leading-[1.65] text-ink-muted">
+            {body}
+          </p>
+        </div>
+
+        {aside ? <div className="shrink-0 sm:self-center">{aside}</div> : null}
+      </div>
+    </Card>
+  );
+}
+
 export function ChipGlyph() {
   return (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">

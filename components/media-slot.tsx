@@ -7,7 +7,7 @@ const THUMB =
   "pointer-events-none aspect-[16/10] w-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-[1.03] lg:w-[260px] xl:w-[328px]";
 
 const FEATURE =
-  "pointer-events-none block h-auto max-h-[560px] w-auto max-w-full";
+  "pointer-events-none block h-auto w-full";
 
 function PreviewVideo({
   src,
@@ -93,9 +93,9 @@ export function MediaSlot({
     }
 
     return (
-      <figure className="overflow-hidden rounded-plate border border-line bg-surface">
+      <figure className="overflow-hidden rounded-[1.15rem] border border-line/80">
         <video
-          className="mx-auto block h-auto max-h-[640px] w-auto max-w-full"
+          className="h-auto w-full bg-line/30"
           src={media.src}
           poster={media.poster}
           controls
@@ -104,7 +104,7 @@ export function MediaSlot({
         >
           {/* TODO: add a captions .vtt alongside the video when a track is available. */}
         </video>
-        <figcaption className="site-meta border-t border-line px-4 py-2.5 text-ink-muted">
+        <figcaption className="site-meta border-t border-line/80 px-4 py-2.5 text-ink-muted">
           {title}
         </figcaption>
       </figure>
@@ -113,7 +113,7 @@ export function MediaSlot({
 
   if (media.type === "image") {
     return (
-      <figure className={variant === "study" ? "overflow-hidden rounded-plate border border-line bg-surface" : undefined}>
+      <figure className={variant === "study" ? "overflow-hidden rounded-[1.15rem] border border-line/80" : undefined}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={media.src}
@@ -121,11 +121,11 @@ export function MediaSlot({
           className={
             variant === "card"
               ? "aspect-[16/10] w-full object-cover"
-              : "mx-auto block h-auto max-h-[640px] w-auto max-w-full"
+              : "w-full object-cover"
           }
         />
         {variant === "study" ? (
-          <figcaption className="site-meta border-t border-line px-4 py-2.5 text-ink-muted">
+          <figcaption className="site-meta border-t border-line/80 px-4 py-2.5 text-ink-muted">
             {title}
           </figcaption>
         ) : null}
@@ -135,7 +135,7 @@ export function MediaSlot({
 
   return (
     <div
-      className={`flex aspect-[16/10] w-full items-end border border-line bg-surface p-3 ${
+      className={`flex aspect-[16/10] w-full items-end border border-line/80 bg-line/25 p-3 ${
         variant === "study" ? "min-h-[220px]" : ""
       }`}
     >

@@ -14,7 +14,6 @@
 
   body {
     @apply bg-paper font-body text-body text-ink antialiased;
-    font-feature-settings: "ss01", "cv11";
   }
 
   /* Fine paper grain — keeps large flat areas from feeling dead */
@@ -24,7 +23,7 @@
     inset: 0;
     z-index: 70;
     pointer-events: none;
-    opacity: 0.035;
+    opacity: 0.032;
     mix-blend-mode: multiply;
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
     background-size: 160px 160px;
@@ -36,14 +35,14 @@
   }
 
   ::selection {
-    background: #0f6e6e;
-    color: #faf9f6;
+    background: #5e6ad2;
+    color: #f7f7f5;
   }
 
   :focus-visible {
-    outline: 2px solid #0f6e6e;
+    outline: 2px solid #5e6ad2;
     outline-offset: 3px;
-    border-radius: 2px;
+    border-radius: 4px;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -64,6 +63,7 @@
       filter: none !important;
     }
 
+    .hero-ambient,
     .hero-in,
     .stage-copy > * {
       animation: none !important;
@@ -72,35 +72,40 @@
 }
 
 @layer components {
-  /* ---------- Labels ---------- */
-  .site-meta,
-  .eyebrow {
-    @apply font-mono text-data uppercase text-ink-muted;
+  /* ---------- Cards ---------- */
+  .site-card {
+    @apply rounded-card border border-line/70 bg-surface/70 px-7 py-7 text-left transition-[border-color,background-color,transform,box-shadow] duration-500 ease-out sm:px-9 sm:py-9;
   }
 
-  .eyebrow-signal {
-    @apply font-mono text-data uppercase text-signal;
+  .project-card {
+    @apply rounded-[1.35rem] border border-line/70 bg-surface/70 px-5 py-5 text-left transition-[border-color,background-color,transform,box-shadow] duration-500 ease-out sm:px-6 sm:py-6;
+  }
+
+  @media (hover: hover) {
+    .site-card:hover,
+    .project-card:hover {
+      @apply -translate-y-1 border-signal/25 bg-surface shadow-[0_18px_44px_-24px_rgba(94,106,210,0.35),0_10px_30px_-18px_rgba(17,17,17,0.22)];
+    }
+
+    a.project-card:hover .site-media-frame {
+      transform: scale(1.015);
+    }
+  }
+
+  .site-meta {
+    @apply font-mono text-data uppercase tracking-[0.08em] text-ink-muted;
   }
 
   .site-tag {
-    @apply inline-flex items-center border border-line px-2 py-[3px] font-mono text-[11px] tracking-[0.02em] text-ink-muted transition-colors duration-300;
+    @apply rounded-full border border-line bg-paper px-2.5 py-1 font-mono text-[12px] tracking-[0.02em] text-ink transition-[transform,border-color] duration-300;
   }
 
-  .site-card {
-    @apply rounded-card border border-line bg-surface/60 px-7 py-7 text-left sm:px-9 sm:py-9;
+  .site-media {
+    @apply pointer-events-none aspect-[16/10] w-full object-cover;
   }
 
-  /* ---------- Editorial rules ---------- */
-  .rule {
-    @apply border-t border-line;
-  }
-
-  .rule-ink {
-    @apply border-t border-ink;
-  }
-
-  .display-italic {
-    @apply font-display italic text-signal;
+  .site-media-frame {
+    @apply overflow-hidden rounded-[1rem] bg-line/40 transition-transform duration-500 ease-out;
   }
 
   /* ---------- Links ---------- */
@@ -119,10 +124,10 @@
     position: absolute;
     left: 0;
     right: 1.4em;
-    bottom: 0.6em;
+    bottom: 0.55em;
     height: 1px;
     background: currentColor;
-    opacity: 0.25;
+    opacity: 0.28;
     transform-origin: left;
     transition:
       transform 500ms cubic-bezier(0.22, 1, 0.36, 1),
@@ -131,52 +136,62 @@
 
   @media (hover: hover) {
     .link-arrow:hover::after {
-      transform: translateX(5px);
+      transform: translateX(4px);
     }
 
     .link-arrow:hover::before {
       opacity: 1;
+      transform: scaleX(1.02);
     }
   }
 
-  .link-quiet {
-    @apply text-ink underline decoration-ink/25 underline-offset-[5px] transition-colors duration-300 hover:decoration-ink;
+  .pill-cta {
+    @apply inline-flex items-center gap-1.5 rounded-full bg-ink px-3.5 py-2 font-mono text-[11px] uppercase tracking-[0.08em] text-paper transition-[background-color,transform,gap] duration-300;
   }
 
-  .link-signal {
-    @apply text-signal underline decoration-signal/35 underline-offset-[5px] transition-colors duration-300 hover:decoration-signal;
+  @media (hover: hover) {
+    .pill-cta:hover {
+      @apply gap-2.5 bg-signal;
+    }
   }
 
   /* ---------- Reveal on scroll ---------- */
   .reveal {
     opacity: 0;
-    transform: translateY(14px);
+    transform: translateY(18px);
+    filter: blur(6px);
     transition:
-      opacity 800ms cubic-bezier(0.22, 1, 0.36, 1),
-      transform 800ms cubic-bezier(0.22, 1, 0.36, 1);
+      opacity 720ms cubic-bezier(0.22, 1, 0.36, 1),
+      transform 720ms cubic-bezier(0.22, 1, 0.36, 1),
+      filter 720ms cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   .reveal.is-in {
     opacity: 1;
     transform: translateY(0);
+    filter: blur(0);
   }
 
   .reveal.reveal-stagger {
     opacity: 1;
     transform: none;
+    filter: none;
   }
 
   .reveal-stagger > * {
     opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(16px);
+    filter: blur(5px);
     transition:
-      opacity 760ms cubic-bezier(0.22, 1, 0.36, 1),
-      transform 760ms cubic-bezier(0.22, 1, 0.36, 1);
+      opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
+      transform 700ms cubic-bezier(0.22, 1, 0.36, 1),
+      filter 700ms cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   .reveal-stagger.is-in > * {
     opacity: 1;
     transform: none;
+    filter: none;
   }
 
   .reveal-stagger > *:nth-child(2) { transition-delay: 90ms; }
@@ -187,98 +202,127 @@
 
   /* ---------- Hero ---------- */
   .hero-in {
-    animation: fade-in 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation: fade-in 640ms cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
   .hero-word {
     display: inline-block;
     overflow: hidden;
     vertical-align: bottom;
-    padding-bottom: 0.1em;
-    margin-bottom: -0.1em;
+    padding-bottom: 0.08em;
+    margin-bottom: -0.08em;
   }
 
   .hero-word > span {
     display: inline-block;
     transform: translateY(112%);
-    animation: word-in 1000ms cubic-bezier(0.22, 1, 0.36, 1) both;
-    animation-delay: calc(120ms + var(--i, 0) * 80ms);
+    animation: word-in 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(140ms + var(--i, 0) * 70ms);
   }
 
-  /* ---------- Plates (Work / Achievements / Press) ---------- */
-  .plate {
-    @apply relative border border-line bg-paper transition-[border-color] duration-500 ease-out;
+  .hero-ambient {
+    pointer-events: none;
+    position: absolute;
+    right: -12%;
+    top: -8%;
+    height: min(78vw, 34rem);
+    width: min(78vw, 36rem);
+    background:
+      radial-gradient(closest-side, rgb(94 106 210 / 0.18), transparent 72%),
+      radial-gradient(closest-side at 70% 80%, rgb(94 106 210 / 0.08), transparent 68%);
+    filter: blur(10px);
+    animation: drift 22s ease-in-out infinite;
   }
 
-  .plate-media {
-    @apply relative flex items-center justify-center overflow-hidden bg-surface;
+  .hero-ambient-2 {
+    right: auto;
+    left: -18%;
+    top: 30%;
+    height: min(60vw, 26rem);
+    width: min(60vw, 28rem);
+    background: radial-gradient(closest-side, rgb(255 107 74 / 0.09), transparent 70%);
+    animation-duration: 28s;
+    animation-direction: reverse;
   }
 
-  .plate-media > * {
-    max-height: 560px;
+  .hero-grid {
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-image:
+      linear-gradient(rgb(17 17 17 / 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(17 17 17 / 0.035) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 60% 55% at 28% 30%, #000 10%, transparent 75%);
+  }
+
+  /* ---------- Tinted cards (Work / Achievements) ---------- */
+  .tint-card {
+    @apply relative overflow-hidden border bg-gradient-to-br text-left shadow-[0_24px_60px_-44px_rgba(17,17,17,0.35)] transition-[transform,box-shadow,border-color] duration-500 ease-out;
+    border-color: rgb(17 17 17 / 0.08);
+  }
+
+  .tint-media {
+    @apply flex justify-center overflow-hidden rounded-[1rem] border bg-paper/50;
+    border-color: rgb(17 17 17 / 0.08);
+  }
+
+  /* Native aspect ratio, but never taller than the card can comfortably hold */
+  .tint-media > * {
+    max-height: 420px;
     width: auto;
     max-width: 100%;
-    transition: transform 1200ms cubic-bezier(0.22, 1, 0.36, 1);
+    transition: transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  .plate-cta {
-    @apply inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.12em] text-ink transition-colors duration-300;
-  }
-
-  .plate-cta::after {
-    content: "→";
-    display: inline-block;
-    transition: transform 400ms cubic-bezier(0.22, 1, 0.36, 1);
+  .tint-icon {
+    transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   @media (hover: hover) {
-    .plate:hover {
-      border-color: #0f6e6e;
+    .tint-card:hover {
+      transform: translateY(-4px);
+      border-color: rgb(94 106 210 / 0.25);
+      box-shadow:
+        0 30px 70px -40px rgb(94 106 210 / 0.35),
+        0 18px 40px -30px rgb(17 17 17 / 0.3);
     }
 
-    .plate:hover .plate-media > * {
-      transform: scale(1.02);
+    .tint-card:hover .tint-media > * {
+      transform: scale(1.025);
     }
 
-    .plate:hover .plate-cta {
-      color: #0f6e6e;
-    }
-
-    .plate:hover .plate-cta::after {
-      transform: translateX(5px);
+    .tint-card:hover .tint-icon {
+      transform: scale(1.08) rotate(-4deg);
     }
   }
 
-  /* ---------- Chapter index (sticky rail beside plates) ---------- */
+  /* ---------- Scroll stage rail (Work / Achievements sidebar) ---------- */
   .stage-card {
-    transition: opacity 220ms linear;
+    transition: opacity 200ms linear, transform 200ms linear;
+    transform-origin: center;
   }
 
   .stage-list-item {
-    @apply flex w-full items-baseline gap-4 border-0 bg-transparent py-2 text-left text-ink-muted transition-colors duration-500 ease-out;
-  }
-
-  .stage-list-num {
-    @apply w-6 shrink-0 font-mono text-[11px] tracking-[0.08em];
+    @apply py-2.5 text-ink-muted transition-colors duration-500 ease-out;
   }
 
   .stage-list-label {
-    @apply font-display text-[1.35rem] leading-none tracking-[-0.01em];
     display: inline-block;
+    font-size: 1.05rem;
+    font-weight: 500;
     transform-origin: left center;
     transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   .stage-list-item.is-active {
-    @apply text-ink;
-  }
-
-  .stage-list-item.is-active .stage-list-num {
     @apply text-signal;
   }
 
   .stage-list-item.is-active .stage-list-label {
-    transform: translateX(6px);
+    font-weight: 600;
+    transform: translateX(4px) scale(1.06);
   }
 
   @media (hover: hover) {
@@ -299,30 +343,34 @@
   }
 
   .stage-rail {
-    background: rgb(20 20 20 / 0.14);
+    background: rgb(17 17 17 / 0.12);
   }
 
   .stage-rail-fill {
-    background: #0f6e6e;
+    background: #5e6ad2;
   }
 
   .stage-marker {
     position: absolute;
-    left: -2.5px;
-    top: -3px;
-    height: 6px;
-    width: 6px;
+    left: -3px;
+    top: -3.5px;
+    height: 7px;
+    width: 7px;
     border-radius: 999px;
-    background: #0f6e6e;
+    background: #5e6ad2;
+    box-shadow: 0 0 0 4px rgb(94 106 210 / 0.15);
     will-change: transform;
   }
 
-  /* Serif digits overshoot a 1em line box, so the window is 1.2em tall and the
-     column is translated in 1.2em steps (see ScrollStage). */
+  .stage-counter {
+    display: inline-flex;
+    align-items: baseline;
+  }
+
   .stage-counter-win {
     display: inline-block;
-    height: 1.2em;
-    line-height: 1.2;
+    height: 1em;
+    line-height: 1;
     overflow: hidden;
     vertical-align: baseline;
   }
@@ -335,8 +383,8 @@
 
   .stage-counter-col > span {
     display: block;
-    height: 1.2em;
-    line-height: 1.2;
+    height: 1em;
+    line-height: 1;
   }
 
   .stage-copy > * {
@@ -347,27 +395,18 @@
   .stage-copy > *:nth-child(3) { animation-delay: 120ms; }
   .stage-copy > *:nth-child(4) { animation-delay: 180ms; }
   .stage-copy > *:nth-child(n + 5) { animation-delay: 240ms; }
-
-  /* ---------- Ledger rows (Achievements / Featured / Experience) ---------- */
-  .ledger-row {
-    @apply grid gap-x-8 gap-y-3 border-t border-line py-6 transition-colors duration-500 sm:py-7;
-  }
-
-  /* ---------- Live dot (coral, only when data is actually live) ---------- */
-  .live-dot {
-    @apply inline-block h-1.5 w-1.5 rounded-full bg-coral;
-    animation: pulse 1.8s ease-in-out infinite;
-  }
 }
 
 @keyframes copy-in {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(10px);
+    filter: blur(3px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
+    filter: blur(0);
   }
 }
 
@@ -391,14 +430,12 @@
   }
 }
 
-@keyframes pulse {
+@keyframes drift {
   0%,
   100% {
-    opacity: 1;
-    transform: scale(1);
+    transform: translate3d(0, 0, 0) scale(1);
   }
   50% {
-    opacity: 0.45;
-    transform: scale(0.8);
+    transform: translate3d(4%, -3%, 0) scale(1.06);
   }
 }
