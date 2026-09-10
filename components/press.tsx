@@ -1,40 +1,41 @@
 import { press } from "@/lib/content";
-import { Section } from "@/lib/ui";
+import { PageCol } from "@/lib/rich-text";
 import { Reveal } from "./reveal";
 
 export function Press() {
   return (
-    <Section
-      id="featured"
-      index="05"
-      title="Featured"
-      aside={`${String(press.length).padStart(2, "0")} mentions`}
-    >
-      <Reveal stagger className="border-b border-line">
-        {press.map((item) => (
-          <a
-            key={item.href}
-            href={item.href}
-            target="_blank"
-            rel="noreferrer"
-            className="ledger-row group grid-cols-1 sm:grid-cols-[minmax(0,0.5fr)_minmax(0,1.5fr)_auto] sm:items-baseline"
-          >
-            <h3 className="font-display text-[1.75rem] leading-none tracking-[-0.01em] text-ink sm:text-[2rem]">
-              {item.outlet}
-            </h3>
-            {/* TODO: Jagran Josh excerpt — replace the placeholder framing once the paragraph mentioning Viraj is pasted in. */}
-            <p className="max-w-[56ch] text-[16px] leading-[1.55] text-ink-muted transition-colors group-hover:text-ink">
-              {item.subheading}
-            </p>
-            <span className="flex items-baseline gap-4 font-mono text-[11px] uppercase tracking-[0.12em] text-ink-muted">
-              {item.date}
-              <span className="inline-block transition-transform duration-300 ease-out group-hover:translate-x-1">
-                ↗
-              </span>
-            </span>
-          </a>
-        ))}
-      </Reveal>
-    </Section>
+    <section id="featured" className="scroll-mt-20 border-t border-line py-20 sm:py-24">
+      <PageCol>
+        <Reveal>
+          <h2 className="font-display text-section font-semibold text-ink">Featured</h2>
+        </Reveal>
+        <ul className="mt-10 space-y-6 sm:space-y-8">
+          {press.map((item, index) => (
+            <li key={item.href}>
+              <Reveal delay={index * 70}>
+                <a
+                  href={item.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="project-card flex w-full items-center gap-4 sm:gap-6"
+                >
+                  <div className="min-w-0 flex-1">
+                    <h3 className="font-display text-[18px] font-semibold leading-snug text-ink">
+                      {item.outlet}
+                    </h3>
+                    <p className="mt-2 line-clamp-2 text-[16px] leading-[1.55] text-ink-muted">
+                      {item.subheading}
+                    </p>
+                  </div>
+                  <span className="shrink-0 font-mono text-data text-ink-muted">
+                    {item.date}
+                  </span>
+                </a>
+              </Reveal>
+            </li>
+          ))}
+        </ul>
+      </PageCol>
+    </section>
   );
 }

@@ -1,7 +1,12 @@
-import type { ReactNode } from "react";
+import type { ComponentPropsWithoutRef, ElementType, ReactNode } from "react";
 
 export const pageColClass = "mx-auto w-full max-w-page px-6 sm:px-10 lg:px-12";
-export const wideColClass = "mx-auto w-full max-w-wide px-6 sm:px-10 lg:px-12";
+
+export const cardClass =
+  "site-card group block w-full text-left";
+
+export const projectCardClass =
+  "project-card group block w-full text-left";
 
 export function PageCol({
   children,
@@ -13,75 +18,79 @@ export function PageCol({
   return <div className={`${pageColClass} ${className}`}>{children}</div>;
 }
 
-export function WideCol({
-  children,
-  className = "",
-}: {
-  children: ReactNode;
-  className?: string;
-}) {
-  return <div className={`${wideColClass} ${className}`}>{children}</div>;
-}
-
-/**
- * Editorial section opener: a numbered mono eyebrow, a large serif title and an
- * optional lede, with room for a right-aligned data aside.
- */
-export function SectionHead({
-  index,
-  title,
-  lede,
-  aside,
-}: {
-  index: string;
-  title: ReactNode;
-  lede?: ReactNode;
-  aside?: ReactNode;
-}) {
-  return (
-    <div className="grid gap-6 border-t border-ink pt-5 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end sm:gap-10">
-      <div>
-        <p className="eyebrow-signal">{index}</p>
-        <h2 className="mt-8 max-w-[14ch] font-display text-section text-ink sm:mt-12">
-          {title}
-        </h2>
-        {lede ? (
-          <p className="mt-6 max-w-[46ch] text-[17px] leading-[1.55] text-ink-muted">
-            {lede}
-          </p>
-        ) : null}
-      </div>
-      {aside ? <div className="eyebrow sm:pb-1 sm:text-right">{aside}</div> : null}
-    </div>
-  );
-}
-
 export function Section({
   id,
-  index,
   title,
   lede,
   aside,
+  icon,
   children,
   className = "",
 }: {
   id?: string;
-  index: string;
-  title: ReactNode;
-  lede?: ReactNode;
+  title: string;
+  lede?: string;
   aside?: ReactNode;
+  icon?: ReactNode;
   children: ReactNode;
   className?: string;
 }) {
+  const heading = (
+    <h2 className="font-display text-section font-semibold tracking-[-0.038em] text-ink">
+      {title}
+    </h2>
+  );
+
   return (
     <section
       id={id}
-      className={`scroll-mt-24 py-section-sm sm:py-section ${className}`}
+      className={`scroll-mt-24 border-t border-line py-section-sm sm:py-section ${className}`}
     >
       <PageCol>
-        <SectionHead index={index} title={title} lede={lede} aside={aside} />
-        <div className="mt-14 sm:mt-20">{children}</div>
+        {lede || aside || icon ? (
+          <div className="flex items-start justify-between gap-6">
+            <div className="flex items-start gap-3.5">
+              {icon}
+              <div>
+                {heading}
+                {lede ? (
+                  <p className="mt-3 max-w-[42ch] text-[17px] leading-snug text-ink-muted">
+                    {lede}
+                  </p>
+                ) : null}
+              </div>
+            </div>
+            {aside}
+          </div>
+        ) : (
+          heading
+        )}
+        <div className="mt-12 sm:mt-14">{children}</div>
       </PageCol>
     </section>
+  );
+}
+
+export function CardList({ children }: { children: ReactNode }) {
+  return <ul className="space-y-6 sm:space-y-8">{children}</ul>;
+}
+
+type CardProps<T extends ElementType> = {
+  as?: T;
+  className?: string;
+  children: ReactNode;
+} & Omit<ComponentPropsWithoutRef<T>, "as" | "className" | "children">;
+
+export function Card<T extends ElementType = "div">({
+  as,
+  className = "",
+  children,
+  ...props
+}: CardProps<T>) {
+  const Comp = as ?? "div";
+  return (
+    <Comp className={`${cardClass} ${className}`} {...props}>
+      {children}
+    </Comp>
   );
 }

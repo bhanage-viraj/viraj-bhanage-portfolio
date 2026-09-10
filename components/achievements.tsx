@@ -5,6 +5,8 @@ import {
   ChipGlyph,
   MarketGlyph,
   MedalGlyph,
+  TrophyGlyph,
+  type AchievementTone,
 } from "@/components/achievement-card";
 import { CursorGlyph } from "@/components/cursor-glyph";
 import { KaggleGlyph } from "@/components/kaggle-glyph";
@@ -13,15 +15,29 @@ import { ScrollStage } from "@/components/scroll-stage";
 import { achievements } from "@/lib/content";
 import type { KaggleStats } from "@/lib/types";
 
+const tones: Record<
+  AchievementTone,
+  { mark: string; glow: string }
+> = {
+  cursor: { mark: "text-[#2B6CB0]", glow: "from-[#E4EEF8] to-[#F7F7F5]" },
+  geo: { mark: "text-[#2F7D4A]", glow: "from-[#E6F3EA] to-[#F7F7F5]" },
+  algo: { mark: "text-[#C45C2A]", glow: "from-[#F6EBE3] to-[#F7F7F5]" },
+  meta: { mark: "text-[#6B4EA0]", glow: "from-[#EEE8F6] to-[#F7F7F5]" },
+  kaggle: { mark: "text-ink", glow: "from-[#ECEBE8] to-[#F7F7F5]" },
+  solana: { mark: "text-[#7B4FC4]", glow: "from-[#EDE8F6] to-[#F7F7F5]" },
+  farm: { mark: "text-[#5B7A2F]", glow: "from-[#EEF3E4] to-[#F7F7F5]" },
+};
+
 type Win = {
   id: string;
+  tone: AchievementTone;
   label: string;
   result: string;
   title: string;
   body: string;
   date?: string;
   icon: ReactNode;
-  thumb?: { src: string; alt: string; contain?: boolean };
+  thumb?: { src: string; alt: string };
   kind?: "kaggle";
 };
 
@@ -50,6 +66,7 @@ const groups: AchievementGroup[] = [
     wins: [
       {
         id: "cursor",
+        tone: "cursor",
         label: "Cursor Bali",
         result: achievements.cursorBali.result,
         title: achievements.cursorBali.title,
@@ -59,6 +76,7 @@ const groups: AchievementGroup[] = [
       },
       {
         id: "geoai",
+        tone: "geo",
         label: "Geo AI · IIT Bombay",
         result: achievements.geoAi.result,
         title: achievements.geoAi.title,
@@ -68,6 +86,7 @@ const groups: AchievementGroup[] = [
       },
       {
         id: "unicorn",
+        tone: "farm",
         label: "Unicorn Bharat",
         result: achievements.unicornBharat.result,
         title: achievements.unicornBharat.title,
@@ -84,6 +103,7 @@ const groups: AchievementGroup[] = [
     wins: [
       {
         id: "algo",
+        tone: "algo",
         label: "AlgoUtsav",
         result: achievements.algoUtsav.result,
         title: achievements.algoUtsav.title,
@@ -94,6 +114,7 @@ const groups: AchievementGroup[] = [
       },
       {
         id: "meta",
+        tone: "meta",
         label: "Meta Hacker Cup",
         result: achievements.metaHackerCup.result,
         title: achievements.metaHackerCup.title,
@@ -111,6 +132,7 @@ const groups: AchievementGroup[] = [
     wins: [
       {
         id: "kaggle",
+        tone: "kaggle",
         label: "Kaggle",
         result: achievements.kaggle.result,
         title: achievements.kaggle.title,
@@ -121,6 +143,7 @@ const groups: AchievementGroup[] = [
       },
       {
         id: "solana",
+        tone: "solana",
         label: "School of Solana",
         result: achievements.schoolOfSolana.result,
         title: achievements.schoolOfSolana.title,
@@ -168,70 +191,64 @@ function useKaggle() {
   return kaggle;
 }
 
-function KaggleStrip({ kaggle }: { kaggle: KaggleStats }) {
-  return (
-    <div className="mt-5 flex flex-wrap items-end gap-x-10 gap-y-4 border-t border-line pt-4">
-      {[kaggle.datasets, kaggle.notebooks].map((cat) => (
-        <p key={cat.name} className="font-mono text-ink">
-          <span className="text-[1.35rem] leading-none">{formatCount(cat.rank)}</span>
-          <span className="ml-1.5 text-[11px] text-ink-muted">/ {formatCount(cat.of)}</span>
-          <span className="mt-1.5 block text-[10px] uppercase tracking-[0.12em] text-ink-muted">
-            {cat.name} rank · {cat.tier}
-          </span>
-        </p>
-      ))}
-      <p className="ml-auto font-mono text-[10px] uppercase tracking-[0.12em] text-ink-muted">
-        {kaggle.live ? (
-          <span className="inline-flex items-center gap-2">
-            <span className="live-dot" />
-            Live
-          </span>
-        ) : (
-          <>As of {kaggle.asOf}</>
-        )}
-      </p>
-    </div>
-  );
-}
-
-function WinRow({ win, kaggle }: { win: Win; kaggle: KaggleStats }) {
+function WinTile({ win, kaggle }: { win: Win; kaggle: KaggleStats }) {
+  const palette = tones[win.tone];
   const inner = (
-    <div className="ledger-row grid-cols-1 sm:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)_88px]">
-      <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-3 sm:block">
-        <p className="font-display text-[1.9rem] leading-[1] tracking-[-0.01em] text-ink sm:text-[2.1rem]">
+    <>
+      <div className="flex items-start justify-between gap-3">
+        <span
+          className={`tint-icon flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-paper/80 shadow-sm ${palette.mark} [&>svg]:h-5 [&>svg]:w-5`}
+        >
+          {win.icon}
+        </span>
+        {win.date ? (
+          <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-muted">
+            {win.date}
+          </span>
+        ) : null}
+      </div>
+
+      <div className="mt-8">
+        <p className={`font-mono text-[11px] uppercase tracking-[0.12em] ${palette.mark}`}>
           {win.result}
         </p>
-        <p className="flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-[11px] uppercase tracking-[0.12em] text-ink-muted sm:mt-4">
-          <span className="text-signal [&>svg]:h-4 [&>svg]:w-4">{win.icon}</span>
-          <span className="whitespace-nowrap">{win.label}</span>
-          {win.date ? <span className="opacity-60">· {win.date}</span> : null}
-        </p>
+        <h3 className="mt-1.5 font-display text-[1.15rem] font-semibold leading-snug tracking-[-0.03em] text-ink">
+          {win.title}
+        </h3>
+        <p className="mt-2 text-[14px] leading-[1.6] text-ink-muted">{win.body}</p>
       </div>
 
-      <div className="min-w-0">
-        <h4 className="text-[17px] font-medium leading-snug text-ink">{win.title}</h4>
-        <p className="mt-2 max-w-[58ch] text-[15px] leading-[1.65] text-ink-muted">
-          {win.body}
-        </p>
-        {win.kind === "kaggle" ? <KaggleStrip kaggle={kaggle} /> : null}
-      </div>
+      {win.kind === "kaggle" ? (
+        <div className="mt-5 flex gap-6 border-t border-ink/10 pt-4">
+          <p className="font-mono text-[15px] text-ink">
+            {formatCount(kaggle.datasets.rank)}
+            <span className="mt-0.5 block text-[10px] uppercase tracking-[0.1em] text-ink-muted">
+              Datasets rank
+            </span>
+          </p>
+          <p className="font-mono text-[15px] text-ink">
+            {formatCount(kaggle.notebooks.rank)}
+            <span className="mt-0.5 block text-[10px] uppercase tracking-[0.1em] text-ink-muted">
+              Notebooks rank
+            </span>
+          </p>
+        </div>
+      ) : null}
 
       {win.thumb ? (
-        <div className="hidden overflow-hidden border border-line bg-surface lg:block">
+        <div className="mt-5 w-[112px] overflow-hidden rounded-lg border border-ink/10 bg-paper shadow-sm">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={win.thumb.src}
             alt={win.thumb.alt}
-            className={`aspect-[4/3] w-full ${
-              win.thumb.contain ? "object-contain p-1.5" : "object-cover object-top"
-            }`}
+            className="aspect-[4/3] w-full object-cover object-top"
           />
         </div>
-      ) : (
-        <div className="hidden lg:block" aria-hidden="true" />
-      )}
-    </div>
+      ) : null}
+    </>
   );
+
+  const className = `tint-card flex h-full flex-col rounded-[1.4rem] p-5 sm:p-6 ${palette.glow}`;
 
   if (win.kind === "kaggle") {
     return (
@@ -239,16 +256,16 @@ function WinRow({ win, kaggle }: { win: Win; kaggle: KaggleStats }) {
         href={achievements.kaggle.profileUrl}
         target="_blank"
         rel="noreferrer"
-        className="block transition-colors hover:bg-surface/60"
+        className={`${className} group`}
       >
         {inner}
       </a>
     );
   }
-  return inner;
+  return <article className={className}>{inner}</article>;
 }
 
-function GroupPlate({
+function GroupCard({
   group,
   index,
   kaggle,
@@ -258,24 +275,30 @@ function GroupPlate({
   kaggle: KaggleStats;
 }) {
   return (
-    <article className="plate">
-      <div className="flex items-baseline justify-between gap-4 px-5 py-3 sm:px-6">
-        <h3 className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink">
-          {String(index + 1).padStart(2, "0")} · {group.title}
-        </h3>
-        <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-muted">
-          {group.wins.length} results
-        </span>
+    <div className="rounded-[1.6rem] border border-line/70 bg-surface/50 p-4 sm:p-5">
+      <div className="mb-4 flex flex-wrap items-baseline justify-between gap-3 px-1">
+        <div>
+          <p className="site-meta">
+            {String(index + 1).padStart(2, "0")} · {group.wins.length}
+          </p>
+          <h3 className="mt-1.5 font-display text-[1.3rem] font-semibold tracking-[-0.03em] text-ink">
+            {group.title}
+          </h3>
+        </div>
+        <p className="max-w-[40ch] text-[14px] leading-snug text-ink-muted lg:hidden">
+          {group.lede}
+        </p>
       </div>
-      <div className="px-5 sm:px-6">
+      <div
+        className={`grid gap-3 sm:grid-cols-2 ${
+          group.wins.length === 3 ? "xl:grid-cols-3" : ""
+        }`}
+      >
         {group.wins.map((win) => (
-          <WinRow key={win.id} win={win} kaggle={kaggle} />
+          <WinTile key={win.id} win={win} kaggle={kaggle} />
         ))}
       </div>
-      <p className="px-5 py-4 text-[14px] leading-snug text-ink-muted sm:px-6 xl:hidden">
-        {group.lede}
-      </p>
-    </article>
+    </div>
   );
 }
 
@@ -285,38 +308,64 @@ export function Achievements() {
   return (
     <ScrollStage
       id="achievements"
-      index="04"
-      title="Achievements"
-      lede="Competitions, certifications and milestones along the way."
-      aside={`${String(achievementCount).padStart(2, "0")} achievements`}
       listLabel="Achievement groups"
       items={groups}
       getId={(group) => group.id}
-      renderList={(group, i) => (
-        <>
-          <span className="stage-list-num">{String(i + 1).padStart(2, "0")}</span>
-          <span className="stage-list-label">{group.title}</span>
-        </>
-      )}
-      renderCard={(group, i) => <GroupPlate group={group} index={i} kaggle={kaggle} />}
-      renderCopy={(group, i) => (
-        <>
-          <p className="eyebrow">
-            <span className="text-signal">{String(i + 1).padStart(2, "0")}</span>
-            <span className="mx-2 opacity-40">/</span>
-            {group.wins.length} results
+      getTeaser={(group) => group.lede}
+      header={
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div className="flex items-start gap-3.5">
+            <span className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-ink text-paper">
+              <TrophyGlyph />
+            </span>
+            <div>
+              <h2 className="font-display text-section font-semibold tracking-[-0.038em] text-ink">
+                Achievements
+              </h2>
+              <p className="mt-3 max-w-[42ch] text-[17px] leading-snug text-ink-muted">
+                Competitions, certifications and milestones along the way.
+              </p>
+            </div>
+          </div>
+          <p className="shrink-0 font-mono text-data uppercase text-ink-muted">
+            {achievementCount} achievements
           </p>
-          <p className="mt-6 font-display text-[1.55rem] leading-[1.15] tracking-[-0.01em] text-ink">
+        </div>
+      }
+      renderList={(group, i) => (
+        <span className="flex w-full flex-col items-start gap-0.5">
+          <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-muted">
+            {String(i + 1).padStart(2, "0")} · {group.wins.length}
+          </span>
+          <span className="stage-list-label font-display tracking-[-0.02em]">
+            {group.title}
+          </span>
+        </span>
+      )}
+      renderCard={(group, i) => (
+        <GroupCard group={group} index={i} kaggle={kaggle} />
+      )}
+      renderCopy={(group, _i, { desc, scrambling }) => (
+        <>
+          <p className="font-display text-[1.2rem] font-semibold leading-snug tracking-[-0.03em] text-ink">
             {group.title}
           </p>
-          <p className="mt-5 text-[14.5px] leading-[1.7] text-ink-muted">{group.lede}</p>
-          <ul className="mt-6 divide-y divide-line border-y border-line">
+          <p
+            className={`mt-3 text-[14px] leading-[1.7] transition-colors duration-300 ${
+              scrambling ? "text-signal" : "text-ink-muted"
+            }`}
+          >
+            {desc}
+          </p>
+          <ul className="mt-4 space-y-2.5">
             {group.wins.map((win) => (
-              <li key={win.id} className="flex items-baseline justify-between gap-3 py-2.5">
-                <span className="text-[14px] text-ink">{win.label}</span>
-                <span className="shrink-0 font-mono text-[11px] uppercase tracking-[0.08em] text-signal">
+              <li key={win.id} className="flex items-baseline gap-3">
+                <span
+                  className={`shrink-0 font-mono text-[11px] uppercase tracking-[0.08em] ${tones[win.tone].mark}`}
+                >
                   {win.result}
                 </span>
+                <span className="text-[14px] text-ink">{win.label}</span>
               </li>
             ))}
           </ul>
