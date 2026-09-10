@@ -8,8 +8,6 @@ import {
   type ReactNode,
 } from "react";
 import { Reveal } from "@/components/reveal";
-import { PageCol } from "@/lib/ui";
-
 const SCRAMBLE_CHARS = "0123456789!<>-_\\/[]{}—=+*^?#$%&";
 
 function clamp(value: number, min: number, max: number) {
@@ -245,10 +243,11 @@ export function ScrollStage<T>({
       ref={sectionRef}
       className="scroll-mt-24 border-t border-line py-section-sm sm:py-section"
     >
-      <PageCol>
+      {/* Wider than the page column so the centre stage keeps room for media. */}
+      <div className="mx-auto w-full max-w-[1400px] px-6 sm:px-10 lg:px-12">
         <Reveal>{header}</Reveal>
 
-        <div className="mt-12 sm:mt-14 lg:grid lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-14 xl:grid-cols-[300px_minmax(0,1fr)]">
+        <div className="mt-12 sm:mt-14 lg:grid lg:grid-cols-[200px_minmax(0,1fr)_260px] lg:gap-10 xl:grid-cols-[220px_minmax(0,1fr)_300px] xl:gap-14">
           <aside className="hidden lg:block">
             <div className="sticky top-28 flex flex-col gap-8">
               <p
@@ -294,10 +293,6 @@ export function ScrollStage<T>({
                   </button>
                 ))}
               </div>
-
-              <div key={active} className="stage-copy border-t border-line pt-6">
-                {renderCopy(items[active], active, { desc, scrambling })}
-              </div>
             </div>
           </aside>
 
@@ -314,8 +309,14 @@ export function ScrollStage<T>({
               </div>
             ))}
           </div>
+
+          <aside className="hidden lg:block">
+            <div key={active} className="stage-copy sticky top-28 border-l border-line pl-6 xl:pl-8">
+              {renderCopy(items[active], active, { desc, scrambling })}
+            </div>
+          </aside>
         </div>
-      </PageCol>
+      </div>
     </section>
   );
 }
