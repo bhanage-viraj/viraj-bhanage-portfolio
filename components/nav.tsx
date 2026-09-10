@@ -79,9 +79,12 @@ export function Nav() {
           {pathname !== "/" ? <BackButton /> : null}
           <Link
             href="/"
-            className="inline-flex min-h-11 shrink-0 items-center text-[15px] font-semibold tracking-[-0.03em] text-ink transition-opacity duration-200 hover:opacity-55"
+            className="inline-flex min-h-11 shrink-0 items-baseline gap-2 text-ink transition-opacity duration-200 hover:opacity-55"
           >
-            {site.wordmark}
+            <span className="font-display text-[1.35rem] leading-none">{site.wordmark}</span>
+            <span className="hidden font-mono text-[10px] uppercase tracking-[0.14em] text-ink-muted sm:inline">
+              {site.name}
+            </span>
           </Link>
         </div>
         <nav
@@ -107,7 +110,7 @@ export function Nav() {
                 ref={(node) => {
                   itemRefs.current[index] = node;
                 }}
-                className={`inline-flex min-h-11 items-center whitespace-nowrap rounded-full px-3 text-[14px] transition-colors duration-200 ${
+                className={`inline-flex min-h-11 items-center whitespace-nowrap px-3 font-mono text-[11px] uppercase tracking-[0.12em] transition-colors duration-200 ${
                   isActive ? "text-ink" : "text-ink-muted hover:text-ink"
                 }`}
               >
