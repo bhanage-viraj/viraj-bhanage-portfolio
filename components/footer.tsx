@@ -1,5 +1,5 @@
-import { contact } from "@/lib/content";
-import { PageCol } from "@/lib/rich-text";
+import { contact, site } from "@/lib/content";
+import { PageCol } from "@/lib/ui";
 import { Reveal } from "./reveal";
 
 type ContactLink = {
@@ -8,7 +8,6 @@ type ContactLink = {
 };
 
 const items: ContactLink[] = [
-  { label: "Email", href: contact.email ? `mailto:${contact.email}` : null },
   { label: "LinkedIn", href: contact.linkedin },
   { label: "X", href: contact.x },
   { label: "GitHub", href: contact.github },
@@ -17,33 +16,58 @@ const items: ContactLink[] = [
 
 export function Footer() {
   return (
-    <footer id="contact" className="scroll-mt-20 border-t border-line py-16 sm:py-20">
-      <PageCol>
+    <footer id="contact" className="scroll-mt-24 bg-ink text-paper">
+      <PageCol className="py-20 sm:py-28">
         <Reveal>
-          <h2 className="font-display text-section font-semibold text-ink">Contact</h2>
+          <div className="flex items-baseline justify-between gap-6 border-t border-paper/25 pt-5">
+            <p className="font-mono text-data uppercase text-[#7FD1C7]">07</p>
+            <h2 className="font-mono text-data uppercase text-paper/60">Contact</h2>
+          </div>
         </Reveal>
+
         <Reveal delay={80}>
-          <ul className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-x-8 sm:gap-y-3">
-            {items.map((item) => (
-              <li key={item.label}>
-                {item.href ? (
-                  <a
-                    href={item.href}
-                    className="text-body text-signal underline decoration-signal/40 underline-offset-4 hover:decoration-signal"
-                    target={item.href.startsWith("http") ? "_blank" : undefined}
-                    rel={item.href.startsWith("http") ? "noreferrer" : undefined}
-                  >
-                    {item.label}
-                  </a>
-                ) : (
-                  <span className="text-body text-ink-muted">
-                    {/* TODO: add {item.label} URL */}
-                    {item.label}
-                  </span>
-                )}
-              </li>
-            ))}
-          </ul>
+          {contact.email ? (
+            <a
+              href={`mailto:${contact.email}`}
+              className="mt-14 block break-all font-display text-[clamp(1.75rem,5.4vw,4.75rem)] leading-[1.02] tracking-[-0.02em] text-paper transition-colors duration-500 hover:text-[#7FD1C7] sm:mt-20"
+            >
+              {contact.email}
+            </a>
+          ) : (
+            <p className="mt-14 font-display text-section text-paper/60">
+              {/* TODO: add Email */}
+              Email
+            </p>
+          )}
+        </Reveal>
+
+        <Reveal delay={140}>
+          <div className="mt-16 grid gap-10 border-t border-paper/20 pt-8 sm:mt-24 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end">
+            <ul className="flex flex-wrap gap-x-8 gap-y-3">
+              {items.map((item) => (
+                <li key={item.label}>
+                  {item.href ? (
+                    <a
+                      href={item.href}
+                      className="inline-flex min-h-11 items-center text-[15px] text-paper/80 underline decoration-paper/25 underline-offset-[6px] transition-colors hover:text-paper hover:decoration-paper"
+                      target={item.href.startsWith("http") ? "_blank" : undefined}
+                      rel={item.href.startsWith("http") ? "noreferrer" : undefined}
+                    >
+                      {item.label}
+                    </a>
+                  ) : (
+                    <span className="text-[15px] text-paper/50">
+                      {/* TODO: add {item.label} URL */}
+                      {item.label}
+                    </span>
+                  )}
+                </li>
+              ))}
+            </ul>
+            <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-paper/45">
+              {site.name} · {site.wordmark}
+            </p>
+          </div>
         </Reveal>
       </PageCol>
     </footer>

@@ -1,14 +1,8 @@
 "use client";
 
-import {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-  type ReactNode,
-} from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Reveal } from "@/components/reveal";
-const SCRAMBLE_CHARS = "0123456789!<>-_\\/[]{}—=+*^?#$%&";
+import { SectionHead, WideCol } from "@/lib/ui";
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
@@ -24,32 +18,34 @@ function pad(n: number) {
 
 export type ScrollStageProps<T> = {
   id: string;
-  header: ReactNode;
+  index: string;
+  title: string;
+  lede?: ReactNode;
+  aside?: ReactNode;
   listLabel: string;
   items: readonly T[];
   getId: (item: T) => string;
-  getTeaser: (item: T) => string;
   renderList: (item: T, index: number, active: boolean) => ReactNode;
   renderCard: (item: T, index: number) => ReactNode;
-  renderCopy: (
-    item: T,
-    index: number,
-    ctx: { desc: string; scrambling: boolean },
-  ) => ReactNode;
+  /** Optional sticky reading panel on the right (xl+) for the active item. */
+  renderCopy?: (item: T, index: number) => ReactNode;
 };
 
 /**
- * Cards scroll normally in the document. A sticky rail on the left follows
- * along: list highlight, progress marker, rolling counter and live copy all
- * react to which card is nearest the reading line. Nothing hijacks scroll.
+ * Chapter layout. Plates scroll normally in the document; a sticky index on the
+ * left follows along (rolling counter, rail marker, list highlight) and an
+ * optional sticky copy panel on the right reads out the active plate. Nothing
+ * hijacks scroll.
  */
 export function ScrollStage<T>({
   id,
-  header,
+  index,
+  title,
+  lede,
+  aside,
   listLabel,
   items,
   getId,
-  getTeaser,
   renderList,
   renderCard,
   renderCopy,
@@ -63,57 +59,7 @@ export function ScrollStage<T>({
   const markerRef = useRef<HTMLSpanElement | null>(null);
   const counterRef = useRef<HTMLSpanElement | null>(null);
   const activeRef = useRef(0);
-  const scrambleRaf = useRef<number | null>(null);
-  const teaserRef = useRef(getTeaser);
-  const itemsRef = useRef(items);
-  teaserRef.current = getTeaser;
-  itemsRef.current = items;
-
   const [active, setActive] = useState(0);
-  const [desc, setDesc] = useState(() => getTeaser(items[0]));
-  const [scrambling, setScrambling] = useState(false);
-
-  const runScramble = useCallback((text: string) => {
-    if (scrambleRaf.current) cancelAnimationFrame(scrambleRaf.current);
-    if (reducedMotion()) {
-      setDesc(text);
-      setScrambling(false);
-      return;
-    }
-    setScrambling(true);
-    const scrambleDur = 180;
-    const revealDur = 320;
-    const total = scrambleDur + revealDur;
-    const start = performance.now();
-    let lastFrame = -100;
-    const frame = (now: number) => {
-      const elapsed = now - start;
-      if (elapsed - lastFrame >= 45) {
-        lastFrame = elapsed;
-        let out = "";
-        for (let i = 0; i < text.length; i++) {
-          const ch = text[i];
-          if (ch === " " || ch === "\n") {
-            out += ch;
-            continue;
-          }
-          out +=
-            (elapsed - scrambleDur) / revealDur > i / text.length
-              ? ch
-              : SCRAMBLE_CHARS[(Math.random() * SCRAMBLE_CHARS.length) | 0];
-        }
-        setDesc(out);
-      }
-      if (elapsed < total) {
-        scrambleRaf.current = requestAnimationFrame(frame);
-      } else {
-        setDesc(text);
-        setScrambling(false);
-        scrambleRaf.current = null;
-      }
-    };
-    scrambleRaf.current = requestAnimationFrame(frame);
-  }, []);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -146,7 +92,7 @@ export function ScrollStage<T>({
 
       // Reading line sits a bit above centre — where the eye naturally rests.
       const focusLine = window.innerHeight * 0.42;
-      const range = window.innerHeight * 0.75;
+      const range = window.innerHeight * 0.9;
 
       let nearest = 0;
       let nearestDist = Number.POSITIVE_INFINITY;
@@ -164,23 +110,18 @@ export function ScrollStage<T>({
         }
         if (reduced || !desktop) {
           el.style.opacity = "";
-          el.style.transform = "";
           return;
         }
         const focus = clamp(1 - dist / range, 0, 1);
-        el.style.opacity = String(0.55 + 0.45 * focus);
-        el.style.transform = `scale(${0.975 + 0.025 * focus})`;
+        el.style.opacity = String(0.62 + 0.38 * focus);
       });
 
       if (nearest !== activeRef.current) {
         activeRef.current = nearest;
         setActive(nearest);
-        const text = teaserRef.current(itemsRef.current[nearest]);
-        if (initialised) runScramble(text);
-        else setDesc(text);
       }
 
-      // Continuous position between the two cards straddling the reading line
+      // Continuous position between the two plates straddling the reading line
       let pos = nearest;
       const o = offsets[nearest] ?? 0;
       if (o > 0 && nearest > 0 && offsets[nearest - 1] !== undefined) {
@@ -192,7 +133,7 @@ export function ScrollStage<T>({
       }
       pos = clamp(pos, 0, N - 1);
 
-      const ease = reduced || !initialised ? 1 : 1 - Math.exp(-dt / 110);
+      const ease = reduced || !initialised ? 1 : 1 - Math.exp(-dt / 120);
       displayPos += (pos - displayPos) * ease;
       initialised = true;
 
@@ -218,53 +159,63 @@ export function ScrollStage<T>({
         markerRef.current.style.transform = `translate3d(0, ${markerY}px, 0)`;
       }
       if (counterRef.current) {
-        counterRef.current.style.transform = `translate3d(0, ${-displayPos}em, 0)`;
+        counterRef.current.style.transform = `translate3d(0, ${-displayPos * 1.2}em, 0)`;
       }
     };
 
     return () => {
       io.disconnect();
       if (raf) cancelAnimationFrame(raf);
-      if (scrambleRaf.current) cancelAnimationFrame(scrambleRaf.current);
     };
-  }, [N, runScramble]);
+  }, [N]);
 
   const onListClick = (idx: number) => {
     const el = cardRefs.current[idx];
     if (!el) return;
     const top =
-      el.getBoundingClientRect().top + window.scrollY - window.innerHeight * 0.42 + el.offsetHeight / 2;
+      el.getBoundingClientRect().top +
+      window.scrollY -
+      window.innerHeight * 0.42 +
+      el.offsetHeight / 2;
     window.scrollTo({ top, behavior: reducedMotion() ? "auto" : "smooth" });
   };
+
+  const hasCopy = Boolean(renderCopy);
 
   return (
     <section
       id={id}
       ref={sectionRef}
-      className="scroll-mt-24 border-t border-line py-section-sm sm:py-section"
+      className="scroll-mt-24 py-section-sm sm:py-section"
     >
-      {/* Wider than the page column so the centre stage keeps room for media. */}
-      <div className="mx-auto w-full max-w-[1400px] px-6 sm:px-10 lg:px-12">
-        <Reveal>{header}</Reveal>
+      <WideCol>
+        <Reveal>
+          <SectionHead index={index} title={title} lede={lede} aside={aside} />
+        </Reveal>
 
-        <div className="mt-12 sm:mt-14 lg:grid lg:grid-cols-[200px_minmax(0,1fr)_260px] lg:gap-10 xl:grid-cols-[220px_minmax(0,1fr)_300px] xl:gap-14">
+        <div
+          className={`mt-14 sm:mt-20 lg:grid lg:gap-10 xl:gap-14 ${
+            hasCopy
+              ? "lg:grid-cols-[220px_minmax(0,1fr)] xl:grid-cols-[240px_minmax(0,1fr)_300px]"
+              : "lg:grid-cols-[220px_minmax(0,1fr)] xl:grid-cols-[260px_minmax(0,1fr)]"
+          }`}
+        >
           <aside className="hidden lg:block">
-            <div className="sticky top-28 flex flex-col gap-8">
+            <div className="sticky top-28 flex flex-col gap-10">
               <p
-                className="stage-counter font-mono text-[12px] uppercase tracking-[0.1em] text-ink-muted"
+                className="flex items-baseline font-display text-[4.5rem] leading-none text-ink"
                 aria-live="polite"
               >
                 <span className="stage-counter-win">
                   <span ref={counterRef} className="stage-counter-col">
                     {items.map((item, i) => (
-                      <span key={getId(item)} className="text-signal">
-                        {pad(i + 1)}
-                      </span>
+                      <span key={getId(item)}>{pad(i + 1)}</span>
                     ))}
                   </span>
                 </span>
-                <span className="mx-1.5 opacity-50">/</span>
-                <span>{pad(N)}</span>
+                <span className="ml-3 font-mono text-[12px] tracking-[0.1em] text-ink-muted">
+                  / {pad(N)}
+                </span>
               </p>
 
               <div
@@ -285,9 +236,7 @@ export function ScrollStage<T>({
                     role="option"
                     aria-selected={active === i}
                     onClick={() => onListClick(i)}
-                    className={`stage-list-item w-full border-0 bg-transparent text-left ${
-                      active === i ? "is-active" : ""
-                    }`}
+                    className={`stage-list-item ${active === i ? "is-active" : ""}`}
                   >
                     {renderList(item, i, active === i)}
                   </button>
@@ -296,27 +245,33 @@ export function ScrollStage<T>({
             </div>
           </aside>
 
-          <div className="flex flex-col gap-6 sm:gap-8">
+          <div className="flex flex-col gap-10 sm:gap-14">
             {items.map((item, i) => (
               <div
                 key={getId(item)}
+                id={getId(item)}
                 ref={(node) => {
                   cardRefs.current[i] = node;
                 }}
-                className="stage-card will-change-transform"
+                className="stage-card scroll-mt-28"
               >
                 {renderCard(item, i)}
               </div>
             ))}
           </div>
 
-          <aside className="hidden lg:block">
-            <div key={active} className="stage-copy sticky top-28 border-l border-line pl-6 xl:pl-8">
-              {renderCopy(items[active], active, { desc, scrambling })}
-            </div>
-          </aside>
+          {renderCopy ? (
+            <aside className="hidden xl:block">
+              <div
+                key={active}
+                className="stage-copy sticky top-28 border-t border-ink pt-5"
+              >
+                {renderCopy(items[active], active)}
+              </div>
+            </aside>
+          ) : null}
         </div>
-      </div>
+      </WideCol>
     </section>
   );
 }
