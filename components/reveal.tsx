@@ -6,10 +6,13 @@ export function Reveal({
   children,
   className = "",
   delay = 0,
+  stagger = false,
 }: {
   children: ReactNode;
   className?: string;
   delay?: number;
+  /** Animate direct children one after another instead of the block as a whole */
+  stagger?: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
@@ -28,7 +31,7 @@ export function Reveal({
           observer.disconnect();
         }
       },
-      { threshold: 0.12, rootMargin: "0px 0px -8% 0px" },
+      { threshold: 0.1, rootMargin: "0px 0px -6% 0px" },
     );
     observer.observe(node);
     return () => observer.disconnect();
@@ -37,7 +40,9 @@ export function Reveal({
   return (
     <div
       ref={ref}
-      className={`reveal ${visible ? "is-in" : ""} ${className}`}
+      className={`reveal ${stagger ? "reveal-stagger" : ""} ${
+        visible ? "is-in" : ""
+      } ${className}`}
       style={delay ? { transitionDelay: `${delay}ms` } : undefined}
     >
       {children}

@@ -5,14 +5,15 @@ import { Reveal } from "./reveal";
 export function About() {
   return (
     <Section id="about" title="About">
-      <Reveal>
-        <div className="max-w-prose space-y-5">
-          {about.map((paragraph) => (
-            <p key={paragraph.slice(0, 40)} className="text-body text-ink">
-              {paragraph}
-            </p>
-          ))}
-        </div>
+      <Reveal stagger>
+        {about.map((paragraph) => (
+          <p
+            key={paragraph.slice(0, 40)}
+            className="max-w-prose text-body text-ink [&+&]:mt-5"
+          >
+            {paragraph}
+          </p>
+        ))}
       </Reveal>
     </Section>
   );
