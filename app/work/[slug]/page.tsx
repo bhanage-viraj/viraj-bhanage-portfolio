@@ -106,16 +106,30 @@ export default async function CaseStudyPage({
           ))}
 
           <div className="mt-14 grid gap-10 sm:grid-cols-2 sm:gap-x-12 sm:gap-y-14">
-            {project.narrative.map((section) => (
-              <section key={section.heading}>
-                <h2 className="font-display text-[22px] font-semibold text-ink">
-                  {section.heading}
-                </h2>
-                <p className="mt-4 text-[17px] leading-[1.65] text-ink">
-                  <RichText>{section.body}</RichText>
-                </p>
-              </section>
-            ))}
+            {project.narrative.map((section, index) => {
+              const wide =
+                project.narrative.length % 2 === 1 &&
+                index === project.narrative.length - 1;
+              return (
+                <section
+                  key={section.heading}
+                  className={wide ? "sm:col-span-2" : undefined}
+                >
+                  <h2 className="font-display text-[22px] font-semibold text-ink">
+                    {section.heading}
+                  </h2>
+                  <p
+                    className={
+                      wide
+                        ? "mt-4 max-w-study text-[17px] leading-[1.65] text-ink"
+                        : "mt-4 text-[17px] leading-[1.65] text-ink"
+                    }
+                  >
+                    <RichText>{section.body}</RichText>
+                  </p>
+                </section>
+              );
+            })}
           </div>
 
           {project.numbers ? <CaseNumbers numbers={project.numbers} /> : null}
