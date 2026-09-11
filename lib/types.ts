@@ -5,7 +5,9 @@ export type ProjectMedia =
 
 export type NarrativeSection = {
   heading: string;
-  body: string;
+  body: string | string[];
+  /** Span the full study column — use for a long engineering story. */
+  wide?: boolean;
 };
 
 export type ProjectFact = {

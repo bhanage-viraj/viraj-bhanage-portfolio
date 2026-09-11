@@ -108,8 +108,15 @@ export default async function CaseStudyPage({
           <div className="mt-14 grid gap-10 sm:grid-cols-2 sm:gap-x-12 sm:gap-y-14">
             {project.narrative.map((section, index) => {
               const wide =
-                project.narrative.length % 2 === 1 &&
-                index === project.narrative.length - 1;
+                section.wide ||
+                (project.narrative.length % 2 === 1 &&
+                  index === project.narrative.length - 1);
+              const paragraphs = Array.isArray(section.body)
+                ? section.body
+                : [section.body];
+              const bodyClass = wide
+                ? "max-w-study text-[17px] leading-[1.65] text-ink"
+                : "text-[17px] leading-[1.65] text-ink";
               return (
                 <section
                   key={section.heading}
@@ -118,15 +125,11 @@ export default async function CaseStudyPage({
                   <h2 className="font-display text-[22px] font-semibold text-ink">
                     {section.heading}
                   </h2>
-                  <p
-                    className={
-                      wide
-                        ? "mt-4 max-w-study text-[17px] leading-[1.65] text-ink"
-                        : "mt-4 text-[17px] leading-[1.65] text-ink"
-                    }
-                  >
-                    <RichText>{section.body}</RichText>
-                  </p>
+                  {paragraphs.map((paragraph, paragraphIndex) => (
+                    <p key={paragraphIndex} className={`mt-4 ${bodyClass}`}>
+                      <RichText>{paragraph}</RichText>
+                    </p>
+                  ))}
                 </section>
               );
             })}
