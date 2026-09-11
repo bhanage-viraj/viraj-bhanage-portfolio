@@ -23,6 +23,7 @@ Or upload the whole `resumes/` folder and switch Main document per application.
 
 | File | Use for | Apply |
 |---|---|---|
+| `resume-cursor.tex` | Cursor (Anysphere) · Software Engineer, New Grad 2027 · SF / NY | [Careers](https://cursor.com/careers) |
 | `resume-capital-one.tex` | Capital One Canada · Mobile SWE · Winter 2027 · Toronto | [Workday](https://capitalone.wd12.myworkdayjobs.com/en-US/Capital_One/job/Intern--Mobile-Software-Engineer---Team-Gringotts-North---Winter-2027_R249015) |
 | `resume-revolut.tex` | Revolut iOS intern · Summer 2027 | [Revolut](https://www.revolut.com/careers/apply/bc2ddc16-c0ca-4c39-9db7-390db7f6cb3c/) |
 | `resume-argmax-runanywhere.tex` | Argmax Frameworks intern **and** RunAnywhere cold email | [Argmax](https://job-boards.greenhouse.io/argmax/jobs/4067268009) |
@@ -38,6 +39,7 @@ Generic version (not tailored): `../resume.tex`.
 
 ## What is different (not invented)
 
+- **Cursor** — product-engineer shape: shipped-and-iterated (Rush Hour), frontend + backend (Who’s Out), reviewable OSS (RealityAudio), Cursor Bali Hackathon 1st first in Achievements. **Only file that says Expected 2027** (degree can be shortened to graduate Spring 2027). Compile locally: `cd resumes && tectonic -o pdf/Cursor resume-cursor.tex`.
 - **Capital One** — Who’s Out REST + Spring Boot first; mobile + backend skills.
 - **Revolut** — Rush Hour MVVM + SwiftUI first. Does **not** list RxSwift, Core Data, or Realm.
 - **Argmax / RunAnywhere** — RealityAudio SPM, Coralyst Core ML, Sema / llama.cpp.
@@ -51,4 +53,4 @@ Generic version (not tailored): `../resume.tex`.
 
 ## Flag
 
-Education says **Expected 2028**. Confirm that before Revolut / Apple IS&T if your real grad year is different.
+Education says **Expected 2028** everywhere except `resume-cursor.tex` (**Expected 2027**, since the Cursor new-grad role requires a Spring 2027 graduation). Pick one year before sending resumes to companies that may compare notes.

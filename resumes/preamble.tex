@@ -30,7 +30,11 @@
     \setsansfont{TeX Gyre Heros}
   }{
     \IfFontExistsTF{Helvetica Neue}{
-      \setsansfont{Helvetica Neue}
+      % name faces explicitly: tectonic sometimes picks Bold Italic out of the .ttc for \bfseries
+      \setsansfont{Helvetica Neue}[
+        BoldFont={Helvetica Neue Bold},
+        ItalicFont={Helvetica Neue Italic},
+        BoldItalicFont={Helvetica Neue Bold Italic}]
     }{
       \setsansfont{Helvetica}
     }

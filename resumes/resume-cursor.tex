@@ -1,0 +1,84 @@
+% Cursor (Anysphere) — Software Engineer, New Grad 2027 · SF / NY
+% Overleaf: upload with preamble.tex · Compiler pdfLaTeX · Main document = this file
+% Local: tectonic resume-cursor.tex
+\input{preamble}
+\begin{document}
+
+\begin{center}
+    \textbf{\Huge Viraj Bhanage} \\ \vspace{4pt}
+    {\small\textit{Software Engineer, New Grad 2027 --- ships end to end: UI, on-device AI, and the backend underneath}} \\ \vspace{4pt}
+    \small
+    \faEnvelope \hspace{2pt} \href{mailto:virajbhanage00@gmail.com}{\texttt{virajbhanage00@gmail.com}} \hspace{1pt} $|$
+    \hspace{1pt} \faPhone \hspace{2pt} \href{tel:+918855867440}{\texttt{+91 8855867440}} \hspace{1pt} $|$
+    \hspace{1pt} \href{https://www.bhanageviraj.tech}{\texttt{bhanageviraj.tech}} \\
+    \faLinkedin \hspace{2pt} \href{https://www.linkedin.com/in/bhanageviraj/}{\texttt{linkedin.com/in/bhanageviraj}} \hspace{1pt} $|$
+    \hspace{1pt} \faGithub \hspace{2pt} \href{https://github.com/bhanage-viraj}{\texttt{github.com/bhanage-viraj}} \hspace{1pt} $|$
+    \hspace{1pt} \faMapMarker* \hspace{2pt}\texttt{Bali, Indonesia}
+\end{center}
+
+\section{EXPERIENCE}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {Apple Developer Academy}{Mar. 2026 -- Present}
+      {Junior Developer}{Bali, Indonesia}
+      \resumeItemListStart
+        \resumeItem{Own products end to end in a small, flat team: scope the problem, ship the UI, wire the backend when needed, iterate from real users --- four apps on TestFlight (Coralyst, Revenants, Who's Out, Rush Hour)}
+        \resumeItem{Published an open-source Swift package with a public API and tests that other AR apps import; covered by DevBytes}
+      \resumeItemListEnd
+  \resumeSubHeadingListEnd
+
+\section{PROJECTS}
+    \resumeSubHeadingListStart
+        \resumeProjectHeading
+          {\textbf{Rush Hour} $|$ \emph{SwiftUI, MVVM, AVFoundation, Screen Time, WidgetKit} $|$ \href{https://github.com/bhanage-viraj/RushHour}{\myuline{GitHub}} \hspace{2pt} \href{https://testflight.apple.com/join/JX8RE59Q}{\myuline{TestFlight}} \hspace{2pt} \href{https://rush-hour-rho.vercel.app}{\myuline{Site}}}{}
+          \resumeItemListStart
+            \resumeItem{Shipped a contained product --- timelapse focus sessions (\texttt{AVCaptureSession}), app blocking (\texttt{FamilyControls} / \texttt{DeviceActivity} + Shield extensions), home-screen widget --- then fixed bugs and smoothed it from real work sessions after the Academy showcase}
+          \resumeItemListEnd
+        \resumeProjectHeading
+          {\textbf{Who's Out} $|$ \emph{SwiftUI, Foundation Models, REST, Spring Boot, CryptoKit} $|$ \href{https://github.com/bhanage-viraj/Whos-Out}{\myuline{GitHub}} \hspace{2pt} \href{https://testflight.apple.com/join/avevSG7f}{\myuline{TestFlight}}}{}
+          \resumeItemListStart
+            \resumeItem{Frontend + backend: SwiftUI client with an \texttt{actor} \texttt{APIClient} (JSON REST, token refresh, retries) over a Spring Boot API that stores only ciphertext; X25519 + ChaCha20-Poly1305 E2E location sync; Siri via App Intents; unit tests}
+            \resumeItem{Built for IndeHub WWDC26 on a deadline: on-device Foundation Models reason over calendar / location so suggestions never leave the phone}
+          \resumeItemListEnd
+        \resumeProjectHeading
+          {\textbf{RealityAudio} $|$ \emph{Swift Package Manager, Swift 6, RealityKit, Swift Testing} $|$ \href{https://github.com/bhanage-viraj/RealityAudio}{\myuline{GitHub}}}{}
+          \resumeItemListStart
+            \resumeItem{Open-source spatial-audio SDK extracted from a game: one \texttt{@MainActor} entry point \texttt{RealityAudio.play(\_:in:at:occluded:)}, LiDAR occlusion opt-in, iOS 17+ / visionOS 1+, tests for the spatial math}
+          \resumeItemListEnd
+        \resumeProjectHeading
+          {\textbf{Coralyst} $|$ \emph{Core ML, Python, AVFoundation} $|$ \href{https://github.com/Gleenryan/CH5_Biorocks}{\myuline{GitHub}} \hspace{2pt} \href{https://coralyst.vercel.app}{\myuline{Live prototype}}}{}
+          \resumeItemListStart
+            \resumeItem{Trained a bidirectional LSTM on 57k hydrophone clips (ROC-AUC $\sim$0.95--0.98) and shipped it as a bundled \texttt{.mlpackage} running on iPhone; measured the domain-shift gap on 38 held-out field recordings and closed it iteration over iteration (18\% $\rightarrow$ 32\% field recall)}
+          \resumeItemListEnd
+        \resumeProjectHeading
+          {\textbf{Revenants} $|$ \emph{Swift 6 concurrency, VIPER, ARKit, Network.framework} $|$ \href{https://github.com/bhanage-viraj/Split-Mechanics}{\myuline{GitHub}} \hspace{2pt} \href{https://testflight.apple.com/join/bxqH2nP9}{\myuline{TestFlight}}}{}
+          \resumeItemListStart
+            \resumeItem{Two-phone co-op AR: custom wire protocol over Bonjour, host-authoritative state, \texttt{@MainActor} services with \texttt{Task \{ @MainActor \}} hops so callbacks stay thread-safe; bounded send queue drops non-critical frames}
+          \resumeItemListEnd
+    \resumeSubHeadingListEnd
+
+\section{ACHIEVEMENTS}
+ \begin{itemize}[leftmargin=0in, label={}, itemsep=0pt, topsep=1pt]
+    \small{\item{
+     \textbf{1st Place} --- Cursor Bali Hackathon 2026 (posture-tracking macOS app) \hspace{8pt} \textbf{Rank 1,623} --- Meta Hacker Cup 2025 \\
+     \textbf{AIR 3} --- AlgoUtsav 2025 \hspace{8pt} \textbf{Finalist} --- Geo AI Hackathon, IIT Bombay \hspace{8pt} \textbf{Kaggle} --- Dataset \& Notebook Expert
+    }}
+ \end{itemize}
+
+\section{EDUCATION}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {BITS Pilani}{Expected 2027}
+      {Bachelor of Science in Computer Science}{CGPA: 8.54/10}
+  \resumeSubHeadingListEnd
+
+\section{SKILLS}
+ \begin{itemize}[leftmargin=0in, label={}]
+    \small{\item{
+     \textbf{Product / client} {: Swift, SwiftUI, UIKit, Swift 6 concurrency (actors, \texttt{Sendable}), MVVM / VIPER, App Intents, WidgetKit, TypeScript, React / Next.js} \vspace{1pt} \\
+     \textbf{Backend / data} {: REST + JSON, Java / Spring Boot, URLSession, CryptoKit, Keychain, Python (model training)} \vspace{1pt} \\
+     \textbf{AI as leverage} {: Core ML, Foundation Models, llama.cpp / Gemma, MediaPipe; daily Cursor user (site, apps, and this resume built with it)}
+    }}
+ \end{itemize}
+
+\end{document}
